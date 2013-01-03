@@ -45,3 +45,6 @@ consoleServer.listen(5000);
 
 // Start SocketStream
 ss.start(server);
+
+// Server-specific code
+require('./server/startup')(ss);

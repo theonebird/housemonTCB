@@ -10,6 +10,7 @@ ss.server.on 'reconnect', ->
   console.log 'Connection back up :-)'
 
 require 'ssAngular'
+require '/controllers'
 
 ss.server.on 'ready', ->
   jQuery ->

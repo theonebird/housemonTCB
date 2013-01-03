@@ -4,5 +4,14 @@ html(lang="en")
     meta(charset="utf-8")
     != SocketStream
     title Welcome
-  body
-    p Welcome to your new realtime app!
+    
+  body(ng-app='myApp',ng-controller='AppCtrl')
+    p Server platform: 
+      u {{platform}}
+    p It is now 
+      b {{tick|date:'HH:mm:ss'}}
+    p Server module paths:
+      pre
+        span(ng-repeat='path in serverModulePaths.data')
+          | {{path}}
+          br
