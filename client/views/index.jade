@@ -12,6 +12,6 @@ html(lang="en")
       b {{tick|date:'HH:mm:ss'}}
     p Server module paths:
       pre
-        span(ng-repeat='path in serverModulePaths.data')
+        span(ng-repeat='path in serverModulePaths.data[0].value')
           | {{path}}
           br
