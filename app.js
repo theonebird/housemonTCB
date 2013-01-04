@@ -7,7 +7,6 @@ ss.client.define('main', {
   view: 'index.jade',
   css: 'app.styl',
   code: ['libs', 'app'],
-  tmpl: '*'
 });
 
 // Serve this client on the root URL
@@ -24,14 +23,11 @@ ss.client.formatters.add(require('ss-stylus'));
 ss.client.templateEngine.use('angular');
 
 // Responders
-ss.responders.add(require('ss-angular'), {
-  pollFreq: 1000
-});
+ss.responders.add(require('ss-angular'));
 
 // Minimize and pack assets if you type: SS_ENV=production node app.js
-if (ss.env === 'production') {
+if (ss.env === 'production')
   ss.client.packAssets();
-}
 
 // Start web server
 var server = http.Server(ss.http.middleware);
