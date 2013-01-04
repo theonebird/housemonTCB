@@ -1,8 +1,9 @@
-crypto = require 'crypto'
+revision = 0
+model = []
 
-model = [
-  { name: 'paths', value: module.paths }
-]
+model.push
+  name: 'paths'
+  value: module.paths
 
 checkFilter = (row, filter) ->
   for k,v of filter
@@ -12,11 +13,9 @@ checkFilter = (row, filter) ->
 exports.make = (des, chan, ss) ->
 
   poll: (filter) ->
+    data = model
     if filter?
-      data = (row for row in model when checkFilter(row, filter))
-    else
-      data = model
+      data = (row for row in data when checkFilter(row, filter))
     chan
-      # calculate a hash of the result so that it only gets sent when modified
-      hash: crypto.createHash('md5').update(JSON.stringify(data)).digest('hex')
+      hash: model.revision 
       data: data
