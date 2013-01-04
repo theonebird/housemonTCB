@@ -18,6 +18,6 @@ myApp.controller 'AppCtrl', [
     # example RPC call, the returned promise is automatically resolved
     $scope.platform = rpc 'host.platform'
     
-    # link to part of the "central" model, i.e. the server's "module.paths"
-    $scope.linkModel 'central', { name: 'paths' }, 'serverModulePaths'
+    # link to the "features" model on the server
+    $scope.linkModel 'features'
 ]

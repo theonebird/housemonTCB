@@ -10,8 +10,8 @@ html(lang="en")
       u {{platform}}
     p It is now 
       b {{tick|date:'HH:mm:ss'}}
-    p Server module paths:
+    p Server features:
       pre
-        span(ng-repeat='path in serverModulePaths.data[0].value')
-          | {{path}}
+        span(ng-repeat='(name,path) in features.data')
+          |   {{name}}
           br
