@@ -1,13 +1,13 @@
 exports.info =
   name: 'rf12decoders'
-  desc: 'Some simple decoders for RF12 packets'
+  description: 'Some simple decoders for RF12 packets'
 
 time2watt = (t) ->
   if t > 60000
     t = 1000 * (t - 60000)
   Math.floor(18000000 / t) if t > 0
 
-devices =
+exports.devices  =
 
   radioBlip: (raw, cb) ->
     count = raw.readUInt32LE(0)
@@ -64,5 +64,3 @@ devices =
         usew: ints[6]
         genw: ints[7]
         gas: ints[9]
-
-exports.devices = devices

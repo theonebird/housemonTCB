@@ -16,7 +16,7 @@ Install [Node.js](http://nodejs.org) and [npm](https://npmjs.org), then do:
 
 Launch the web server:
 
-    $ node app.js
+    $ npm start
 
 Then browse to <http://localhost:3333/>.
 

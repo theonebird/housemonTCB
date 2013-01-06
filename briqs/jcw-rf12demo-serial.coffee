@@ -2,12 +2,11 @@ serialport = require 'serialport'
 
 exports.info =
   name: 'rf12demo'
-  desc: 'Serial interface to a JeeNode/JeeLink running the RF12demo sketch'
-
-exports.parameters = [
-  name: 'serial port'
-  default: '/dev/tty...'
-]
+  description: 'Serial interface for a JeeNode running the RF12demo sketch'
+  parameters: [
+    name: 'Serial port'
+    default: '/dev/tty...' # TODO: list choices with serialport.list
+  ]
 
 class RF12demo extends serialport.SerialPort
   
@@ -41,4 +40,4 @@ class RF12demo extends serialport.SerialPort
         else
           @emit 'other', data
         
-exports.interface = RF12demo
+exports.factory = RF12demo

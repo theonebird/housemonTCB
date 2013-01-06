@@ -1,17 +1,31 @@
 !!! 5
-html(lang="en")
+html(lang='en',ng-app='myApp')
   head
-    meta(charset="utf-8")
+    meta(charset='utf-8')
     != SocketStream
     title Welcome
     
-  body(ng-app='myApp',ng-controller='AppCtrl')
+  body(ng-controller='AppCtrl')
     p Server platform: 
       u {{platform}}
-    p It is now 
+      |  - it is now 
       b {{tick|date:'HH:mm:ss'}}
-    p Server features:
-      pre
-        span(ng-repeat='(name,path) in features.data')
-          |   {{name}}
-          br
+      
+    div.leftSide
+    
+      h3 Briqs
+      ul: li(ng-repeat='id in briqs',
+             ng-click='selectBriq(id)') {{data[id].info.name}}
+           
+      h3 Installed Briqs
+      ul: li(ng-repeat='id in installed',
+             ng-click='uninstallBriq(id)') {{id.slice(10)}}
+             
+    div(ng-show='id')
+      h3 {{data[id].info.name}}
+      p {{data[id].info.description}}
+      table
+        tr(ng-repeat='param in data[id].info.parameters')
+          td {{param.name}}:
+          td: input(type='text', ng-model='param.default')
+      p: button(ng-click='installBriq()') Install

@@ -15,5 +15,8 @@
     "ss-console": "~0.1.3",
     "ss-angular": "~0.5.7",
     "serialport": "~1.0.8"
+  },
+  "scripts": {
+    "start": "node app.js"
   }
 }
