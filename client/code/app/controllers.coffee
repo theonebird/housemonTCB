@@ -49,7 +49,7 @@ myApp.controller 'AppCtrl', [
       # TODO: use a single loop and generalise
       $scope.briqs = idsOf 'briqs'
       $scope.installed = idsOf 'installed'
-      console.log 'model fetched'
+      console.info 'model fetched'
 
     $scope.selectBriq = (id) ->
       $scope.id = id

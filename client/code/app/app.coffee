@@ -1,3 +1,3 @@
 # Client Code
 
-console.log 'app loaded'
+console.info 'app loaded'

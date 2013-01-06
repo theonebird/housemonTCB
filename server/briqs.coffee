@@ -9,7 +9,7 @@ loadFile = (filename) ->
 
 loadAll = () ->
   # delete existing briqs
-  ss.api.store key  for key in ss.api.idsOf 'briq'
+  ss.api.store key  for key in ss.api.idsOf 'briqs'
   # scan and add all briqs, async
   fs.readdir './briqs', (err, files) ->
     throw err  if err

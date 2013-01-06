@@ -10,18 +10,18 @@ module.exports = (ss) ->
   # these are registered as ss.api for server-wide use
   
   fetch = () ->
-    console.log 'fetch', Object.keys(model).length
+    console.info 'fetch', Object.keys(model).length
     model
   
   idsOf = (group) ->
     pre = "#{group}:"
     len = pre.length
     result = (id for id of model when id.slice(0, len) is pre)
-    console.log 'idsOf', group, result 
+    console.info 'idsOf', group, result 
     result
 
   store = (key, value) ->
-    console.log 'store', key, value?
+    console.info 'store', key, value?
     unless value is model[key]
       if value?
         model[key] = value

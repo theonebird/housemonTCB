@@ -4,10 +4,10 @@
 window.ss = require 'socketstream'
 
 ss.server.on 'disconnect', ->
-  console.log 'Connection down :-('
+  console.info 'Connection down :-('
 
 ss.server.on 'reconnect', ->
-  console.log 'Connection back up :-)'
+  console.info 'Connection back up :-)'
   # force full reload to re-establish all model links
   # FIXME: this is a bit drastic, it loses all client state
   window.location.reload true

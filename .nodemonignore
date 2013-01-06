@@ -2,6 +2,6 @@
 # Install with 'npm install -g nodemon' and start your app with 'nodemon app.js'
 # From then on, all changes to /server will automatically restart your app.
 
+/briqs/*
 /client/*
-/features/*
 ./README.md
