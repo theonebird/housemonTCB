@@ -1,6 +1,7 @@
 # loaded from main startup file
 
 briqs = require './briqs'
+pkg = require '../package'
 
 model = {}
 
@@ -33,6 +34,8 @@ module.exports = (ss) ->
   ss.api.add 'fetch', fetch
   ss.api.add 'idsOf', idsOf
   ss.api.add 'store', store
+  
+  store 'version', pkg.version
 
   # this event is periodically pushed to the clients to make them, eh, "tick"
   setInterval ->

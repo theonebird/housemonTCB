@@ -5,7 +5,7 @@ var ss = require('socketstream');
 // Define a single-page client called 'main'
 ss.client.define('main', {
   view: 'index.jade',
-  css: 'app.styl',
+  css: ['libs', 'app.styl'],
   code: ['libs', 'app'],
 });
 

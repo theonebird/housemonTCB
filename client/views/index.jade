@@ -2,30 +2,42 @@
 html(lang='en',ng-app='myApp')
   head
     meta(charset='utf-8')
+    meta(name='viewport',content='width=device-width')
+    title Welcome to HomeMon
     != SocketStream
-    title Welcome
     
   body(ng-controller='AppCtrl')
-    p Server platform: 
-      u {{platform}}
-      |  - it is now 
-      b {{tick|date:'HH:mm:ss'}}
-      
-    div.leftSide
+    .row
+      .twelve.columns
+        p Server platform: 
+          u {{platform}}
+          |  - it is now 
+          b {{tick|date:'HH:mm:ss'}}
     
-      h3 Briqs
-      ul: li(ng-repeat='id in briqs',
-             ng-click='selectBriq(id)') {{data[id].info.name}}
-           
-      h3 Installed Briqs
-      ul: li(ng-repeat='id in installed',
-             ng-click='uninstallBriq(id)') {{id.slice(10)}}
+    .row
+      .three.columns
+        h4 Briqs
+        ul.square
+          li(ng-repeat='id in briqs',ng-click='selectBriq(id)')
+            {{data[id].info.name}}
+        h4 Installed Briqs
+        ul.square
+          li(ng-repeat='id in installed',ng-click='uninstallBriq(id)')
+            {{id.slice(10)}}
              
-    div(ng-show='id')
-      h3 {{data[id].info.name}}
-      p {{data[id].info.description}}
-      table
-        tr(ng-repeat='param in data[id].info.parameters')
-          td {{param.name}}:
-          td: input(type='text', ng-model='param.default')
-      p: button(ng-click='installBriq()') Install
+      .nine.columns(ng-show='id')
+        .panel
+          h4 {{data[id].info.name}}
+          h4.subheader {{data[id].info.description}}
+          .row(ng-repeat='param in data[id].info.parameters')
+            .two.columns
+              label.right.inline {{param.name}}:
+            .ten.columns
+              input.four(type='text',ng-model='param.default')
+          .row.twelve.columns
+            input.button(type='submit',value='Install',ng-click='installBriq()')
+
+    .row
+      .twelve.columns
+        hr
+        p.right HomeMon {{data.version}}
