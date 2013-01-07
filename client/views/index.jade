@@ -9,10 +9,6 @@ html(lang='en',ng-app='myApp')
   body(ng-controller='AppCtrl')
     .row
       .twelve.columns
-        p Server platform: 
-          u {{platform}}
-          |  - it is now 
-          b {{tick|date:'HH:mm:ss'}}
     
     .row
       .three.columns
@@ -30,9 +26,9 @@ html(lang='en',ng-app='myApp')
           h4 {{data[id].info.name}}
           h4.subheader {{data[id].info.description}}
           .row(ng-repeat='param in data[id].info.parameters')
-            .two.columns
+            .three.columns
               label.right.inline {{param.name}}:
-            .ten.columns
+            .nine.columns
               input.four(type='text',ng-model='param.default')
           .row.twelve.columns
             input.button(type='submit',value='Install',ng-click='installBriq()')
@@ -40,4 +36,10 @@ html(lang='en',ng-app='myApp')
     .row
       .twelve.columns
         hr
-        p.right HomeMon {{data.version}}
+        p.left Server platform: 
+          i {{platform}}
+          |  - it is now 
+          b {{tick|date:'HH:mm:ss'}}
+        p.right
+          a(href='https://github.com/jcw/homemon') HomeMon
+          |  {{data.version}}
