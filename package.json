@@ -1,7 +1,7 @@
 {
-  "name": "homemon",
+  "name": "housemon",
   "description": "Real-time home monitoring and automation",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "author": "Jean-Claude Wippler <jc@wippler.nl>",
   "private": true,
   "engines": {

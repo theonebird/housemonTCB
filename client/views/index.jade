@@ -3,7 +3,7 @@ html(lang='en',ng-app='myApp')
   head
     meta(charset='utf-8')
     meta(name='viewport',content='width=device-width')
-    title Welcome to HomeMon
+    title Welcome to HouseMon
     != SocketStream
     
   body(ng-controller='AppCtrl')
@@ -41,5 +41,5 @@ html(lang='en',ng-app='myApp')
           |  - it is now 
           b {{tick|date:'HH:mm:ss'}}
         p.right
-          a(href='https://github.com/jcw/homemon') HomeMon
+          a(href='https://github.com/jcw/housemon') HouseMon
           |  {{data.version}}
