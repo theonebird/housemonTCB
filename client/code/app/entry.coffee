@@ -9,7 +9,6 @@ ss.server.on 'disconnect', ->
 ss.server.on 'reconnect', ->
   console.info 'Connection back up :-)'
   # force full reload to re-establish all model links
-  # FIXME: this is a bit drastic, it loses all client state
   window.location.reload true
 
 require 'ssAngular'

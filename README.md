@@ -4,7 +4,7 @@ Real-time home monitoring and automation.
 
 More info at <http://jeelabs.org/tag/housemon/>.
 
-# Install
+# Installation
 
 Install [Node.js](http://nodejs.org) and [npm](https://npmjs.org), then do:
 

@@ -1,7 +1,6 @@
 # Manage the state which is shared with all clients
 
 events = require 'events'
-
 state = new events.EventEmitter
 
 # set up central data model
