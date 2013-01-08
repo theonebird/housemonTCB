@@ -1,15 +1,15 @@
-# Automatic loading of "briqs"
+# Briqs are the installable modules in the ./briqs/ directory
 
+state = require './state'
 fs = require 'fs'
-ss = require 'socketstream'
 
 loadFile = (filename) ->
   loaded = require("../briqs/#{filename}")  
-  ss.api.store "briqs:#{filename}", loaded.info.name and loaded
+  state.store "briqs:#{filename}", loaded.info.name and loaded
 
 loadAll = () ->
   # delete existing briqs
-  ss.api.store key  for key in ss.api.idsOf 'briqs'
+  state.store key  for key in state.idsOf 'briqs'
   # scan and add all briqs, async
   fs.readdir './briqs', (err, files) ->
     throw err  if err
