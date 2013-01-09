@@ -27,21 +27,21 @@ myApp.controller 'AppCtrl', [
     # example RPC call, the returned promise is automatically resolved
     $scope.platform = rpc 'host.platform'
     
-    $scope.data = {}    
+    $scope.model = {}    
 
     idsOf = (group) ->
       pre = "#{group}:"
       len = pre.length
-      (id for id of $scope.data when id.slice(0, len) is pre)
+      (id for id of $scope.model when id.slice(0, len) is pre)
 
     $scope.$on 'ss-store', (event, msg) ->
       [key, value] = msg
       if value?
-        existed = $scope.data[key]?
-        $scope.data[key] = value
+        existed = $scope.model[key]?
+        $scope.model[key] = value
         return if existed
       else
-        delete $scope.data[key]
+        delete $scope.model[key]
       # update collections in $scope when keys are added or removed
       keyEnd = key.indexOf ':'
       if keyEnd >= 0
@@ -51,7 +51,7 @@ myApp.controller 'AppCtrl', [
     
     # get initial model from the server
     ss.rpc 'host.api', 'fetch', (model) ->
-      $scope.data = model
+      $scope.model = model
       # TODO: use a single loop and generalise
       $scope.briqs = idsOf 'briqs'
       $scope.installed = idsOf 'installed'
@@ -67,7 +67,7 @@ myApp.controller 'AdminCtrl', [
 
     $scope.selectBriq = (id) ->
       $scope.id = id
-      $scope.details = $scope.data[id]
+      $scope.details = $scope.model[id]
       
     $scope.installBriq = () ->
       key = ['installed', $scope.details.info.name]

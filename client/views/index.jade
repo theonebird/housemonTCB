@@ -3,12 +3,13 @@ html(lang='en',ng-app='myApp')
   head
     meta(charset='utf-8')
     meta(name='viewport',content='width=device-width')
-    title Welcome to HouseMon
+    title Welcome
     != SocketStream
     
   body(ng-controller='AppCtrl')
     nav.top-bar
       ul.right
+        //- TODO: use ng-repeat and add .active for current view
         li: a(href='.') Home
         li: a(href='admin') Admin
         li: a(href='sandbox') Sandbox

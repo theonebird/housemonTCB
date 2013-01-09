@@ -1,6 +1,8 @@
 {
   "name": "housemon",
+  "exact-name": "HouseMon",
   "description": "Real-time home monitoring and automation",
+  "homepage": "https://github.com/jcw/housemon",
   "version": "0.0.5",
   "author": "Jean-Claude Wippler <jc@wippler.nl>",
   "private": true,

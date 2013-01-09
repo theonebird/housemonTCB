@@ -8,7 +8,7 @@ div(ng-controller='AdminCtrl')
       h4 Briqs
       ul.square
         li(ng-repeat='id in briqs',ng-click='selectBriq(id)')
-          {{data[id].info.name}}
+          {{model[id].info.name}}
       h4 Installed
       ul.square
         li(ng-repeat='id in installed',ng-click='uninstallBriq(id)')
@@ -16,9 +16,9 @@ div(ng-controller='AdminCtrl')
              
     .nine.columns(ng-show='id')
       .panel
-        h4 {{data[id].info.name}}
-        h4.subheader {{data[id].info.description}}
-        .row(ng-repeat='param in data[id].info.parameters')
+        h4 {{model[id].info.name}}
+        h4.subheader {{model[id].info.description}}
+        .row(ng-repeat='param in model[id].info.parameters')
           .three.columns
             label.right.inline {{param.name}}:
           .nine.columns
@@ -34,5 +34,5 @@ div(ng-controller='AdminCtrl')
         |  - it is now 
         b {{tick|date:'HH:mm:ss'}}
       p.right
-        a(href='https://github.com/jcw/housemon') HouseMon
-        |  {{data.package.version}}
+        a(href='{{model.package.homepage}}') {{model.package['exact-name']}}
+        |  {{model.package.version}}
