@@ -10,13 +10,13 @@ time2watt = (t) ->
 exports.devices  =
 
   radioBlip: (raw, cb) ->
-    count = raw.readUInt32LE(0)
+    count = raw.readUInt32LE(1)
     cb
       ping: count 
       age: Math.floor(count / (86400 / 64))
   
   homePower: (raw, cb) ->
-    ints = (raw.readUInt16LE(2*i) for i in [0..5])
+    ints = (raw.readUInt16LE(1+2*i) for i in [0..5])
     cb
       c1: ints[0]
       p1: time2watt ints[1]
@@ -26,7 +26,7 @@ exports.devices  =
       p3: time2watt ints[5]
   
   smaRelay: (raw, cb) ->
-    ints = (raw.readUInt16LE(2*i) for i in [0..6])
+    ints = (raw.readUInt16LE(1+2*i) for i in [0..6])
     cb
       yield: ints[0]
       total: ints[1]
@@ -37,18 +37,18 @@ exports.devices  =
       dcw2: ints[6]
 
   roomNode: (raw, cb) ->
-    t = raw.readUInt16LE(2) & 0x3FF
+    t = raw.readUInt16LE(3) & 0x3FF
     cb
-      light: raw.readUInt8(0)
-      humi: raw.readUInt8(1) >> 1
-      moved: raw.readUInt8(1) & 1
+      light: raw[1]
+      humi: raw[2] >> 1
+      moved: raw[2] & 1
       temp: if t < 0x200 then t else 0x200 - t
 
   # see http://jeelabs.org/2012/12/01/extracting-data-from-p1-packets/
   p1scanner: (raw, cb) ->
     ints = []
     v = 0
-    for i in [0...raw.length]
+    for i in [1...raw.length]
       b = raw[i]
       v = (v << 7) + (b & 0x7F)
       if b & 0x80
