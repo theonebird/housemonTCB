@@ -7,10 +7,4 @@ html(lang='en',ng-app='myApp')
     != SocketStream
     
   body(ng-controller='AppCtrl')
-    nav.top-bar
-      ul.right
-        li: a(href='.') Home
-        li: a(href='admin') Admin
-        li: a(href='sandbox') Sandbox
-        
-    .ng-view
+    block content

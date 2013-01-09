@@ -1,0 +1,38 @@
+div(ng-controller='AdminCtrl')
+
+  .row
+    .twelve.columns
+    
+  .row
+    .three.columns
+      h4 Briqs
+      ul.square
+        li(ng-repeat='id in briqs',ng-click='selectBriq(id)')
+          {{data[id].info.name}}
+      h4 Installed
+      ul.square
+        li(ng-repeat='id in installed',ng-click='uninstallBriq(id)')
+          {{id.slice(10)}}
+             
+    .nine.columns(ng-show='id')
+      .panel
+        h4 {{data[id].info.name}}
+        h4.subheader {{data[id].info.description}}
+        .row(ng-repeat='param in data[id].info.parameters')
+          .three.columns
+            label.right.inline {{param.name}}:
+          .nine.columns
+            input.four(type='text',ng-model='param.default')
+        .row.twelve.columns
+          input.button(type='submit',value='Install',ng-click='installBriq()')
+
+  .row
+    .twelve.columns
+      hr
+      p.left Server platform: 
+        i {{platform}}
+        |  - it is now 
+        b {{tick|date:'HH:mm:ss'}}
+      p.right
+        a(href='https://github.com/jcw/housemon') HouseMon
+        |  {{data.package.version}}

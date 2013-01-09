@@ -1,8 +1,17 @@
 myApp = angular.module 'myApp', ['ssAngular']
 
 myApp.config [
-  '$locationProvider',
-  ($locationProvider) ->
+  '$routeProvider','$locationProvider',
+  ($routeProvider, $locationProvider) ->
+    $routeProvider
+      .when '/',
+        templateUrl: 'home.html'
+      .when '/admin',
+        templateUrl: 'admin.html'
+      .when '/sandbox',
+        templateUrl: 'sandbox.html'
+      .otherwise
+        redirectTo: '/'
     $locationProvider.html5Mode true
 ]
 
@@ -14,7 +23,7 @@ myApp.controller 'AppCtrl', [
     $scope.tick = '?'
     $scope.$on 'ss-tick', (event, msg) ->
       $scope.tick = msg
-      
+    
     # example RPC call, the returned promise is automatically resolved
     $scope.platform = rpc 'host.platform'
     
@@ -24,9 +33,6 @@ myApp.controller 'AppCtrl', [
       pre = "#{group}:"
       len = pre.length
       (id for id of $scope.data when id.slice(0, len) is pre)
-
-    store = (key, value) ->
-      rpc 'host.api', 'store', key, value
 
     $scope.$on 'ss-store', (event, msg) ->
       [key, value] = msg
@@ -50,6 +56,14 @@ myApp.controller 'AppCtrl', [
       $scope.briqs = idsOf 'briqs'
       $scope.installed = idsOf 'installed'
       console.info 'model fetched'
+]
+  
+myApp.controller 'AdminCtrl', [
+  '$scope','rpc',
+  ($scope, rpc) ->
+
+    store = (key, value) ->
+      rpc 'host.api', 'store', key, value
 
     $scope.selectBriq = (id) ->
       $scope.id = id
