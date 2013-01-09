@@ -1,25 +1,22 @@
 # Manage the state which is shared with all clients
 
 events = require 'events'
-state = new events.EventEmitter
 
 # set up central data model
 model = 
   package: require '../package'
 
 # fetch, idsOf, and store implement a simple distributed key-value store
-# these are registered as ss.api for server-wide use
+
+state = new events.EventEmitter
   
 state.fetch = () ->
-  console.info 'fetch', Object.keys(model).length
   model
   
 state.idsOf = (group) ->
   pre = "#{group}:"
   len = pre.length
-  result = (id for id of model when id.slice(0, len) is pre)
-  console.info 'idsOf', group, result 
-  result
+  (id for id of model when id.slice(0, len) is pre)
 
 state.store = (key, value) ->
   console.info 'store', key, value?
