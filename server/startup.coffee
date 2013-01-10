@@ -35,9 +35,6 @@ ss.client.formatters.add require('ss-stylus')
 # Use client-side templates
 ss.client.templateEngine.use 'angular'
 
-# Responders on the server side
-ss.responders.add require('ss-angular')
-
 # Minimise and pack assets if you type: SS_ENV=production node app.js
 ss.client.packAssets()  if ss.env is 'production'
 

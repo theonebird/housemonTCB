@@ -1,4 +1,4 @@
-myApp = angular.module 'myApp', ['ssAngular']
+myApp = angular.module 'myApp', ['app.services']
 
 myApp.config [
   '$routeProvider','$locationProvider',
@@ -25,7 +25,7 @@ myApp.controller 'AppCtrl', [
       $scope.tick = msg
     
     # example RPC call, the returned promise is automatically resolved
-    $scope.platform = rpc 'host.platform'
+    $scope.platform = ss.rpc 'host.platform'
     
     $scope.model = {}    
 
@@ -63,7 +63,7 @@ myApp.controller 'AdminCtrl', [
   ($scope, rpc) ->
 
     store = (key, value) ->
-      rpc 'host.api', 'store', key, value
+      ss.rpc 'host.api', 'store', key, value
 
     $scope.selectBriq = (id) ->
       $scope.id = id

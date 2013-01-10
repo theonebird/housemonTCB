@@ -11,7 +11,7 @@ ss.server.on 'reconnect', ->
   # force full reload to re-establish all model links
   window.location.reload true
 
-require 'ssAngular'
+require '/services'
 require '/controllers'
 
 ss.server.on 'ready', ->
