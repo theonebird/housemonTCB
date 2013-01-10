@@ -8,7 +8,7 @@ and Node.js's "middleware" for which there is an excellent introduction over
 
 ## Client startup
 
-The client starts with "entry.coffee", which orchestrates the main setup
+The client starts with `entry.coffee`, which orchestrates the main setup
 needed for Angular:
   
 * create an Angular module called "myApp"
@@ -16,7 +16,12 @@ needed for Angular:
 * install any filters defined in "filters.coffee"
 * install any services defined in "services.coffee"
 * install any directives defined in "directives.coffee"
-* wait for the DOM to finish loading, then load the main "app.coffee" code
+* wait for the DOM to finish loading, then print "app ready" on the console
+
+With NG apps, the bulk of the client-side code should probably be placed inside
+services, because these can access each other and can be used by controllers.
+All NG madules can take advantage of the "Dependency Injection" mechanism, a
+fancy name for a clean high-level mechanism to tie things _loosely_ together.
   
 ## Terminology
 

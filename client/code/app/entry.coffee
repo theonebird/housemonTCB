@@ -42,4 +42,4 @@ for name, controller of require '/controllers'
 
 ss.server.on 'ready', ->
   jQuery ->
-    require '/app'
+    console.info 'app ready'

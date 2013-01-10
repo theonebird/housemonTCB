@@ -9,7 +9,7 @@ exports.AppCtrl = [
     $scope.$on 'ss-tick', (event, msg) ->
       $scope.tick = msg
     
-    # example RPC call, the returned result adjust the scope
+    # example RPC call, the returned result will adjust the scope
     ss.rpc 'host.platform', (name) ->
       $scope.platform = name
       
