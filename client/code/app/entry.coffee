@@ -16,20 +16,26 @@ myApp = angular.module 'myApp', []
 myApp.config [
   '$routeProvider','$locationProvider',
   ($routeProvider, $locationProvider) ->
-    $routeProvider
-      .when '/',
-        templateUrl: 'home.html'
-      .when '/admin',
-        templateUrl: 'admin.html'
-      .when '/sandbox',
-        templateUrl: 'sandbox.html'
-      .otherwise
+    console.info 'routes defined'
+
+    for route in require '/routes'
+      if route.title and route.path
+        route.templateUrl = "#{route.title.toLowerCase()}.html"
+        $routeProvider.when route.path, route
+    $routeProvider.otherwise
         redirectTo: '/'
+
     $locationProvider.html5Mode true
 ]
 
+for name, filter of require '/filters'
+  myApp.filter name, filter
+  
 for name, service of require '/services'
   myApp.factory name, service
+  
+for name, directive of require '/directives'
+  myApp.directive name, directive
   
 for name, controller of require '/controllers'
   myApp.controller name, controller

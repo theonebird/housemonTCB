@@ -12,6 +12,8 @@ exports.AppCtrl = [
     # example RPC call, the returned result adjust the scope
     ss.rpc 'host.platform', (name) ->
       $scope.platform = name
+      
+    $scope.routes = require '/routes'
     
     $scope.model = {}    
 

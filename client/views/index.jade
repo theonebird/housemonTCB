@@ -9,9 +9,7 @@ html(lang='en',ng-app='myApp',ng-controller='AppCtrl')
   body()
     nav.top-bar
       ul.right
-        //- TODO: use ng-repeat and add .active for current view
-        li: a(href='.') Home
-        li: a(href='admin') Admin
-        li: a(href='sandbox') Sandbox
+        li(ng-repeat='route in routes')
+          a(href='{{route.path}}') {{route.title}}
         
     .ng-view
