@@ -29,7 +29,7 @@ Getting to grips with NG can be daunting. There is a very detailed tutorial
 on the [NG site](http://docs.angularjs.org/tutorial/) - it's quite long, but
 there's really no other way to reach nirvana than to work through it...
 
-For reference, a quick overview of the main concepts introduced there:
+For reference, here's a short list of the key concepts used in AngularJS:
 
 * **Routes** are the path matchers which determine how each URL gets handled
 * **Filters** are Angular's way of converting data to a nice format for HTML
@@ -48,7 +48,7 @@ a similar purpose, but they get auto-loaded and are paricularly suited for
 
 Everything in `client/code/` ends up in the browser through SocketStream's
 magic and the [Browserify](https://github.com/substack/node-browserify#readme)
-tool it uses internally. That's why things like "require './routes" works.
+tool it uses internally. That's why something like "require './routes" works.
 
 Everyting in `code/static/` is served as is, i.e. images and other "raw" assets.
 
