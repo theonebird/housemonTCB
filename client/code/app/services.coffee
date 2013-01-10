@@ -1,13 +1,13 @@
+# Service definitions
+
 # Credit due to https://github.com/polidore/ss-angular for 
 # figuring out a good way to wrap socketstream RPC and pubsub
 # as an angular service.  The code for the rpc and pubsub
 # services we taken / derived from there.
 # 
-# Thanks also to https://github.com/americanyak/ss-angular-demo for the example.
+# Thx also to https://github.com/americanyak/ss-angular-demo for the demo code.
 
-m = angular.module 'app.services', []
-
-m.factory 'rpc', [
+exports.rpc = [
   '$q','$rootScope',
   ($q, $rootScope) ->
     console.info 'rpc service created'
@@ -25,7 +25,7 @@ m.factory 'rpc', [
     cache: {}
 ]
 
-m.factory 'pubsub', [
+exports.pubsub = [
   '$rootScope',
   ($rootScope) ->
     console.info 'pubsub service created'

@@ -11,8 +11,28 @@ ss.server.on 'reconnect', ->
   # force full reload to re-establish all model links
   window.location.reload true
 
-require '/services'
-require '/controllers'
+myApp = angular.module 'myApp', []
+
+myApp.config [
+  '$routeProvider','$locationProvider',
+  ($routeProvider, $locationProvider) ->
+    $routeProvider
+      .when '/',
+        templateUrl: 'home.html'
+      .when '/admin',
+        templateUrl: 'admin.html'
+      .when '/sandbox',
+        templateUrl: 'sandbox.html'
+      .otherwise
+        redirectTo: '/'
+    $locationProvider.html5Mode true
+]
+
+for name, service of require '/services'
+  myApp.factory name, service
+  
+for name, controller of require '/controllers'
+  myApp.controller name, controller
 
 ss.server.on 'ready', ->
   jQuery ->

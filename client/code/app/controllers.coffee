@@ -1,21 +1,6 @@
-myApp = angular.module 'myApp', ['app.services']
+# Controller definitions
 
-myApp.config [
-  '$routeProvider','$locationProvider',
-  ($routeProvider, $locationProvider) ->
-    $routeProvider
-      .when '/',
-        templateUrl: 'home.html'
-      .when '/admin',
-        templateUrl: 'admin.html'
-      .when '/sandbox',
-        templateUrl: 'sandbox.html'
-      .otherwise
-        redirectTo: '/'
-    $locationProvider.html5Mode true
-]
-
-myApp.controller 'AppCtrl', [
+exports.AppCtrl = [
   '$scope','pubsub','rpc',
   ($scope, pubsub, rpc) ->
     
@@ -24,8 +9,9 @@ myApp.controller 'AppCtrl', [
     $scope.$on 'ss-tick', (event, msg) ->
       $scope.tick = msg
     
-    # example RPC call, the returned promise is automatically resolved
-    $scope.platform = ss.rpc 'host.platform'
+    # example RPC call, the returned result adjust the scope
+    ss.rpc 'host.platform', (name) ->
+      $scope.platform = name
     
     $scope.model = {}    
 
@@ -58,12 +44,12 @@ myApp.controller 'AppCtrl', [
       console.info 'model fetched'
 ]
   
-myApp.controller 'AdminCtrl', [
+exports.AdminCtrl = [
   '$scope','rpc',
   ($scope, rpc) ->
 
     store = (key, value) ->
-      ss.rpc 'host.api', 'store', key, value
+      ss.rpc 'host.api', 'store', key, value, ->
 
     $scope.selectBriq = (id) ->
       $scope.id = id
