@@ -39,5 +39,5 @@ exports.pubsub = [
           scope.$broadcast name, message
     
       # call angular's $on version
-      old$on.call this, name, listener
+      old$on.call scope, name, listener
 ]

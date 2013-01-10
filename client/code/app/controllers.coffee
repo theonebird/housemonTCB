@@ -38,6 +38,7 @@ exports.AppCtrl = [
     # get initial model from the server
     ss.rpc 'host.api', 'fetch', (model) ->
       $scope.model = model
+      $scope.appName = model.package['exact-name']
       # TODO: use a single loop and generalise
       $scope.briqs = idsOf 'briqs'
       $scope.installed = idsOf 'installed'
