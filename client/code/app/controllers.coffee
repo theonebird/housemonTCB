@@ -58,8 +58,8 @@ exports.AdminCtrl = [
       
     $scope.installBriq = () ->
       key = ['installed', $scope.details.info.name]
-      for p in $scope.details.info.parameters ? []
-        key.push p.default
+      for input in $scope.details.info.inputs ? []
+        key.push input.default
       store key.join(':'), $scope.id
       
     $scope.uninstallBriq = (id) ->

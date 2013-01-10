@@ -18,11 +18,11 @@ div(ng-controller='AdminCtrl')
       .panel
         h4 {{model[id].info.name}}
         h4.subheader {{model[id].info.description}}
-        .row(ng-repeat='param in model[id].info.parameters')
+        .row(ng-repeat='input in model[id].info.inputs')
           .three.columns
-            label.right.inline {{param.name}}:
+            label.right.inline {{input.name}}:
           .nine.columns
-            input.four(type='text',ng-model='param.default')
+            input.four(type='text',ng-model='input.default')
         .row.twelve.columns
           input.button(type='submit',value='Install',ng-click='installBriq()')
 

@@ -1,12 +1,17 @@
-serialport = require 'serialport'
-
 exports.info =
   name: 'rf12demo'
   description: 'Serial interface for a JeeNode running the RF12demo sketch'
-  parameters: [
+  inputs: [
     name: 'Serial port'
     default: '/dev/tty...' # TODO: list choices with serialport.list
   ]
+  outputs: [
+    type: 'packets'
+  ]
+  dependencies:
+    'serialport': '*'
+
+serialport = require 'serialport'
 
 class RF12demo extends serialport.SerialPort
   

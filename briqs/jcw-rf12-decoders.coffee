@@ -1,6 +1,10 @@
 exports.info =
   name: 'rf12decoders'
   description: 'Some simple decoders for RF12 packets'
+  inputs: [
+    name: 'Packets'
+    default: '...'
+  ]
 
 time2watt = (t) ->
   if t > 60000

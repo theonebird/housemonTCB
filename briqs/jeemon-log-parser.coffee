@@ -1,9 +1,18 @@
-events = require 'events'
-lazy = require 'lazy'
-
 exports.info =
   name: 'jeemon-log'
   description: 'Parser for JeeMon-formatted text logfiles'
+  inputs: [
+    name: 'Logfile path'
+    default: 'abc...' # TODO: server-side file/directory selection
+  ]
+  outputs: [
+    type: 'packets'
+  ]
+  dependencies:
+    'lazy': '*'
+
+events = require 'events'
+lazy = require 'lazy'
 
 # L 01:02:03.537 usb-A40117UK OK 9 25 54 66 235 61 139 183 235 210 226 33 19
 
