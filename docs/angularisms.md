@@ -20,7 +20,7 @@ needed for Angular:
 
 With NG apps, the bulk of the client-side code should probably be placed inside
 services, because these can access each other and can be used by controllers.
-All NG madules can take advantage of the "Dependency Injection" mechanism, a
+All NG modules can take advantage of the "Dependency Injection" mechanism, a
 fancy name for a clean high-level mechanism to tie things _loosely_ together.
   
 ## Terminology
