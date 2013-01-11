@@ -20,7 +20,7 @@ state.on 'store', (key, value) ->
 # Define a single-page client called 'main'
 ss.client.define 'main',
   view: 'index.jade'
-  css: 'app.styl'
+  css: ['libs', 'app.styl']
   code: 'app'
 
 # Serve this client on the root URL
