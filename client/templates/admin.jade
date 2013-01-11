@@ -22,7 +22,7 @@ div(ng-controller='AdminCtrl')
           .three.columns
             label.right.inline {{input.name}}:
           .nine.columns
-            input.four(type='text',ng-model='input.default')
+            input.four(type='text',ng-model='input.value',placeholder='{{input.default}}')
         .row.twelve.columns
           input.button(type='submit',value='Install',ng-click='installBriq()')
 

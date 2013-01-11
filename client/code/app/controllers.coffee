@@ -57,11 +57,13 @@ exports.AdminCtrl = [
     $scope.selectBriq = (id) ->
       $scope.id = id
       $scope.details = $scope.model[id]
+      for input in $scope.details.info.inputs ? []
+        input.value = null
       
     $scope.installBriq = () ->
       key = ['installed', $scope.details.info.name]
       for input in $scope.details.info.inputs ? []
-        key.push input.default
+        key.push input.value or input.default
       store key.join(':'), $scope.id
       
     $scope.uninstallBriq = (id) ->
