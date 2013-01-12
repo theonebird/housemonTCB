@@ -8,11 +8,7 @@ exports.AppCtrl = [
     $scope.tick = '?'
     $scope.$on 'ss-tick', (event, msg) ->
       $scope.tick = msg
-    
-    # example RPC call, the returned result will adjust the scope
-    ss.rpc 'host.platform', (name) ->
-      $scope.platform = name
-      
+          
     $scope.routes = require '/routes'
     
     $scope.model = {}    
@@ -39,11 +35,18 @@ exports.AppCtrl = [
         index = $scope[hash].indexOf(key)
         $scope[hash].splice(index, 1)
     
-    # get initial model from the server
-    ss.rpc 'host.api', 'fetch', (model) ->
-      $scope.model = model
-      $scope.appName = model.package.exactName
-      console.info 'model fetched'
+    # RPC isn't ready for use yet, so we must postpone these calls slightly
+    ss.server.on 'ready', ->
+      
+      # example RPC call, the returned result will adjust the scope
+      ss.rpc 'host.platform', (name) ->
+        $scope.platform = name
+
+      # get initial model from the server
+      ss.rpc 'host.api', 'fetch', (model) ->
+        $scope.model = model
+        $scope.appName = model.package.exactName
+        console.info 'model fetched'
 ]
   
 exports.AdminCtrl = [

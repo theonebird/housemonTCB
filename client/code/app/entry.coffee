@@ -41,5 +41,6 @@ for name, controller of require '/controllers'
   myApp.controller name, controller
 
 ss.server.on 'ready', ->
+  ss.rpc 'host.api','log','client app is ready', ->
   jQuery ->
     console.info 'app ready'
