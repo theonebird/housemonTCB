@@ -26,5 +26,12 @@ state.store = (key, value) ->
     else
       delete model[key]
     state.emit 'store', key, value
+    
+state.setupStorage = (db) ->
+  redis = require 'redis'
+  client = redis.createClient()
+  client.select db
+  state.on 'store', (key, value) ->
+    client.set key, JSON.stringify value
 
 module.exports = state

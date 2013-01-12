@@ -3,6 +3,7 @@
 # This list is also the order in which everything gets initialised
 state = require '../engine/state'
 briqs = require '../engine/briqs'
+pkg = require '../package'
 http = require 'http'
 ss = require 'socketstream'
 
@@ -26,6 +27,14 @@ ss.client.define 'main',
 # Serve this client on the root URL
 ss.http.route '/', (req, res) ->
   res.serveClient 'main'
+
+# Persistent sessions with Redis
+if pkg['use-redis']
+  db = 1
+  console.info "Connecting to Redis db ##{db}"
+  ss.session.store.use 'redis', { db: db }
+  ss.publish.transport.use 'redis'
+  state.setupStorage db
 
 # Code Formatters known by SocketStream
 ss.client.formatters.add require('ss-coffee')

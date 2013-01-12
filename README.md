@@ -12,6 +12,9 @@ Install [Node.js](http://nodejs.org) including [npm](https://npmjs.org), then:
     $ cd housemon
     $ npm install
     
+If you don't have [Redis](http://redis.io) installed and running: change the 
+"use-redis" entry in `package.json` to "false". This app selects database #1.
+    
 Launch the web server:
 
     $ npm start
