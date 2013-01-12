@@ -58,7 +58,7 @@ exports.AdminCtrl = [
       for input in id.info.inputs or []
         input.value = null
       
-    $scope.installBriq = () ->
+    $scope.installBriq = ->
       briq = $scope.id.info
       key = [briq.name]
       for input in briq.inputs or []

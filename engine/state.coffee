@@ -10,7 +10,7 @@ model =
 
 state = new events.EventEmitter
   
-state.fetch = () ->
+state.fetch = ->
   model
   
 state.idsOf = (hash) ->
@@ -28,14 +28,22 @@ state.store = (hash, key, value) ->
     model[hash] = collection
     state.emit 'store', hash, key, value
     
-state.setupStorage = (db) ->
+state.setupStorage = (db, cb) ->
   redis = require 'redis'
   client = redis.createClient()
-  client.select db
+  
   state.on 'store', (hash, key, value) ->
     if value?
       client.hmset hash, key, JSON.stringify value
     else
       client.hdel hash, key
+
+  client.select db, ->
+    # TODO: needs a more generic "restore everything we need" approach
+    client.hgetall 'installed', (err, res) ->
+      throw err  if err
+      for k,v of res
+        state.store 'installed', k, v
+      cb?()
 
 module.exports = state

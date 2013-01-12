@@ -2,7 +2,7 @@
 exports.actions = (req, res, ss) ->
   
   # this example function returns some information about the server
-  platform: () ->
+  platform: ->
     res process.platform
 
   api: (cmd, args...) ->

@@ -12,11 +12,11 @@ zlib = require 'zlib'
 gunzip = zlib.createGunzip()
 
 class Tester
-  constructor: () ->
+  constructor: ->
     log = []
 
     stream = fs.createReadStream("#{__dirname}/20121130.txt.gz").pipe(gunzip)
-    stream.on 'end', () ->
+    stream.on 'end', ->
       console.info "#{log.length} test packets loaded"
       
     parser = new parser.factory
