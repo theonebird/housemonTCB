@@ -5,6 +5,7 @@ events = require 'events'
 # set up central data model
 model = 
   package: require '../package'
+  local: require '../local'
 
 # fetch, idsOf, and store implement a simple distributed key-value store
 
@@ -28,9 +29,9 @@ state.store = (hash, key, value) ->
     model[hash] = collection
     state.emit 'store', hash, key, value
     
-state.setupStorage = (db, cb) ->
+state.setupStorage = (config, cb) ->
   redis = require 'redis'
-  client = redis.createClient()
+  client = redis.createClient(config.port, config.host, config)
   
   state.on 'store', (hash, key, value) ->
     if value?
@@ -38,7 +39,7 @@ state.setupStorage = (db, cb) ->
     else
       client.hdel hash, key
 
-  client.select db, ->
+  client.select config.db, ->
     # TODO: needs a more generic "restore everything we need" approach
     client.hgetall 'installed', (err, res) ->
       throw err  if err

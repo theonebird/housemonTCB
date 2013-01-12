@@ -42,7 +42,7 @@ exports.AppCtrl = [
     # get initial model from the server
     ss.rpc 'host.api', 'fetch', (model) ->
       $scope.model = model
-      $scope.appName = model.package['exact-name']
+      $scope.appName = model.package.exactName
       console.info 'model fetched'
 ]
   

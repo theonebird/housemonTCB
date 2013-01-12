@@ -13,17 +13,17 @@ Install [Node.js](http://nodejs.org) including [npm](https://npmjs.org), then:
     $ npm install
     
 If you don't have [Redis](http://redis.io) installed and running: change the 
-"use-redis" entry in `package.json` to "false". This app selects database #1.
+`useRedis` line in `local.json` to `false`. The default database is #1.
     
 Launch the web server:
 
     $ npm start
 
-Then browse to <http://localhost:3333/>.
+Then browse to <http://localhost:3333/> (this port is defined in `local.json`).
 
 # Seed use
 
-To use this project as the starting point for a fresh project:
+To use this project as starting point for a fresh project:
 
 * clone this project, then install all the required packages as described above
 * remove everything from the `briqs/` directory, except for `demo.coffee`

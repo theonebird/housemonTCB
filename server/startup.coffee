@@ -3,7 +3,7 @@
 # This list is also the order in which everything gets initialised
 state = require '../engine/state'
 briqs = require '../engine/briqs'
-pkg = require '../package'
+local = require '../local'
 http = require 'http'
 ss = require 'socketstream'
 
@@ -29,12 +29,11 @@ ss.http.route '/', (req, res) ->
   res.serveClient 'main'
 
 # Persistent sessions with Redis
-if pkg['use-redis']
-  db = 1
-  console.info "redis db ##{db}"
-  ss.session.store.use 'redis', { db: db }
-  # ss.publish.transport.use 'redis'
-  state.setupStorage db
+if local.useRedis
+  console.info 'redisConfig', local.redisConfig
+  ss.session.store.use 'redis', local.redisConfig
+  # ss.publish.transport.use 'redis', local.redisConfig
+  state.setupStorage local.redisConfig
 
 # Code Formatters known by SocketStream
 ss.client.formatters.add require('ss-coffee')
@@ -49,7 +48,7 @@ ss.client.packAssets()  if ss.env is 'production'
 
 # Start web server
 server = http.Server ss.http.middleware
-server.listen 3333
+server.listen local.httpPort
 ss.start server
 
 # This event is periodically pushed to the clients to make them, eh, "tick"

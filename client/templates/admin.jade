@@ -35,5 +35,5 @@ div(ng-controller='AdminCtrl')
         |  - it is now 
         b {{tick|date:'HH:mm:ss'}}
       p.right
-        a(href='{{model.package.homepage}}') {{model.package['exact-name']}}
+        a(href='{{model.package.homepage}}') {{model.local.exactName}}
         |  {{model.package.version}}
