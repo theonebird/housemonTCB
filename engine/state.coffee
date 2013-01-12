@@ -43,7 +43,7 @@ state.setupStorage = (db, cb) ->
     client.hgetall 'installed', (err, res) ->
       throw err  if err
       for k,v of res
-        state.store 'installed', k, v
+        state.store 'installed', k, JSON.parse(v)
       cb?()
 
 module.exports = state
