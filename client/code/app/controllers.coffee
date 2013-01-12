@@ -17,33 +17,32 @@ exports.AppCtrl = [
     
     $scope.model = {}    
 
-    idsOf = (group) ->
-      pre = "#{group}:"
-      len = pre.length
-      (id for id of $scope.model when id.slice(0, len) is pre)
+    idsOf = (hash) ->
+      Object.keys($scope.model[hash])
 
     $scope.$on 'ss-store', (event, msg) ->
-      [key, value] = msg
+      [hash,key,value] = msg
+      collection = $scope.model[hash] or {}
       if value?
-        existed = $scope.model[key]?
-        $scope.model[key] = value
-        return if existed
+        prevValue = collection[key]
+        collection[key] = value
       else
-        delete $scope.model[key]
+        delete collection[key]
+      $scope.model[hash] = collection
+      return if prevValue?
       # update collections in $scope when keys are added or removed
-      keyEnd = key.indexOf ':'
-      if keyEnd >= 0
-        prefix = key.slice(0, keyEnd)
-        # TODO: incrementally add or remove one item only
-        $scope[prefix] = idsOf prefix
+      # TODO: incrementally add or remove one item only
+      $scope[hash] ?= []
+      if value?
+        $scope[hash].push key
+      else
+        index = $scope[hash].indexOf(key)
+        $scope[hash].splice(index, 1)
     
     # get initial model from the server
     ss.rpc 'host.api', 'fetch', (model) ->
       $scope.model = model
       $scope.appName = model.package['exact-name']
-      # TODO: use a single loop and generalise
-      $scope.briqs = idsOf 'briqs'
-      $scope.installed = idsOf 'installed'
       console.info 'model fetched'
 ]
   
@@ -51,22 +50,22 @@ exports.AdminCtrl = [
   '$scope','rpc',
   ($scope, rpc) ->
 
-    store = (key, value) ->
-      ss.rpc 'host.api', 'store', key, value, ->
+    store = (hash, key, value) ->
+      ss.rpc 'host.api', 'store', hash, key, value, ->
 
     $scope.selectBriq = (id) ->
       $scope.id = id
-      $scope.details = $scope.model[id]
-      for input in $scope.details.info.inputs ? []
+      for input in id.info.inputs or []
         input.value = null
       
     $scope.installBriq = () ->
-      key = ['installed', $scope.details.info.name]
-      for input in $scope.details.info.inputs ? []
+      briq = $scope.id.info
+      key = [briq.name]
+      for input in briq.inputs or []
         key.push input.value or input.default
-      store key.join(':'), $scope.id
+      store 'installed', key.join(':'), briq.name
       
     $scope.uninstallBriq = (id) ->
       $scope.id = null
-      store id
+      store 'installed', id
 ]

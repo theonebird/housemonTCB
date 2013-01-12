@@ -5,7 +5,7 @@ fs = require 'fs'
 
 loadFile = (filename) ->
   loaded = require "../briqs/#{filename}"
-  state.store "briqs:#{filename}", loaded.info.name and loaded
+  state.store 'briqs', filename, loaded.info.name and loaded
 
 loadAll = (cb) ->
   # delete existing briqs

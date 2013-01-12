@@ -13,25 +13,29 @@ state = new events.EventEmitter
 state.fetch = () ->
   model
   
-state.idsOf = (group) ->
-  pre = "#{group}:"
-  len = pre.length
-  (id for id of model when id.slice(0, len) is pre)
+state.idsOf = (hash) ->
+  collection = model[hash] or {}
+  Object.keys(collection)
 
-state.store = (key, value) ->
-  console.info 'store', key, value?
-  unless value is model[key]
+state.store = (hash, key, value) ->
+  console.info 'store', hash, key, value?
+  collection = model[hash] or {}
+  unless value is collection[key]
     if value?
-      model[key] = value
+      collection[key] = value
     else
-      delete model[key]
-    state.emit 'store', key, value
+      delete collection[key]
+    model[hash] = collection
+    state.emit 'store', hash, key, value
     
 state.setupStorage = (db) ->
   redis = require 'redis'
   client = redis.createClient()
   client.select db
-  state.on 'store', (key, value) ->
-    client.set key, JSON.stringify value
+  state.on 'store', (hash, key, value) ->
+    if value?
+      client.hmset hash, key, JSON.stringify value
+    else
+      client.hdel hash, key
 
 module.exports = state

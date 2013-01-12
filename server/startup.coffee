@@ -15,8 +15,8 @@ briqs.loadAll ->
 ss.api.add 'fetch', state.fetch
 ss.api.add 'idsOf', state.idsOf
 ss.api.add 'store', state.store
-state.on 'store', (key, value) ->
-  ss.api.publish.all 'ss-store', [key, value]
+state.on 'store', (hash, key, value) ->
+  ss.api.publish.all 'ss-store', [hash, key, value]
   
 # Define a single-page client called 'main'
 ss.client.define 'main',
@@ -31,9 +31,9 @@ ss.http.route '/', (req, res) ->
 # Persistent sessions with Redis
 if pkg['use-redis']
   db = 1
-  console.info "Connecting to Redis db ##{db}"
+  console.info "redis db ##{db}"
   ss.session.store.use 'redis', { db: db }
-  ss.publish.transport.use 'redis'
+  # ss.publish.transport.use 'redis'
   state.setupStorage db
 
 # Code Formatters known by SocketStream

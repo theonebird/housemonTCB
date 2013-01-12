@@ -7,22 +7,23 @@ div(ng-controller='AdminCtrl')
     .three.columns
       h4 Briqs
       ul.square
-        li(ng-repeat='id in briqs',ng-click='selectBriq(id)')
-          {{model[id].info.name}}
+        li(ng-repeat='id in model.briqs',ng-click='selectBriq(id)')
+          {{id.info.name}}
       h4 Installed
       ul.square
-        li(ng-repeat='id in installed',ng-click='uninstallBriq(id)')
-          {{id.slice(10)}}
+        li(ng-repeat='(k,v) in model.installed',ng-click='uninstallBriq(k)')
+          {{k}}
              
     .nine.columns(ng-show='id')
       .panel
-        h4 {{model[id].info.name}}
-        h4.subheader {{model[id].info.description}}
-        .row(ng-repeat='input in model[id].info.inputs')
+        h4 {{midel.briqs[id].info.name}}
+        h4.subheader {{id.info.description}}
+        .row(ng-repeat='input in id.info.inputs')
           .three.columns
             label.right.inline {{input.name}}:
           .nine.columns
-            input.four(type='text',ng-model='input.value',placeholder='{{input.default}}')
+            input.four(type='text',ng-model='input.value',
+                        placeholder='{{input.default}}')
         .row.twelve.columns
           input.button(type='submit',value='Install',ng-click='installBriq()')
 

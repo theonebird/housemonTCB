@@ -17,7 +17,7 @@ class Tester
 
     stream = fs.createReadStream("#{__dirname}/20121130.txt.gz").pipe(gunzip)
     stream.on 'end', () ->
-      console.log "#{log.length} test packets loaded"
+      console.info "#{log.length} test packets loaded"
       
     parser = new parser.factory
     parser.on 'packet', (packet) ->

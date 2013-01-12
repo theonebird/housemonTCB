@@ -15,7 +15,7 @@ exports.rpc = [
     # call ss.rpc with 'demoRpc.foobar', args..., {callback}
     exec: (args...) ->
       deferred = $q.defer()
-      ss.rpc args..., (err, res) ->
+      ss.rpc args, (err, res) ->
         $rootScope.$apply (scope) ->
           return deferred.reject(err)  if err
           deferred.resolve res
