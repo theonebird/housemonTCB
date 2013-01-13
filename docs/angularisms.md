@@ -1,22 +1,20 @@
 # Angularisms
 
 The client side of this app is based on [AngularJS](http://angularjs.org)
-("NG"), which has a fairly steep learning curve. Before diving in, make sure
-you are familiar with [Connect](https://github.com/senchalabs/connect#readme)
-and Node.js's "middleware" for which there is an excellent introduction over
-[here](http://project70.com/nodejs/understanding-connect-and-middleware/).
+("NG"), which has a fairly steep learning curve. This is used to create a
+[SPA](http://en.wikipedia.org/wiki/Single-page_application) whereby a lot of
+the application lives inside the browser. NG only operates on the client side.
 
 ## Client startup
 
 The client starts with `entry.coffee`, which orchestrates the main setup
 needed for Angular:
   
-* create an Angular module called "myApp"
-* configure the client-side routes, as defined in the "routes.coffee" file
-* install any filters defined in "filters.coffee"
-* install any services defined in "services.coffee"
-* install any directives defined in "directives.coffee"
-* wait for the DOM to finish loading, then print "app ready" on the console
+* create an Angular module called "myApp" and load main code from "main.coffee"
+* configure the client-side routes, as defined in the main application code
+* set up the generic RPC and pubsub mechanisms to inter-operate with NG
+* install the filters, services, directives, and controllers in "main.coffee"
+* wait for the DOM to finish loading, then report "app ready" on the console
 
 With NG apps, the bulk of the client-side code should probably be placed inside
 services, because these can access each other and can be used by controllers.
@@ -48,9 +46,9 @@ a similar purpose, but they get auto-loaded and are paricularly suited for
 
 Everything in `client/code/` ends up in the browser through SocketStream's
 magic and the [Browserify](https://github.com/substack/node-browserify#readme)
-tool it uses internally. That's why something like "require './routes" works.
+tool it uses internally. That's why something like "require './main" works.
 
-Everyting in `code/static/` is served as is, i.e. images and other "raw" assets.
+Everyting in `code/static/` is served as is, i.e. images and other raw files.
 
 The `code/css/` area contains CSS files, for the app itself as well as for any
 frameworks included in the code. The `*.stylus` files are auto-compiled to CSS.
@@ -59,5 +57,3 @@ The `code/templates/` directory holds *partial* HTML (and `*.jade` files, which
 are also auto-compiled to HTML). These are inserted in the `ng-view` element,
 which is listed on the `views/index.jade` file. That index file has the main
 page boilerplate. This is all part of how "Single Page Applications" work.
-
-Note that outside the `client/` directory, AngularJS plays no role.
