@@ -2,31 +2,35 @@
 
 events = require 'events'
 
-# set up central data model
-model = 
-  package: require '../package'
+# set up the central data models used by each client
+models = 
+  pkg: require '../package'
   local: require '../local'
+  process: {}
 
-# fetch, idsOf, and store implement a simple distributed key-value store
+# process info is useful in the client, but not all of it can be serialised
+for k,v of process
+  unless k in ['stdin', 'stdout', 'stderr', 'mainModule']
+    unless typeof v is 'function'
+      models.process[k] = v
+      
+# fetch and store implement a simple replicated key-value store
+# when optionally tied to Redis, the store becomes persistent
 
 state = new events.EventEmitter
   
 state.fetch = ->
-  model
+  models
   
-state.idsOf = (hash) ->
-  collection = model[hash] or {}
-  Object.keys(collection)
-
 state.store = (hash, key, value) ->
   console.info 'store', hash, key, value?
-  collection = model[hash] or {}
+  collection = models[hash] or {}
   unless value is collection[key]
     if value?
       collection[key] = value
     else
       delete collection[key]
-    model[hash] = collection
+    models[hash] = collection
     state.emit 'store', hash, key, value
     
 state.setupStorage = (config, cb) ->

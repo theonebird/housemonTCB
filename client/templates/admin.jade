@@ -7,16 +7,16 @@ div(ng-controller='AdminCtrl')
     .three.columns
       h4 Briqs
       ul.square
-        li(ng-repeat='id in model.briqs',ng-click='selectBriq(id)')
+        li(ng-repeat='id in briqs',ng-click='selectBriq(id)')
           {{id.info.name}}
       h4 Installed
       ul.square
-        li(ng-repeat='(k,v) in model.installed',ng-click='uninstallBriq(k)')
+        li(ng-repeat='(k,v) in installed',ng-click='uninstallBriq(k)')
           {{k}}
              
     .nine.columns(ng-show='id')
       .panel
-        h4 {{midel.briqs[id].info.name}}
+        h4 {{id.info.name}}
         h4.subheader {{id.info.description}}
         .row(ng-repeat='input in id.info.inputs')
           .three.columns
@@ -31,9 +31,9 @@ div(ng-controller='AdminCtrl')
     .twelve.columns
       hr
       p.left Server platform: 
-        i {{platform}}
+        i {{process.platform}}
         |  - it is now 
         b {{tick|date:'HH:mm:ss'}}
       p.right
-        a(href='{{model.package.homepage}}') {{model.local.exactName}}
-        |  {{model.package.version}}
+        a(href='{{pkg.homepage}}') {{local.exactName}}
+        |  {{pkg.version}}

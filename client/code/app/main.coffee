@@ -1,7 +1,7 @@
 # Main app definitions, these all hook into AngularJS
 
-# Routes which have a title set will appear in the main menu
-# The order in the meny is the order in the reoutes array
+# routes which have a title will appear in the main menu
+# the order in the menu is the order in the reoutes array
 exports.routes = routes = [
   { title: 'Home', path: '/' }
   { title: 'Admin', path: '/admin' }
@@ -18,53 +18,34 @@ exports.controllers =
       $scope.tick = '?'
       $scope.$on 'ss-tick', (event, msg) ->
         $scope.tick = msg
-          
-      $scope.routes = routes
     
-      $scope.model = {}    
+      $scope.store = (hash, key, value) ->
+        ss.rpc 'host.api', 'store', hash, key, value, ->
 
-      idsOf = (hash) ->
-        Object.keys($scope.model[hash])
-
+      # the server emits ss-store events to update each of the client models
       $scope.$on 'ss-store', (event, msg) ->
         [hash,key,value] = msg
-        collection = $scope.model[hash] or {}
+        collection = $scope[hash] or {}
         if value?
-          prevValue = collection[key]
           collection[key] = value
         else
           delete collection[key]
-        $scope.model[hash] = collection
-        return if prevValue?
-        # update collections in $scope when keys are added or removed
-        # TODO: incrementally add or remove one item only
-        $scope[hash] ?= []
-        if value?
-          $scope[hash].push key
-        else
-          index = $scope[hash].indexOf(key)
-          $scope[hash].splice(index, 1)
+        $scope[hash] = collection
+          
+      $scope.routes = routes
     
-      # RPC isn't ready for use yet, so we must postpone these calls slightly
+      # postpone RPC's until the app is ready for use
       ss.server.on 'ready', ->
       
-        # example RPC call, the returned result will adjust the scope
-        ss.rpc 'host.platform', (name) ->
-          $scope.platform = name
-
-        # get initial model from the server
-        ss.rpc 'host.api', 'fetch', (model) ->
-          $scope.model = model
-          $scope.appName = model.package.exactName
-          console.info 'model fetched'
+        # get initial models from the server
+        ss.rpc 'host.api', 'fetch', (models) ->
+          $scope[k] = v  for k,v of models
+          console.info "models fetched: #{Object.keys(models)}"
   ]
   
   AdminCtrl: [
     '$scope','rpc',
     ($scope, rpc) ->
-
-      store = (hash, key, value) ->
-        ss.rpc 'host.api', 'store', hash, key, value, ->
 
       $scope.selectBriq = (id) ->
         $scope.id = id
@@ -72,13 +53,13 @@ exports.controllers =
           input.value = null
       
       $scope.installBriq = ->
-        briq = $scope.id.info
-        key = [briq.name]
-        for input in briq.inputs or []
+        info = $scope.id.info
+        key = [info.name]
+        for input in info.inputs or []
           key.push input.value or input.default
-        store 'installed', key.join(':'), briq.name
+        $scope.store 'installed', key.join(':'), info.name
       
       $scope.uninstallBriq = (id) ->
         $scope.id = null
-        store 'installed', id
+        $scope.store 'installed', id
   ]
