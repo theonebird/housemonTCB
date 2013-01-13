@@ -21,12 +21,12 @@
     "underscore": "~1.4.3",
     "redis": "~0.8.2"
   },
-  "scripts": {
-    "start": "node app.js",
-    "test": "make test"
-  },
   "devDependencies": {
     "mocha": "~1.8.1",
     "should": "~1.2.1"
+  },
+  "scripts": {
+    "start": "node app.js",
+    "test": "echo $PATH; mocha --reporter spec"
   }
 }
