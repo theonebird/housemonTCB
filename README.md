@@ -13,13 +13,13 @@ Install [Node.js](http://nodejs.org) including [npm](https://npmjs.org), then:
     $ npm install
     
 If you don't have [Redis](http://redis.io) installed and running: change the 
-`useRedis` line in `local.json` to `false`. The default database is #1.
+"useRedis" line in `local.json` to "false". The default database is #1.
     
 Launch the web server:
 
     $ npm start
 
-Then browse to <http://localhost:3333/> (this port is defined in `local.json`).
+Then browse to <http://localhost:3333/> (this can be changed in `local.json`).
 
 # Seed use
 
