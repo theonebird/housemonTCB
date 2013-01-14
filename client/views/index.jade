@@ -7,10 +7,12 @@ html(lang='en',ng-app='myApp',ng-controller='MainCtrl')
     include cdn
     != SocketStream
     
-  body()
+  body
     nav.top-bar
       ul.top-bar
-        li.name: h1: a(href='#') {{local.exactName}}
+        li.name: h1: a(href='{{pkg.homepage}}')
+          img(src='/images/logo.png',height=27.5,width=27.5)
+          | &nbsp; {{local.exactName}}
         li.toggle-topbar: a(href='#')
       section
         ul.right
