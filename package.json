@@ -19,7 +19,8 @@
     "serialport": "~1.0.8",
     "lazy": "~1.0.8",
     "underscore": "~1.4.3",
-    "redis": "~0.8.2"
+    "redis": "~0.8.2",
+    "eventemitter2": "~0.4.11"
   },
   "devDependencies": {
     "mocha": "~1.8.1",

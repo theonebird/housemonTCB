@@ -15,7 +15,7 @@ exports.controllers =
         key = [info.name]
         for input in info.inputs or []
           key.push input.value or input.default
-        $scope.store 'installed', key.join(':'), { briq: info.name }
+        $scope.store 'installed', key.join(':'), { briq: $scope.id.filename }
       
       $scope.uninstallBriq = (id) ->
         $scope.id = null

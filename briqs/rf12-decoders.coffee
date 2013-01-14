@@ -3,7 +3,7 @@ exports.info =
   description: 'Some simple decoders for RF12 packets'
   inputs: [
     name: 'Packet source'
-    default: '...'
+    type: 'briq'
   ]
 
 time2watt = (t) ->

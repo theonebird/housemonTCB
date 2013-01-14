@@ -5,11 +5,8 @@ exports.info =
     name: 'Logfile path'
     default: 'abc...' # TODO: server-side file/directory selection
   ]
-  outputs: [
-    type: 'packets'
-  ]
-  dependencies:
-    'lazy': '*'
+  # dependencies:
+  #   'lazy': '*'
 
 events = require 'events'
 lazy = require 'lazy'

@@ -2,7 +2,7 @@
 
 # This list is also the order in which everything gets initialised
 state = require '../engine/state'
-briqs = require '../engine/briqs'
+briqs = require('../engine/briqs') state
 local = require '../local'
 http = require 'http'
 ss = require 'socketstream'

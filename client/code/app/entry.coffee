@@ -26,7 +26,7 @@ for r in routes
     myApp.directive name, def  for name,def of module.directives
     myApp.controller name, def  for name,def of module.controllers
 
-ss.server.on 'ready', ->
+ss.server.once 'ready', ->
   jQuery ->
     console.info 'app ready'
     ss.rpc 'host.api','log','client app is ready', ->

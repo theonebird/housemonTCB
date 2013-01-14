@@ -43,7 +43,7 @@ exports.controllers =
         $scope[hash] = collection
           
       # postpone RPC's until the app is ready for use
-      ss.server.on 'ready', ->
+      ss.server.once 'ready', ->
         # get initial models from the server
         ss.rpc 'host.api', 'fetch', (models) ->
           $scope[k] = v  for k,v of models

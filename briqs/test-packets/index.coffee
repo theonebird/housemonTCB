@@ -1,10 +1,7 @@
 exports.info =
   name: 'test-packets'
   description: 'RF12 test data generator'
-  outputs: [
-    type: 'packets'
-  ]
-  needs: ['jeemon-log-parser']
+  # needs: ['jeemon-log-parser']
 
 parser = require '../jeemon-log-parser'
 fs = require 'fs'

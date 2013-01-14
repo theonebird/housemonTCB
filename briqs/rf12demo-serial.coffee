@@ -5,11 +5,8 @@ exports.info =
     name: 'Serial port'
     default: 'usb-A900ad5m' # TODO: list choices with serialport.list
   ]
-  outputs: [
-    type: 'packets'
-  ]
-  dependencies:
-    'serialport': '*'
+  # dependencies:
+  #   'serialport': '*'
 
 serialport = require 'serialport'
 
@@ -45,5 +42,7 @@ class RF12demo extends serialport.SerialPort
           @info.band = parseInt(match[3])
         else
           @emit 'other', data
+          
+  destroy: () -> @close()
         
 exports.factory = RF12demo
