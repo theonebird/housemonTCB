@@ -9,8 +9,12 @@ html(lang='en',ng-app='myApp',ng-controller='MainCtrl')
     
   body()
     nav.top-bar
-      ul.right
-        li(ng-repeat='route in routes')
-          a(href='{{route.path}}') {{route.title}}
+      ul
+        li.name: h1: a(href='#') {{local.exactName}}
+        li.toggle-topbar: a(href='#')
+      section
+        ul.right
+          li(ng-repeat='route in routes')
+            a(href='{{route.path}}') {{route.title}}
         
     .ng-view
