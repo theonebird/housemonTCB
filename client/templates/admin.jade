@@ -1,39 +1,37 @@
-div(ng-controller='AdminCtrl')
-
-  .row
-    .twelve.columns
+.row
+  .twelve.columns
     
-  .row
-    .three.columns
-      h4 Briqs
-      ul.square
-        li(ng-repeat='id in briqs',ng-click='selectBriq(id)')
-          {{id.info.name}}
-      h4 Installed
-      ul.square
-        li(ng-repeat='(k,v) in installed',ng-click='uninstallBriq(k)')
-          {{k}}
+.row
+  .three.columns
+    h4 Briqs
+    ul.square
+      li(ng-repeat='id in briqs',ng-click='selectBriq(id)')
+        {{id.info.name}}
+    h4 Installed
+    ul.square
+      li(ng-repeat='(k,v) in installed',ng-click='uninstallBriq(k)')
+        {{k}}
              
-    .nine.columns(ng-show='id')
-      .panel
-        h4 {{id.info.name}}
-        h4.subheader {{id.info.description}}
-        .row(ng-repeat='input in id.info.inputs')
-          .three.columns
-            label.right.inline {{input.name}}:
-          .nine.columns
-            input.four(type='text',ng-model='input.value',
-                        placeholder='{{input.default}}')
-        .row.twelve.columns
-          input.button(type='submit',value='Install',ng-click='installBriq()')
+  .nine.columns(ng-show='id')
+    .panel
+      h4 {{id.info.name}}
+      h4.subheader {{id.info.description}}
+      .row(ng-repeat='input in id.info.inputs')
+        .three.columns
+          label.right.inline {{input.name}}:
+        .nine.columns
+          input.four(type='text',ng-model='input.value',
+                      placeholder='{{input.default}}')
+      .row.twelve.columns
+        input.button(type='submit',value='Install',ng-click='installBriq()')
 
-  .row
-    .twelve.columns
-      hr
-      p.left Server platform: 
-        i {{process.platform}}
-        |  - it is now 
-        b {{tick|date:'HH:mm:ss'}}
-      p.right
-        a(href='{{pkg.homepage}}') {{local.exactName}}
-        |  {{pkg.version}}
+.row
+  .twelve.columns
+    hr
+    p.left Server platform: 
+      i {{process.platform}}
+      |  - it is now 
+      b {{tick|date:'HH:mm:ss'}}
+    p.right
+      a(href='{{pkg.homepage}}') {{local.exactName}}
+      |  {{pkg.version}}

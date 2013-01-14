@@ -1,10 +1,9 @@
 # Admin module definitions
 
 exports.controllers = 
-
   AdminCtrl: [
-    '$scope','rpc',
-    ($scope, rpc) ->
+    '$scope',
+    ($scope) ->
 
       $scope.selectBriq = (id) ->
         $scope.id = id
