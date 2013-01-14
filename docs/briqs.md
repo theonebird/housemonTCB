@@ -31,11 +31,11 @@ which does not currently exist, since there _is_ no middleware yet...
 Client-side features will often be "a new page in the app with its own UI" -
 such a new feature can be added as follows right now:
 
-* pick a short name (e.g. 'jobs') to use application-wide
+* pick a short name (e.g. 'jobs') to use application-wide, and as URL prefix
 
 * add a file called `client/templates/jobs.jade`, to contain the HTML structure
 
-* add a file `client/code/app/jobs.coffee` and in it, place the following code:
+* create a file `client/code/modules/jobs.coffee` with the following contents:
 
         exports.controllers = 
           JobsCtrl: [
@@ -53,11 +53,6 @@ such a new feature can be added as follows right now:
 * edit the `client/code/app/routes.coffee` file, and add the following item:
 
         title: 'Jobs'
-        path: '/jobs'
         controller: 'JobsCtrl'
-
-* edit the `client/code/app/entry.coffee` file, and extend the list in there:
-
-        for path in ['/main', '/home', '/admin', '/sandbox', '/jobs]
 
 That's it. Save and your browser should show a new "Jobs" tab in the main menu.

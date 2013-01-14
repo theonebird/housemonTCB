@@ -3,7 +3,7 @@ exports.info =
   description: 'Serial interface for a JeeNode running the RF12demo sketch'
   inputs: [
     name: 'Serial port'
-    default: '/dev/tty...' # TODO: list choices with serialport.list
+    default: 'usb-A900ad5m' # TODO: list choices with serialport.list
   ]
   outputs: [
     type: 'packets'
@@ -17,6 +17,9 @@ class RF12demo extends serialport.SerialPort
   
   constructor: (device) ->
     @info = {}
+    
+    # TODO: expand platform-specific shorthands, not just Mac
+    device = device.replace /^usb-/, '/dev/tty.usbserial-'
     
     # construct the serial port object
     super device,

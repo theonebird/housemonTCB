@@ -28,7 +28,7 @@ To use this project as starting point for a fresh project:
 
 * clone this project, then install all the required packages as described above
 * remove everything from the `briqs/` directory, except for `demo.coffee`
-* change the project name, author, version, etc. as needed in `package.json`
+* change project name, author, version, etc. in `package.json` and `local.json`
 
 # License
 

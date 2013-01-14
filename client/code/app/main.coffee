@@ -6,10 +6,11 @@ exports.config = [
   '$routeProvider','$locationProvider',
   ($routeProvider, $locationProvider) ->
     
-    for route in routes
-      if route.title and route.path
-        route.templateUrl ?= "#{route.title.toLowerCase()}.html"
-        $routeProvider.when route.path, route
+    for r in routes
+      if r.title
+        r.route ?= "/#{r.title.toLowerCase()}"
+        r.templateUrl ?= "#{r.title.toLowerCase()}.html"
+        $routeProvider.when r.route, r
     $routeProvider.otherwise
       redirectTo: '/'
 

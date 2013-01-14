@@ -1,6 +1,6 @@
 # Startup
 
-Understanding the startup process is quite a challenge, with so much magic
+Understanding the startup process can be quite a challenge with so much magic
 going on under the hood. There's SocketStream and AngularJS, neither of them
 know about each other on initial application startup.
 
@@ -19,7 +19,7 @@ See `admin.coffee for an example, with `MainCtrl` "calling" rpc and pubsub.
 
 ## Server-side startup
 
-The application is normally started using `npm start`. Here's what that does:
+The server is normally started using `npm start`. Here's what that does:
 
 * npm looks in `package.json` for the `main` entry and finds `app.js`
 * it then launches `node` with `app.js` as script (see the note below)
@@ -28,7 +28,9 @@ The application is normally started using `npm start`. Here's what that does:
 * non-standard is that all files in `briqs/` are scanned and loaded
 * also extra, is the code in `engine/...` to manage briqs and shared state
 
-For develoment, it's better to install `nodemon`, and launch the app that way.
+For develoment, it's better to launch the app with `nodemon`, because it'll
+restart the server on relevant file changes. To install nodemon globally, use
+`npm install -g nodemon`. To launch the server, run `nodemon` in the top dir.
 
 ## More docs
 

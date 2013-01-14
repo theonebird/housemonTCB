@@ -1,4 +1,5 @@
 # This client-side code gets called first by SocketStream and must always exist
+routes = require '/routes'
 
 # Make 'ss' available to all modules and the browser console
 window.ss = require 'socketstream'
@@ -14,13 +15,16 @@ ss.server.on 'reconnect', ->
 myApp = angular.module 'myApp', []
 
 # set up all NG modules, the '/main' entry must always be the first one
-for path in ['/main', '/home', '/admin', '/sandbox']
-  module = require path
-  myApp.config module.config  if module.config
-  myApp.filter name, def  for name,def of module.filters
-  myApp.factory name, def  for name,def of module.services
-  myApp.directive name, def  for name,def of module.directives
-  myApp.controller name, def  for name,def of module.controllers
+# this now uses the routes list to figure out what files to load
+for r in routes
+  loadPath = r.load or (r.title and "/#{r.title.toLowerCase()}")
+  if loadPath
+    module = require loadPath
+    myApp.config module.config  if module.config
+    myApp.filter name, def  for name,def of module.filters
+    myApp.factory name, def  for name,def of module.services
+    myApp.directive name, def  for name,def of module.directives
+    myApp.controller name, def  for name,def of module.controllers
 
 ss.server.on 'ready', ->
   jQuery ->
