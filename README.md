@@ -13,7 +13,8 @@ Install [Node.js](http://nodejs.org) including [npm](https://npmjs.org), then:
     $ npm install
     
 If you don't have [Redis](http://redis.io) installed and running: change the 
-"useRedis" line in `local.json` to "false". The default database is #1.
+"useRedis" line in `local.json` to "false". The default database is #1. The
+server will work fine without Redis, it just won't have persistent state.
     
 Launch the web server:
 
