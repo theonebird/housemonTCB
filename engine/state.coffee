@@ -24,7 +24,7 @@ state.fetch = ->
   
 state.store = (hash, key, value) ->
   console.info 'store', hash, key, value?
-  collection = models[hash] or {}
+  collection = models[hash] ? {}
   unless value is collection[key]
     if value?
       collection[key] = value

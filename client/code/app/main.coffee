@@ -8,16 +8,15 @@ exports.config = [
     
     for route in routes
       if route.title and route.path
-        route.templateUrl = "#{route.title.toLowerCase()}.html"
+        route.templateUrl ?= "#{route.title.toLowerCase()}.html"
         $routeProvider.when route.path, route
     $routeProvider.otherwise
-        redirectTo: '/'
+      redirectTo: '/'
 
     $locationProvider.html5Mode true
 ]
 
 exports.controllers = 
-
   MainCtrl: [
     '$scope','pubsub','rpc',
     ($scope, pubsub, rpc) ->
@@ -35,7 +34,7 @@ exports.controllers =
       # the server emits ss-store events to update each of the client models
       $scope.$on 'ss-store', (event, msg) ->
         [hash,key,value] = msg
-        collection = $scope[hash] or {}
+        collection = $scope[hash] ? {}
         if value?
           collection[key] = value
         else
@@ -44,7 +43,6 @@ exports.controllers =
           
       # postpone RPC's until the app is ready for use
       ss.server.on 'ready', ->
-      
         # get initial models from the server
         ss.rpc 'host.api', 'fetch', (models) ->
           $scope[k] = v  for k,v of models
