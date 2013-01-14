@@ -10,10 +10,9 @@ the application lives inside the browser. NG only operates on the client side.
 The client starts with `entry.coffee`, which orchestrates the main setup
 needed for Angular:
   
-* create an Angular module called "myApp" and load main code from "main.coffee"
-* configure the client-side routes, as defined in the main application code
-* set up the generic RPC and pubsub mechanisms to inter-operate with NG
-* install the filters, services, directives, and controllers in "main.coffee"
+* create an Angular module called "myApp" and setup things in "wrappers.coffee"
+* configure the client-side routes, as defined in the "routes.coffee" file
+* install all the configs, filters, services, directives, and controllers
 * wait for the DOM to finish loading, then report "app ready" on the console
 
 With NG apps, the bulk of the client-side code should probably be placed inside
