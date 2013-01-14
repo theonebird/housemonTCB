@@ -13,8 +13,8 @@ ss.server.on 'reconnect', ->
 
 myApp = angular.module 'myApp', []
 
-# set up all NG modules, the '/wrappers' entry must always be the first one
-for path in ['/wrappers', '/main', '/home', '/admin', '/sandbox']
+# set up all NG modules, the '/main' entry must always be the first one
+for path in ['/main', '/home', '/admin', '/sandbox']
   module = require path
   myApp.config module.config  if module.config
   myApp.filter name, def  for name,def of module.filters
