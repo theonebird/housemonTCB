@@ -35,13 +35,13 @@ such a new feature can be added as follows right now:
 
 * add a file called `client/templates/jobs.jade`, to contain the HTML structure
 
-* add a file `client/code/app/jobs.coffee` and in it, with the following text:
+* add a file `client/code/app/jobs.coffee` and in it, place the following code:
 
         exports.controllers = 
           JobsCtrl: [
             '$scope',
             ($scope) ->
-            // your code here, using "the Angular way"
+              // your code here, using "the Angular way"
           ]
           
 * you can also add filters, services, and directives, by adding lines such as:
@@ -60,4 +60,4 @@ such a new feature can be added as follows right now:
 
         for path in ['/main', '/home', '/admin', '/sandbox', '/jobs]
 
-That's it. Save and your browser should show a new "Jobs" tab in its menu.
+That's it. Save and your browser should show a new "Jobs" tab in the main menu.

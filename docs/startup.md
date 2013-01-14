@@ -22,7 +22,7 @@ See `admin.coffee for an example, with `MainCtrl` "calling" rpc and pubsub.
 The application is normally started using `npm start`. Here's what that does:
 
 * npm looks in `package.json` for the `main` entry and finds `app.js`
-* it then launches `node` with `app.js` as script
+* it then launches `node` with `app.js` as script (see the note below)
 * `app.js` is just a tiny wrapper to launch `server/startup.coffee`
 * `startup.coffee` is more or less a standard SocketStream app startup file
 * non-standard is that all files in `briqs/` are scanned and loaded
