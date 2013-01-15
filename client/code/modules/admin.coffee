@@ -16,7 +16,6 @@ exports.controllers =
         keys = [info.name]
         for input in info.inputs or []
           keys.push input.value?.keys or input.value or input.default
-        console.log 'aaaa',keys
         $scope.store 'installed', keys.join(':'),
           briq: $scope.id.filename
           keys: keys.join(':')

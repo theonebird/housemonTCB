@@ -4,17 +4,20 @@ exports.info =
   inputs: [
     name: 'Packet source'
     type: 'briq'
-  ,
-    name: 'Node types'
-    type: 'text'
   ]
+  
+events = require 'events'
+nodeMap = require '../nodeMap'
+state = require '../engine/state'
+models = state.fetch()
+console.log 'models',models
 
 time2watt = (t) ->
   if t > 60000
     t = 1000 * (t - 60000)
   Math.floor(18000000 / t) if t > 0
 
-exports.devices  =
+decoders =
 
   radioBlip: (raw, cb) ->
     count = raw.readUInt32LE(1)
@@ -71,3 +74,20 @@ exports.devices  =
         usew: ints[6]
         genw: ints[7]
         gas: ints[9]
+
+findDecoder = (packet) ->
+  name = nodeMap[packet.band]?[packet.group]?[packet.id]
+  decoders[name]
+
+class Decoder extends events.EventEmitter
+  constructor: (a1, a2) ->
+    setTimeout ->
+      feed = models.installed["#{a1}:#{a2}"].emitter
+      feed.on 'packet', (packet) ->
+        decoder = findDecoder packet
+        if decoder 
+          decoder packet.buffer, (info) ->
+            console.log 'decoded', info
+    , 3000
+
+exports.factory = Decoder
