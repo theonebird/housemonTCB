@@ -10,7 +10,6 @@ events = require 'events'
 nodeMap = require '../nodeMap'
 state = require '../engine/state'
 models = state.fetch()
-console.log 'models',models
 
 time2watt = (t) ->
   if t > 60000
@@ -26,7 +25,7 @@ decoders =
       age: Math.floor(count / (86400 / 64))
   
   homePower: (raw, cb) ->
-    ints = (raw.readUInt16LE(1+2*i) for i in [0..5])
+    ints = (raw.readUInt16LE(1+2*i, true) for i in [0..5])
     cb
       c1: ints[0]
       p1: time2watt ints[1]
@@ -36,7 +35,7 @@ decoders =
       p3: time2watt ints[5]
   
   smaRelay: (raw, cb) ->
-    ints = (raw.readUInt16LE(1+2*i) for i in [0..6])
+    ints = (raw.readUInt16LE(1+2*i, true) for i in [0..6])
     cb
       yield: ints[0]
       total: ints[1]
@@ -47,7 +46,7 @@ decoders =
       dcw2: ints[6]
 
   roomNode: (raw, cb) ->
-    t = raw.readUInt16LE(3) & 0x3FF
+    t = raw.readUInt16LE(3, true) & 0x3FF
     cb
       light: raw[1]
       humi: raw[2] >> 1
@@ -75,19 +74,24 @@ decoders =
         genw: ints[7]
         gas: ints[9]
 
-findDecoder = (packet) ->
-  name = nodeMap[packet.band]?[packet.group]?[packet.id]
-  decoders[name]
-
 class Decoder extends events.EventEmitter
   constructor: (a1, a2) ->
+    # FIXME: hack, models.installed may not be ready at this point
     setTimeout ->
       feed = models.installed["#{a1}:#{a2}"].emitter
+      
+      feed.on 'announce', (announced) ->
+        announced.swid = announced.buffer.readUInt16LE(3)
+        announced.name = nodeMap[announced.swid]
+        console.log 'swid', announced.swid, announced.name, announced.buffer
+      
       feed.on 'packet', (packet) ->
-        decoder = findDecoder packet
+        decoder = decoders[packet.announced.name]
         if decoder 
           decoder packet.buffer, (info) ->
             console.log 'decoded', info
+        else
+          console.info 'raw', packet
     , 3000
 
 exports.factory = Decoder

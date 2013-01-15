@@ -10,8 +10,6 @@ module.exports = (state) ->
     if briq.factory
       args = key.split(':').slice(1)
       newVal.emitter = new briq.factory(args...)
-      # newVal.emitter.on 'packet', (packet) ->
-      #   console.log 'got data', packet
     
   state.on 'unset.installed', (key, value) ->
     briq = models.briqs[value.briq]
