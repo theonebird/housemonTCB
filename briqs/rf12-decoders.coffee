@@ -4,6 +4,9 @@ exports.info =
   inputs: [
     name: 'Packet source'
     type: 'briq'
+  ,
+    name: 'Node types'
+    type: 'text'
   ]
 
 time2watt = (t) ->

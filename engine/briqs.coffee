@@ -15,9 +15,10 @@ module.exports = (state) ->
     
   state.on 'unset.installed', (key, value) ->
     briq = models.briqs[value.briq]
-    value.emitter.destroy?()
-    value.emitter.removeAllListeners?()
-    delete value.emitter
+    if value.emitter
+      value.emitter.destroy?()
+      value.emitter.removeAllListeners?()
+      delete value.emitter
 
   loadFile = (filename) ->
     loaded = require "../briqs/#{filename}"

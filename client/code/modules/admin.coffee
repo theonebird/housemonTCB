@@ -9,13 +9,17 @@ exports.controllers =
         $scope.id = id
         for input in id.info.inputs or []
           input.value = null
+          input.type ?= 'line'
       
       $scope.installBriq = ->
         info = $scope.id.info
-        key = [info.name]
+        keys = [info.name]
         for input in info.inputs or []
-          key.push input.value or input.default
-        $scope.store 'installed', key.join(':'), { briq: $scope.id.filename }
+          keys.push input.value?.keys or input.value or input.default
+        console.log 'aaaa',keys
+        $scope.store 'installed', keys.join(':'),
+          briq: $scope.id.filename
+          keys: keys.join(':')
       
       $scope.uninstallBriq = (id) ->
         $scope.id = null

@@ -2,11 +2,13 @@
   .three.columns
     h4 Briqs
     ul.square
-      li(ng-repeat='id in briqs',ng-click='selectBriq(id)')
+      li(ng-repeat='id in briqs'
+         ng-click='selectBriq(id)')
         {{id.info.name}}
     h4 Installed
     ul.square
-      li(ng-repeat='(k,v) in installed',ng-click='uninstallBriq(k)')
+      li(ng-repeat='(k,v) in installed'
+         ng-click='uninstallBriq(k)')
         {{k}}
              
   .nine.columns(ng-show='id')
@@ -16,11 +18,21 @@
       .row(ng-repeat='input in id.info.inputs')
         .three.columns
           label.right.inline {{input.name}}:
-        .nine.columns
-          input.four(type='text',ng-model='input.value',
-                      placeholder='{{input.default}}')
+        .nine.columns(ng-switch on='input.type')
+          input.four(ng-switch-when='line'
+                     type='text'
+                     ng-model='input.value'
+                     placeholder='{{input.default}}')
+          select.five(ng-switch-when='briq'
+                      ng-model='input.value'
+                      ng-options='k for (k,v) in installed')
+          textarea.four(ng-switch-when='text'
+                        ng-model='input.value'
+                        rows=10)
       .row.twelve.columns
-        input.button(type='submit',value='Install',ng-click='installBriq()')
+        input.button(type='submit'
+                     value='Install'
+                     ng-click='installBriq()')
 
 .row
   .twelve.columns
