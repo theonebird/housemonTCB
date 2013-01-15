@@ -74,6 +74,11 @@ decoders =
         genw: ints[7]
         gas: ints[9]
 
+findDecoder = (packet) ->
+  name = packet.announced?.name or
+          nodeMap[packet.band]?[packet.group]?[packet.id]
+  decoders[name]
+
 class Decoder extends events.EventEmitter
   constructor: (a1, a2) ->
     # FIXME: hack, models.installed may not be ready at this point
@@ -86,7 +91,7 @@ class Decoder extends events.EventEmitter
         console.log 'swid', announced.swid, announced.name, announced.buffer
       
       feed.on 'packet', (packet) ->
-        decoder = decoders[packet.announced.name]
+        decoder = decoders[packet.announced?.name]
         if decoder 
           decoder packet.buffer, (info) ->
             console.log 'decoded', info

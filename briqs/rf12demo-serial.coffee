@@ -39,7 +39,7 @@ class RF12demo extends serialport.SerialPort
           @emit 'announce', ainfo[aid]
         else
           # generate new events, on generic channel and on node-specific one
-          info.announced = ainfo[info.id] ? {}
+          info.announced = ainfo[info.id]
           @emit 'packet', info
           @emit "node-#{info.id}", info
       else # look for config lines of the form: A i1* g5 @ 868 MHz

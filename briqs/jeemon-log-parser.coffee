@@ -15,6 +15,8 @@ lazy = require 'lazy'
 
 class JeeMonLogParser extends events.EventEmitter
   
+  info = {}
+  
   parse: (line) ->
     words = line.split ' '
     if words[0] is 'L'

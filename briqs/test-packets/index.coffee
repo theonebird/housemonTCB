@@ -8,11 +8,13 @@ fs = require 'fs'
 zlib = require 'zlib'
 gunzip = zlib.createGunzip()
 
-class Tester
+class Tester extends parser
   constructor: ->
     log = []
 
     stream = fs.createReadStream("#{__dirname}/20121130.txt.gz").pipe(gunzip)
+    @stream = stream
+    
     stream.on 'end', ->
       console.info "#{log.length} test packets loaded"
       
@@ -21,5 +23,7 @@ class Tester
       log.push packet
 
     parser.parseStream stream 
+
+  destroy: () -> @stream.close()
 
 exports.factory = Tester
