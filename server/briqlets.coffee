@@ -1,4 +1,4 @@
-# Briqs are the installable modules in the ./briqs/ directory
+# Briqs are the installable modules in the ./briqlets/ directory
 fs = require 'fs'
 
 module.exports = (state) ->
@@ -19,7 +19,7 @@ module.exports = (state) ->
       delete value.emitter
 
   loadFile = (filename) ->
-    loaded = require "../briqs/#{filename}"
+    loaded = require "../briqlets/#{filename}"
     if loaded.info
       loaded.filename = filename # TODO: really put the key inside the object?
       state.store 'briqs', filename, loaded.info.name and loaded
@@ -27,12 +27,12 @@ module.exports = (state) ->
   loadAll: (cb) ->
     # TODO: delete existing briqs
     # scan and add all briqs, async
-    fs.readdir './briqs', (err, files) ->
+    fs.readdir './briqlets', (err, files) ->
       throw err  if err
       for f in files
         loadFile f
       cb?()
     # TODO: need newer node.js to use fs.watch on Mac OS X
     #  see: https://github.com/joyent/node/issues/3343
-    # fs.watch './briqs', (event, filename) ->
+    # fs.watch './briqlets', (event, filename) ->
     #   console.log event, filename
