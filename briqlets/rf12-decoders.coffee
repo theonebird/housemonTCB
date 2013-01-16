@@ -1,15 +1,9 @@
 exports.info =
   name: 'rf12decoders'
   description: 'Some simple decoders for RF12 packets'
-  inputs: [
-    name: 'Packet source'
-    type: 'briq'
-  ]
   
-events = require 'eventemitter2'
 nodeMap = require './nodeMap'
 state = require '../server/state'
-models = state.fetch()
 
 time2watt = (t) ->
   if t > 60000
@@ -79,31 +73,28 @@ decoders =
         genw: ints[7]
         gas: ints[9]
 
-class Decoder extends events.EventEmitter2
+announceListener = (ainfo) ->
+  ainfo.swid = ainfo.buffer.readUInt16LE(3)
+  ainfo.name = nodeMap[ainfo.swid]
+  console.info 'swid', ainfo.swid, ainfo.name, ainfo.buffer
+
+packetListener = (packet, ainfo) ->
+  # use announcer info if present, else look for own static mapping
+  name = ainfo?.name or
+          nodeMap[packet.band]?[packet.group]?[packet.id]
+  decoder = decoders[name]
+  if decoder 
+    decoder packet.buffer, (info) ->
+      console.log 'decoded', info
+  else
+    console.info 'raw', packet
+        
+exports.factory = class Decoder
   
-  constructor: (args...) ->
-    # have to wait for the proper installed briqlet before hooking up to it
-    # TODO: very messy, args are in the wrong format, this timing hack sucks
-    
-    setTimeout ->
-      key = args.join(':')      
-      emitter = models.installed[key]?.emitter
-
-      emitter.on 'announce', (ainfo) ->
-          ainfo.swid = ainfo.buffer.readUInt16LE(3)
-          ainfo.name = nodeMap[ainfo.swid]
-          console.info 'swid', ainfo.swid, ainfo.name, ainfo.buffer
-
-      emitter.on 'packet', (packet, ainfo) ->
-          # use announcer info if present, else look for own static mapping
-          name = ainfo?.name or
-                  nodeMap[packet.band]?[packet.group]?[packet.id]
-          decoder = decoders[name]
-          if decoder 
-            decoder packet.buffer, (info) ->
-              console.log 'decoded', info
-          else
-            console.info 'raw', packet
-    , 3000
-
-exports.factory = Decoder
+  constructor: ->
+    state.on 'rf12.announce', announceListener
+    state.on 'rf12.packet', packetListener
+        
+  destroy: ->
+    state.off 'rf12.announce', announceListener
+    state.off 'rf12.packet', packetListener

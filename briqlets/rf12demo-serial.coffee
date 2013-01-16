@@ -5,11 +5,12 @@ exports.info =
     name: 'Serial port'
     default: 'usb-AH01A0GD' # TODO: list choices with serialport.list
   ]
-  # events: ['packet', 'data']
+  # events: ['rf12.packet', 'data']
   # dependencies:
   #   'serialport': '*'
 
 serialport = require 'serialport'
+state = require '../server/state'
 
 class RF12demo extends serialport.SerialPort
   
@@ -25,7 +26,7 @@ class RF12demo extends serialport.SerialPort
       baudrate: 57600
       parser: serialport.parsers.readline '\n'
 
-    @on 'data', (data) =>
+    @on 'data', (data) ->
       data = data.slice(0, -1)  if data.slice(-1) is '\r'
       words = data.split ' '
       if words.shift() is 'OK' and info.recvid
@@ -37,22 +38,21 @@ class RF12demo extends serialport.SerialPort
           aid = words[1] & 0x1F
           ainfo[aid] ?= {}
           ainfo[aid].buffer = info.buffer
-          @emit 'announce', ainfo[aid]
+          state.emit 'rf12.announce', ainfo[aid]
         else
           # generate normal packet event, for decoders
-          @emit 'packet', info, ainfo[info.id]
-          console.log info
+          state.emit 'rf12.packet', info, ainfo[info.id]
       else # look for config lines of the form: A i1* g5 @ 868 MHz
         match = /^ \w i(\d+)\*? g(\d+) @ (\d\d\d) MHz/.exec data
         if match
-          @emit 'config', data, match.slice(1)
+          state.emit 'rf12.config', data, match.slice(1)
           info.recvid = parseInt(match[1])
           info.group = parseInt(match[2])
           info.band = parseInt(match[3])
         else
           # unrecognized input, usually a "?" line
-          @emit 'other', data
+          state.emit 'rf12.other', data
           
-  destroy: () -> @close()
+  destroy: -> @close()
         
 exports.factory = RF12demo

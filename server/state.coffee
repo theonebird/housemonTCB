@@ -18,8 +18,8 @@ for k,v of process
 
 state = new events.EventEmitter2
 
-state.onAny (arg) ->
-  console.info '>', @event, arg
+# state.onAny (arg) ->
+#   console.info '>', @event, arg
   
 state.fetch = ->
   models

@@ -7,16 +7,17 @@ logParser = require '../jeemon-log-parser'
 fs = require 'fs'
 zlib = require 'zlib'
 nodeMap = require '../nodeMap'
-events = require 'eventemitter2'
+state = require '../../server/state'
 _ = require 'underscore'
 
-class Tester extends events.EventEmitter2
+class Tester
   constructor: ->
     logs = []
+    @timer = null
     
     # trigger a similated packet event, then delay and schedule the next on
     emitNext = (pos) =>
-      @emit 'packet', logs[pos]
+      state.emit 'rf12.packet', logs[pos]
       # careful with wrapping, reuse the same log every day
       thisTick = logs[pos++].time
       nextTick = logs[pos]?.time
@@ -24,7 +25,7 @@ class Tester extends events.EventEmitter2
         pos = 0
         nextTick = logs[0].time + 86400000
       # TODO: adjust for exact timing, current logic will graduallly drift
-      setTimeout (-> emitNext pos), nextTick - thisTick
+      @timer = setTimeout (-> emitNext pos), nextTick - thisTick
     
     stream = fs.createReadStream("#{__dirname}/20121130.txt.gz")
                   .pipe(zlib.createGunzip())
@@ -38,11 +39,14 @@ class Tester extends events.EventEmitter2
       
     parser = new logParser.factory
     
-    parser.on 'packet', (packet) ->
+    parser.on 'rf12.packet', (packet) ->
       # add static info to the packet, if the device is listed in nodeMap
       _.extend packet, nodeMap[packet.device]  unless packet.band
       logs.push packet
 
     parser.parseStream stream 
+    
+  destroy: ->
+    clearTimeout @timer
 
 exports.factory = Tester
