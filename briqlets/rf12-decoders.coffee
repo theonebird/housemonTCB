@@ -80,10 +80,10 @@ findDecoder = (packet) ->
   decoders[name]
 
 class Decoder extends events.EventEmitter
-  constructor: (a1, a2) ->
+  constructor: (args...) ->
     # FIXME: hack, models.installed may not be ready at this point
     setTimeout ->
-      feed = models.installed["#{a1}:#{a2}"].emitter
+      feed = models.installed[args.join ':'].emitter
       
       feed.on 'announce', (announced) ->
         announced.swid = announced.buffer.readUInt16LE(3)
