@@ -10,7 +10,5 @@ exports.controllers =
 exports.filters =
   cleanup: ->
     (obj) ->
-      out = []
-      for k,v of _.omit obj, 'time', 'tag', '$$hashKey'
-        out.push "#{k}: #{v}"
-      out.join ', '
+      cleanedObj = _.omit obj, 'time', 'tag', '$$hashKey'
+      ("#{k}: #{v}" for k,v of cleanedObj).join ', '
