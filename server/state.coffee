@@ -49,10 +49,15 @@ state.setupStorage = (config, cb) ->
 
   client.select config.db, ->
     # TODO: needs a more generic "restore everything we need" approach
-    client.hgetall 'installed', (err, res) ->
-      throw err  if err
-      for k,v of res
-        state.store 'installed', k, JSON.parse(v)
-      cb?()
+    collections = ['installed', 'readings']
+    counter = collections.length
+    for coll in collections
+      client.hgetall coll, (err, res) ->
+        throw err  if err
+        for k,v of res
+          state.store coll, k, JSON.parse(v)
+        # TODO: mess async sequencer
+        if --counter == 0
+          cb?()
 
 module.exports = state

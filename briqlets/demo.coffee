@@ -1,6 +1,6 @@
 exports.info =
   name: 'demo'
-  description: 'This is a demo briq'
+  description: 'This is a demo briqlet'
   inputs: [
     name: 'Some value'
     default: 'abc'
