@@ -24,7 +24,7 @@ exports.controllers =
     
       $scope.routes = routes
     
-      # pick up the 'ss-tick' events sent from server/startup
+      # pick up the 'ss-tick' events sent from server/launch
       $scope.tick = '?'
       $scope.$on 'ss-tick', (event, msg) ->
         $scope.tick = msg

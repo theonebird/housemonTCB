@@ -23,8 +23,8 @@ The server is normally started using `npm start`. Here's what that does:
 
 * npm looks in `package.json` for the `main` entry and finds `app.js`
 * it then launches `node` with `app.js` as script (see the note below)
-* `app.js` is just a tiny wrapper to launch `server/startup.coffee`
-* `startup.coffee` is more or less a standard SocketStream app startup file
+* `app.js` is just a tiny wrapper to launch `server/launch.coffee`
+* `launch.coffee` is more or less a standard SocketStream app startup file
 * non-standard is that all files in `briqlets/` are scanned and loaded
 * also extra, is some code in `server/...` to manage briqlets and shared state
 
