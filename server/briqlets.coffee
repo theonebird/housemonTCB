@@ -1,6 +1,8 @@
 # Briqlets are the installable modules in the ./briqlets/ directory
 fs = require 'fs'
 
+installedBriqlets = {}
+
 module.exports = (state) ->
   
   models = state.fetch()
@@ -8,15 +10,14 @@ module.exports = (state) ->
   state.on 'set.installed', (key, newVal, oldVal) ->
     briq = models.briqlets[newVal.briq]
     if briq.factory
-      args = key.split(':').slice(1)
-      newVal.emitter = new briq.factory(args...)
+      args = key.split(':').slice 1
+      installedBriqlets[key] = new briq.factory(args...)
     
   state.on 'unset.installed', (key, value) ->
-    briq = models.briqlets[value.briq]
-    if value.emitter
-      value.emitter.destroy?()
-      value.emitter.removeAllListeners?()
-      delete value.emitter
+    briqlet = installedBriqlets[key]
+    if briqlet?
+      briqlet.destroy?()
+      delete installedBriqlets[key]
 
   loadFile = (filename) ->
     loaded = require "../briqlets/#{filename}"

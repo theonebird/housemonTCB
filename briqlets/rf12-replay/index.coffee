@@ -1,5 +1,5 @@
 exports.info =
-  name: 'test-packets'
+  name: 'rf12replay'
   description: 'RF12 test data generator'
   # needs: ['jeemon-log-parser']
 
