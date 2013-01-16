@@ -2,14 +2,14 @@
 
 # This list is also the order in which everything gets initialised
 state = require './state'
-briqs = require('./briqlets') state
+briqlets = require('./briqlets') state
 local = require '../local'
 http = require 'http'
 ss = require 'socketstream'
 
-# Auto-load all briqs from a central directory
-briqs.loadAll ->
-  console.info "briqs loaded"
+# Auto-load all briqlets from a central directory
+briqlets.loadAll ->
+  console.info "briqlets loaded"
 
 # Hook state management into SocketStream
 ss.api.add 'fetch', state.fetch

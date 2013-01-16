@@ -27,7 +27,7 @@ Then browse to <http://localhost:3333/> (this can be changed in `local.json`).
 To use this project as starting point for a fresh project:
 
 * clone this project, then install all the required packages as described above
-* remove everything from the `briqs/` directory, except for `demo.coffee`
+* remove everything from the `briqlets/` directory, except for `demo.coffee`
 * change project name, author, version, etc. in `package.json` and `local.json`
 
 # License

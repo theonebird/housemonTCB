@@ -24,6 +24,7 @@ class Tester extends parser
 
     parser.parseStream stream 
 
-  destroy: () -> @stream.close()
+  # FIXME: need a way to clean up, currently re-open fails
+  destroy: () ->
 
 exports.factory = Tester
