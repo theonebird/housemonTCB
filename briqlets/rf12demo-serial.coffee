@@ -41,6 +41,7 @@ class RF12demo extends serialport.SerialPort
         else
           # generate normal packet event, for decoders
           @emit 'packet', info, ainfo[info.id]
+          console.log info
       else # look for config lines of the form: A i1* g5 @ 868 MHz
         match = /^ \w i(\d+)\*? g(\d+) @ (\d\d\d) MHz/.exec data
         if match

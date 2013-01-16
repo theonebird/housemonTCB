@@ -33,7 +33,12 @@ decoders =
       p2: time2watt ints[3]
       c3: ints[4]
       p3: time2watt ints[5]
-  
+
+  otRelay: (raw, cb) ->
+    cb
+      param: raw[1]
+      value: raw.readUInt16LE(2, true)
+      
   smaRelay: (raw, cb) ->
     ints = (raw.readUInt16LE(1+2*i, true) for i in [0..6])
     cb
@@ -78,30 +83,27 @@ class Decoder extends events.EventEmitter2
   
   constructor: (args...) ->
     # have to wait for the proper installed briqlet before hooking up to it
-    # TODO: very messy, args are in the wrong format, this timing dep sucks
+    # TODO: very messy, args are in the wrong format, this timing hack sucks
     
-    listener = (key, value, oldVal) ->
-      if key is args.join(':') and value.emitter
-        state.off 'set.installed', listener
-        
-        value.emitter
-        
-          .on 'announce', (ainfo) ->
-            ainfo.swid = ainfo.buffer.readUInt16LE(3)
-            ainfo.name = nodeMap[ainfo.swid]
-            console.info 'swid', ainfo.swid, ainfo.name, ainfo.buffer
-            
-          .on 'packet', (packet, ainfo) ->
-            # use announcer info if present, else look for own static mapping
-            name = ainfo?.name or
-                    nodeMap[packet.band]?[packet.group]?[packet.id]
-            decoder = decoders[name]
-            if decoder 
-              decoder packet.buffer, (info) ->
-                console.log 'decoded', info
-            else
-              console.info 'raw', packet
-                
-    state.on 'set.installed', listener
+    setTimeout ->
+      key = args.join(':')      
+      emitter = models.installed[key]?.emitter
+
+      emitter.on 'announce', (ainfo) ->
+          ainfo.swid = ainfo.buffer.readUInt16LE(3)
+          ainfo.name = nodeMap[ainfo.swid]
+          console.info 'swid', ainfo.swid, ainfo.name, ainfo.buffer
+
+      emitter.on 'packet', (packet, ainfo) ->
+          # use announcer info if present, else look for own static mapping
+          name = ainfo?.name or
+                  nodeMap[packet.band]?[packet.group]?[packet.id]
+          decoder = decoders[name]
+          if decoder 
+            decoder packet.buffer, (info) ->
+              console.log 'decoded', info
+          else
+            console.info 'raw', packet
+    , 3000
 
 exports.factory = Decoder

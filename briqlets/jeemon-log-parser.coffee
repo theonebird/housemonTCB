@@ -22,8 +22,12 @@ class JeeMonLogParser extends events.EventEmitter
     if words[0] is 'L'
       t = /(\d\d):(\d\d):(\d\d)\.(\d\d\d)/.exec words[1]
       if words[3] is 'OK'
+        time = ((parseInt(t[1], 10) * 60 +
+                 parseInt(t[2], 10)) * 60 +
+                 parseInt(t[3], 10)) * 1000 +
+                 parseInt(t[4], 10)
         info =
-          time: parseInt t[1]+t[2]+t[3]+t[4], 10
+          time: time
           device: words[2]
           id: words[4] & 0x1F
           buffer: new Buffer(words.slice 4)
