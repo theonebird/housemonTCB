@@ -28,7 +28,6 @@ class JeeMonLogParser extends events.EventEmitter
           id: words[4] & 0x1F
           buffer: new Buffer(words.slice 4)
         @emit 'packet', info
-        @emit "node-#{info.id}", info
       else
         @emit 'other', line.substring 28
   

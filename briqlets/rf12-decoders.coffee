@@ -6,7 +6,7 @@ exports.info =
     type: 'briq'
   ]
   
-events = require 'events'
+events = require 'eventemitter2'
 nodeMap = require './nodeMap'
 state = require '../server/state'
 models = state.fetch()
@@ -74,24 +74,21 @@ decoders =
         genw: ints[7]
         gas: ints[9]
 
-findDecoder = (packet) ->
-  name = packet.announced?.name or
-          nodeMap[packet.band]?[packet.group]?[packet.id]
-  decoders[name]
-
-class Decoder extends events.EventEmitter
+class Decoder extends events.EventEmitter2
   constructor: (args...) ->
     # FIXME: hack, models.installed may not be ready at this point
     setTimeout ->
       feed = models.installed[args.join ':'].emitter
       
-      feed.on 'announce', (announced) ->
-        announced.swid = announced.buffer.readUInt16LE(3)
-        announced.name = nodeMap[announced.swid]
-        console.log 'swid', announced.swid, announced.name, announced.buffer
+      feed.on 'announce', (ainfo) ->
+        ainfo.swid = ainfo.buffer.readUInt16LE(3)
+        ainfo.name = nodeMap[ainfo.swid]
+        console.info 'swid', ainfo.swid, ainfo.name, ainfo.buffer
       
-      feed.on 'packet', (packet) ->
-        decoder = decoders[packet.announced?.name]
+      feed.on 'packet', (packet, ainfo) ->
+        # use announcer info if present, else look for own static mapping
+        name = ainfo?.name or nodeMap[packet.band]?[packet.group]?[packet.id]
+        decoder = decoders[name]
         if decoder 
           decoder packet.buffer, (info) ->
             console.log 'decoded', info
