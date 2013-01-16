@@ -7,8 +7,8 @@ exports.info =
   ]
   
 events = require 'events'
-nodeMap = require '../nodeMap'
-state = require '../engine/state'
+nodeMap = require './nodeMap'
+state = require '../server/state'
 models = state.fetch()
 
 time2watt = (t) ->

@@ -1,8 +1,8 @@
 # Web server startup, i.e. first code loaded from app.js
 
 # This list is also the order in which everything gets initialised
-state = require '../engine/state'
-briqs = require('../engine/briqs') state
+state = require './state'
+briqs = require('./briqs') state
 local = require '../local'
 http = require 'http'
 ss = require 'socketstream'

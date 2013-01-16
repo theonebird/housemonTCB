@@ -20,8 +20,9 @@ module.exports = (state) ->
 
   loadFile = (filename) ->
     loaded = require "../briqs/#{filename}"
-    loaded.filename = filename # TODO: really put the key inside the object?
-    state.store 'briqs', filename, loaded.info.name and loaded
+    if loaded.info
+      loaded.filename = filename # TODO: really put the key inside the object?
+      state.store 'briqs', filename, loaded.info.name and loaded
 
   loadAll: (cb) ->
     # TODO: delete existing briqs
