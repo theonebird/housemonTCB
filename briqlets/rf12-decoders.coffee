@@ -76,24 +76,30 @@ decoders =
 
 class Decoder extends events.EventEmitter2
   constructor: (args...) ->
-    # FIXME: hack, models.installed may not be ready at this point
-    setTimeout ->
-      feed = models.installed[args.join ':'].emitter
+    # have to wait for the proper installed briqlet before hooking up to it
+    # TODO: very messy, args are in the wrong format, this timing dep sucks
+    
+    listener = (key, value, oldVal) ->
+      if key is args.join(':') and value.emitter
+        state.off 'set.installed', listener
+        feed = value.emitter
       
-      feed.on 'announce', (ainfo) ->
-        ainfo.swid = ainfo.buffer.readUInt16LE(3)
-        ainfo.name = nodeMap[ainfo.swid]
-        console.info 'swid', ainfo.swid, ainfo.name, ainfo.buffer
+        feed.on 'announce', (ainfo) ->
+          ainfo.swid = ainfo.buffer.readUInt16LE(3)
+          ainfo.name = nodeMap[ainfo.swid]
+          console.info 'swid', ainfo.swid, ainfo.name, ainfo.buffer
       
-      feed.on 'packet', (packet, ainfo) ->
-        # use announcer info if present, else look for own static mapping
-        name = ainfo?.name or nodeMap[packet.band]?[packet.group]?[packet.id]
-        decoder = decoders[name]
-        if decoder 
-          decoder packet.buffer, (info) ->
-            console.log 'decoded', info
-        else
-          console.info 'raw', packet
-    , 3000
+        feed.on 'packet', (packet, ainfo) ->
+          # use announcer info if present, else look for own static mapping
+          name = ainfo?.name or
+                  nodeMap[packet.band]?[packet.group]?[packet.id]
+          decoder = decoders[name]
+          if decoder 
+            decoder packet.buffer, (info) ->
+              console.log 'decoded', info
+          else
+            console.info 'raw', packet
+                
+    state.on 'set.installed', listener
 
 exports.factory = Decoder
