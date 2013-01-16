@@ -1,0 +1,11 @@
+.row
+  .twelve.columns
+    h3 Readings...
+
+  .row(ng-repeat='(k,v) in readings')
+    .three.columns
+      pre {{k}}
+    .two.columns
+      pre {{v.time | date:'MMM dd, HH:mm:ss'}}
+    .seven.columns
+      pre {{v | cleanup}}

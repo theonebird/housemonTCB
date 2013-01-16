@@ -85,7 +85,6 @@ packetListener = (packet, ainfo) ->
   decoder = decoders[name]
   if decoder 
     decoder packet.buffer, (info) ->
-      # console.log 'decoded', info, packet
       channel = "RF12:#{packet.band}:#{packet.group}:#{packet.id}.#{name}"
       channel += ":#{info.tag}"  if info.tag
       now = Date.now()
@@ -93,7 +92,6 @@ packetListener = (packet, ainfo) ->
       if time < 86400000
         time += now - now % 86400000
       info.time = time
-      console.log 'readings', channel, info
       state.store 'readings', channel, info
   else
     console.info 'raw', packet

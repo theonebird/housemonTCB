@@ -12,6 +12,9 @@ module.exports = [
   title: 'Admin'
   controller: 'AdminCtrl'
 ,
+  title: 'Readings'
+  controller: 'ReadingsCtrl'
+,
   title: 'Sandbox'
   controller: 'SandboxCtrl'
 ]
