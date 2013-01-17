@@ -52,9 +52,9 @@ state.setupStorage = (collections, config) ->
       client.hgetall coll, (err, res) ->
         throw err  if err
         for k,v of res
-          console.log 'state.store', coll, k, JSON.parse(v)
           state.store coll, k, JSON.parse(v)
-          
+      
+    # loaded asynchronously, would need async module for completion callback
     loadData coll  for coll in collections
 
 module.exports = state

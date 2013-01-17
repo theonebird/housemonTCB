@@ -36,12 +36,15 @@ exports.controllers =
       $scope.$on 'ss-store', (event, msg) ->
         [hash,key,value] = msg
         collection = $scope[hash] ? {}
+        oldValue = collection[key]
         if value?
           collection[key] = value
+          $scope.$broadcast "set.#{hash}", key, value, oldValue
         else
           delete collection[key]
+          $scope.$broadcast "unset.#{hash}", key, oldValue
         $scope[hash] = collection
-          
+
       # postpone RPC's until the app is ready for use
       ss.server.once 'ready', ->
         # get initial models from the server

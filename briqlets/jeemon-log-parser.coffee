@@ -31,7 +31,7 @@ class JeeMonLogParser extends events.EventEmitter
           device: words[2]
           id: words[4] & 0x1F
           buffer: new Buffer(words.slice 4)
-        @emit 'rf12.packet', info
+        @emit 'packet', info
       else
         @emit 'other', line.substring 28
   

@@ -3,14 +3,20 @@
     h1 Readings
 
     .row
-      .three.columns: h5 Origin
-      .two.columns: h5 Time
-      .seven.columns: h5 Readings
+      .eleven.columns
+      
+        .row
+          .three.columns: h5 Origin
+          .two.columns: h5 Time
+          .seven.columns: h5 Readings
 
-    .row(ng-repeat='(k,v) in readings')
-      .three.columns
-        pre {{k}}
-      .two.columns
-        pre {{v.time | date:'MMM dd, HH:mm:ss'}}
-      .seven.columns
-        pre {{v | cleanup}}
+        .row(ng-repeat='(k,v) in readings')
+          .three.columns
+            | {{k}}
+          .two.columns
+            | {{v.time | date:'MMM dd, HH:mm:ss'}}
+          .seven.columns
+            span(ng-repeat='(x,y) in v | cleanup')  {{x}}: {{y}}
+
+      .one.columns
+        canvas#mybar(width='100%',height='400')

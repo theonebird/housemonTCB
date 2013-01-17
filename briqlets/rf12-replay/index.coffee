@@ -39,7 +39,7 @@ exports.factory = class
       
     parser = new logParser.factory
     
-    parser.on 'rf12.packet', (packet) ->
+    parser.on 'packet', (packet) ->
       # add static info to the packet, if the device is listed in nodeMap
       _.extend packet, nodeMap[packet.device]  unless packet.band
       logs.push packet
