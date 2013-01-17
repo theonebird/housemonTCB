@@ -1,5 +1,7 @@
 # Web server startup, i.e. first code loaded from app.js
 
+global._ = require 'underscore'
+
 # This list is also the order in which everything gets initialised
 state = require './state'
 briqlets = require('./briqlets') state
