@@ -1,6 +1,11 @@
 .row
   .twelve.columns
-    h3 Readings...
+    h1 Readings
+
+    .row
+      .three.columns: h5 Origin
+      .two.columns: h5 Time
+      .seven.columns: h5 Readings
 
     .row(ng-repeat='(k,v) in readings')
       .three.columns

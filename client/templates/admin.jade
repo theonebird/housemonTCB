@@ -1,11 +1,11 @@
 .row
   .three.columns
-    h4 Briqlets
+    h1 Briqlets
     ul.square
       li(ng-repeat='id in briqlets'
          ng-click='selectBriq(id)')
         {{id.info.name}}
-    h4 Installed
+    h1 Installed
     ul.square
       li(ng-repeat='(k,v) in installed'
          ng-click='uninstallBriq(k)')
