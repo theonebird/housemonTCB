@@ -23,7 +23,7 @@ exports.controllers =
     ($scope, pubsub, rpc) ->
     
       $scope.routes = routes
-    
+      
       # pick up the 'ss-tick' events sent from server/launch
       $scope.tick = '?'
       $scope.$on 'ss-tick', (event, msg) ->
@@ -47,7 +47,8 @@ exports.controllers =
         # get initial models from the server
         ss.rpc 'host.api', 'fetch', (models) ->
           $scope[k] = v  for k,v of models
-          console.info "models fetched: #{Object.keys(models)}"
+          console.info "models fetched: #{Object.keys(models)}"          
+          $scope.ready = true
   ]
 
 # Credit to https://github.com/polidore/ss-angular for ss rpc/pubsub wrapping

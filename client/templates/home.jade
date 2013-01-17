@@ -1,4 +1,23 @@
-.row
-  .twelve.columns
-    h1 Home
-    p {{pkg.description}}
+.row(ng-hide='ready')
+  .seven.columns
+    h4 Just a sec...
+
+.row(ng-show='ready')
+  .seven.columns
+    h4 {{pkg.description}}
+    hr
+    p
+      | To run a quick demo, go to the
+      b: a(href='admin')  Admin
+      |  page and click on the "rf12replay" and "rf12decoders" items in the
+      | list of Briqlets, and click on "Install" to activate them both on the
+      | server.
+      | This will start generating simulated RF12 packet receptions.
+    p
+      | Then go to the
+      b: a(href='readings')  Readings
+      |  tab and watch the information update in real time.
+    p: i That's all there is as teaser for now – check the
+      b: a(href='http://jeelabs.org/tag/housemon/')  weblog
+      |  for more news.
+    hr
