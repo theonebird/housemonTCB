@@ -96,7 +96,7 @@ packetListener = (packet, ainfo) ->
   else
     console.info 'raw', packet
         
-exports.factory = class Decoder
+exports.factory = class
   
   constructor: ->
     state.on 'rf12.announce', announceListener

@@ -37,7 +37,7 @@ state.store = (hash, key, value) ->
     models[hash] = collection
     state.emit 'store', hash, key, value
     
-state.setupStorage = (config, cb) ->
+state.setupStorage = (collections, config) ->
   redis = require 'redis'
   client = redis.createClient(config.port, config.host, config)
   
@@ -48,16 +48,13 @@ state.setupStorage = (config, cb) ->
       client.hdel hash, key
 
   client.select config.db, ->
-    # TODO: needs a more generic "restore everything we need" approach
-    collections = ['installed', 'readings']
-    counter = collections.length
-    for coll in collections
+    loadData = (coll) ->
       client.hgetall coll, (err, res) ->
         throw err  if err
         for k,v of res
+          console.log 'state.store', coll, k, JSON.parse(v)
           state.store coll, k, JSON.parse(v)
-        # TODO: mess async sequencer
-        if --counter == 0
-          cb?()
+          
+    loadData coll  for coll in collections
 
 module.exports = state

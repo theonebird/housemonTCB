@@ -32,7 +32,7 @@ if local.useRedis
   console.info 'redisConfig', local.redisConfig
   ss.session.store.use 'redis', local.redisConfig
   # ss.publish.transport.use 'redis', local.redisConfig
-  state.setupStorage local.redisConfig
+  state.setupStorage ['installed', 'readings'], local.redisConfig
 
 # Code Formatters known by SocketStream
 ss.client.formatters.add require('ss-coffee')
