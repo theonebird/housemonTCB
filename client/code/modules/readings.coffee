@@ -7,11 +7,14 @@ exports.controllers =
 
       maxProduced = 5000
       maxConsumed = 5000
-      scaleMinimum = 30
+      scaleMinimum = 0
       
-      mp = Math.log maxProduced 
-      mc = Math.log maxConsumed 
-      sm = Math.log scaleMinimum 
+      # 0 gives sqrt scaling, 30 is a nice value for log scaling
+      mapFun = if scaleMinimum >= 1 then Math.log else Math.sqrt
+      
+      mp = mapFun maxProduced 
+      mc = mapFun maxConsumed 
+      sm = mapFun scaleMinimum 
       
       canvas = $('#mybar')[0]
       ctx = canvas.getContext '2d'
@@ -22,10 +25,10 @@ exports.controllers =
       energyPos = (value) ->
         if value > scaleMinimum
           value = Math.min value, maxProduced
-          pos = mp - Math.log value
+          pos = mp - mapFun value
         else if value < -scaleMinimum
           value = Math.min -value, maxConsumed
-          pos = mp - sm + Math.log(value) - sm
+          pos = mp - sm + mapFun(value) - sm
         else
           pos = mp - sm
         pos * scale + 10
@@ -49,12 +52,6 @@ exports.controllers =
           ctx.lineWidth = 3
           ctx.strokeStyle = colour
           ctx.stroke()
-          # ctx.beginPath()
-          # ctx.lineWidth = 1
-          # ctx.strokeStyle = 'lightgray'
-          # ctx.moveTo w/2 - 10, pos
-          # ctx.lineTo w/2 + 30, pos
-          # ctx.stroke()
         else
           ctx.fillStyle = colour
           ctx.fill()
@@ -67,13 +64,13 @@ exports.controllers =
         ctx.lineTo 0, h-10
         ctx.stroke()
         w = 8
-        for i in [-15..15]
+        for i in [-19..19]
           line 'lightgreen', i * 10
         w = 12
-        for i in [-15..15]
+        for i in [-19..19]
           line 'orange', i * 100
         w = 20
-        for i in [-5..5]
+        for i in [-9..9]
           line 'red', i * 1000
         w = canvas.width
 
