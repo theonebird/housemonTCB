@@ -21,7 +21,7 @@ exports.controllers =
       ctx = canvas.getContext '2d'
       w = canvas.width
       h = canvas.height
-      scale = (h - 20) / ((mp - sm) + (mc - sm))      
+      scale = (h - 2 * margin) / ((mp - sm) + (mc - sm))      
       
       energyPos = (value) ->
         if value > scaleMinimum
@@ -48,7 +48,7 @@ exports.controllers =
         radius = 2.3 * Math.log(2 + Math.abs value)
         radius = 20  if colour is 'blue'
         ctx.beginPath()
-        ctx.arc 10 + w/2, pos, radius, 0, 2 * Math.PI, false
+        ctx.arc 43, pos, radius, 0, 2 * Math.PI, false
         if colour is 'blue'
           ctx.lineWidth = 3
           ctx.strokeStyle = colour
@@ -60,10 +60,6 @@ exports.controllers =
       # draw the tick marks
       energyInit = () ->
         ctx.clearRect 20, 0, w, h
-        line 'lightgray', 0
-        ctx.moveTo 0, margin
-        ctx.lineTo 0, h-margin
-        ctx.stroke()
         w = 8
         for i in [-29..29]
           line 'lightgreen', i * 10
@@ -73,7 +69,11 @@ exports.controllers =
         w = 20
         for i in [-10..10]
           line 'red', i * 1000
-        w = canvas.width
+        w = 70
+        line 'lightgray', 0
+        ctx.moveTo 0, margin
+        ctx.lineTo 0, h-margin
+        ctx.stroke()
 
       $scope.$on 'set.readings', (event, key, value, oldVal) ->
         if key is 'RF12:868:5:9.homePower'
