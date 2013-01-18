@@ -7,7 +7,7 @@ exports.controllers =
 
       maxProduced = 5000
       maxConsumed = 5000
-      scaleMinimum = 50
+      scaleMinimum = 30
       
       mp = Math.log maxProduced 
       mc = Math.log maxConsumed 
@@ -49,6 +49,12 @@ exports.controllers =
           ctx.lineWidth = 3
           ctx.strokeStyle = colour
           ctx.stroke()
+          # ctx.beginPath()
+          # ctx.lineWidth = 1
+          # ctx.strokeStyle = 'lightgray'
+          # ctx.moveTo w/2 - 10, pos
+          # ctx.lineTo w/2 + 30, pos
+          # ctx.stroke()
         else
           ctx.fillStyle = colour
           ctx.fill()
