@@ -78,6 +78,8 @@ exports.controllers =
       $scope.$on 'set.readings', (event, key, value, oldVal) ->
         if key is 'RF12:868:5:9.homePower'
           produced = value.p2 / 10
+          if $scope.readings['RF12:868:5:15.smaRelay']?.acw is 0
+            produced = 0 # ignore residual reading when the inverter is off
           consumed = (value.p1 + value.p3) / 10
           energyInit()
           energyDraw 'red', +1, -consumed
@@ -88,4 +90,4 @@ exports.controllers =
 exports.filters =
   cleanup: ->
     (obj) ->
-      _.omit obj, 'time', 'tag', '$$hashKey'
+      _.omit obj, 'time', '$$hashKey'

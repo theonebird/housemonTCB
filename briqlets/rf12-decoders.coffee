@@ -86,7 +86,9 @@ packetListener = (packet, ainfo) ->
   if decoder 
     decoder packet.buffer, (info) ->
       channel = "RF12:#{packet.band}:#{packet.group}:#{packet.id}.#{name}"
-      channel += ":#{info.tag}"  if info.tag
+      if info.tag
+        channel += ":#{info.tag}"
+        delete info.tag
       now = Date.now()
       time = packet.time or now
       if time < 86400000
