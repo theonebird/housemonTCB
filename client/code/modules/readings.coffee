@@ -5,9 +5,10 @@ exports.controllers =
     '$scope',
     ($scope) ->
 
-      maxProduced = 5000
-      maxConsumed = 5000
-      scaleMinimum = 0
+      margin = 22         # pixels
+      maxProduced = 5000  # Watt
+      maxConsumed = 5000  # Watt
+      scaleMinimum = 0    # Watt
       
       # 0 gives sqrt scaling, 30 is a nice value for log scaling
       mapFun = if scaleMinimum >= 1 then Math.log else Math.sqrt
@@ -31,7 +32,7 @@ exports.controllers =
           pos = mp - sm + mapFun(value) - sm
         else
           pos = mp - sm
-        pos * scale + 10
+        pos * scale + margin
 
       line = (colour, value) ->
         pos = energyPos value
@@ -44,7 +45,7 @@ exports.controllers =
               
       energyDraw = (colour, hor, value) ->
         pos = energyPos value
-        radius = 2 * Math.log(2 + Math.abs value)
+        radius = 2.3 * Math.log(2 + Math.abs value)
         radius = 20  if colour is 'blue'
         ctx.beginPath()
         ctx.arc 10 + w/2, pos, radius, 0, 2 * Math.PI, false
@@ -60,8 +61,8 @@ exports.controllers =
       energyInit = () ->
         ctx.clearRect 20, 0, w, h
         line 'lightgray', 0
-        ctx.moveTo 0, 10
-        ctx.lineTo 0, h-10
+        ctx.moveTo 0, margin
+        ctx.lineTo 0, h-margin
         ctx.stroke()
         w = 8
         for i in [-29..29]
