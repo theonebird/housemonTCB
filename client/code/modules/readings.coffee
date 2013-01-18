@@ -64,13 +64,13 @@ exports.controllers =
         ctx.lineTo 0, h-10
         ctx.stroke()
         w = 8
-        for i in [-19..19]
+        for i in [-29..29]
           line 'lightgreen', i * 10
         w = 12
-        for i in [-19..19]
+        for i in [-29..29]
           line 'orange', i * 100
         w = 20
-        for i in [-9..9]
+        for i in [-10..10]
           line 'red', i * 1000
         w = canvas.width
 
