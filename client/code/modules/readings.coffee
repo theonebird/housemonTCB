@@ -45,6 +45,7 @@ exports.controllers =
               
       drawCircle = (colour, value) ->
         pos = energyToPixel value
+        # scaled so max 5000 is about same size as blue circle
         radius = 2.3 * Math.log(2 + Math.abs value)
         radius = 20  if colour is 'blue'
         ctx.beginPath()
@@ -77,8 +78,10 @@ exports.controllers =
       $scope.$on 'set.readings', (event, key, value, oldVal) ->
         if key is 'RF12:868:5:9.homePower'
           produced = value.p2 / 10
-          if $scope.readings['RF12:868:5:15.smaRelay']?.acw is 0
-            produced = 0 # ignore residual reading when the inverter is off
+          # ignore small residual readings when the inverter is off
+          if produced < 15 and
+              $scope.readings['RF12:868:5:15.smaRelay']?.acw is 0
+            produced = 0
           consumed = (value.p1 + value.p3) / 10
           drawTicks()
           drawCircle 'red', -consumed

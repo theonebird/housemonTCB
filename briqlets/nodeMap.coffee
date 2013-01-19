@@ -10,6 +10,7 @@ module.exports =
   15: 'p1scanner'  
   16: 'homePower'  
   17: 'radioBlip'
+  18: 'slowLogger'
 
   # this is still used for parsing logs which do not include announcer packets
   # TODO: needs to be time-dependent, since the config can change over time
@@ -28,6 +29,7 @@ module.exports =
       14: 'otRelay'
       15: 'smaRelay'
       # 18: 'p1scanner'
+      20: 'slowLogger'
       23: 'roomNode'
       24: 'roomNode'
 

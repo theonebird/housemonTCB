@@ -52,6 +52,13 @@ decoders =
       moved: raw[2] & 1
       temp: if t < 0x200 then t else 0x200 - t
 
+  slowLogger: (raw, cb) ->
+    cb
+      a0: raw.readUInt16LE(1, true)
+      a1: raw.readUInt16LE(3, true)
+      a2: raw.readUInt16LE(5, true)
+      a3: raw.readUInt16LE(7, true)
+      
   # see http://jeelabs.org/2012/12/01/extracting-data-from-p1-packets/
   p1scanner: (raw, cb) ->
     ints = []
