@@ -23,7 +23,7 @@ exports.controllers =
       h = canvas.height
       scale = (h - 2 * margin) / ((mp - sm) + (mc - sm))      
       
-      energyPos = (value) ->
+      energyToPixel = (value) ->
         if value > scaleMinimum
           value = Math.min value, maxProduced
           pos = mp - mapFun value
@@ -34,8 +34,8 @@ exports.controllers =
           pos = mp - sm
         pos * scale + margin
 
-      line = (colour, value) ->
-        pos = energyPos value
+      drawLine = (colour, value) ->
+        pos = energyToPixel value
         ctx.beginPath()
         ctx.strokeStyle = colour
         ctx.lineWidth = 1
@@ -43,8 +43,8 @@ exports.controllers =
         ctx.lineTo w, pos
         ctx.stroke()
               
-      energyDraw = (colour, hor, value) ->
-        pos = energyPos value
+      drawCircle = (colour, value) ->
+        pos = energyToPixel value
         radius = 2.3 * Math.log(2 + Math.abs value)
         radius = 20  if colour is 'blue'
         ctx.beginPath()
@@ -58,19 +58,19 @@ exports.controllers =
           ctx.fill()
 
       # draw the tick marks
-      energyInit = () ->
+      drawTicks = () ->
         ctx.clearRect 20, 0, w, h
         w = 8
         for i in [-29..29]
-          line 'lightgreen', i * 10
+          drawLine 'lightgreen', i * 10
         w = 12
         for i in [-29..29]
-          line 'orange', i * 100
+          drawLine 'orange', i * 100
         w = 20
         for i in [-10..10]
-          line 'red', i * 1000
+          drawLine 'red', i * 1000
         w = 70
-        line 'lightgray', 0
+        drawLine 'lightgray', 0
         ctx.moveTo 0, margin
         ctx.lineTo 0, h-margin
         ctx.stroke()
@@ -81,10 +81,10 @@ exports.controllers =
           if $scope.readings['RF12:868:5:15.smaRelay']?.acw is 0
             produced = 0 # ignore residual reading when the inverter is off
           consumed = (value.p1 + value.p3) / 10
-          energyInit()
-          energyDraw 'red', +1, -consumed
-          energyDraw 'green', -1, produced
-          energyDraw 'blue', 0, produced - consumed
+          drawTicks()
+          drawCircle 'red', -consumed
+          drawCircle 'green', produced
+          drawCircle 'blue', produced - consumed
   ]
 
 exports.filters =
