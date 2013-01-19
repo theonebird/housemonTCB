@@ -5,7 +5,7 @@ exports.controllers =
     '$scope',
     ($scope) ->
 
-      margin = 22         # pixels
+      topBotMargin = 22   # pixels
       maxProduced = 5000  # Watt
       maxConsumed = 5000  # Watt
       scaleMinimum = 0    # Watt
@@ -21,7 +21,7 @@ exports.controllers =
       ctx = canvas.getContext '2d'
       w = canvas.width
       h = canvas.height
-      scale = (h - 2 * margin) / ((mp - sm) + (mc - sm))      
+      scale = (h - 2 * topBotMargin) / ((mp - sm) + (mc - sm))      
       
       energyToPixel = (value) ->
         if value > scaleMinimum
@@ -32,7 +32,7 @@ exports.controllers =
           pos = mp - sm + mapFun(value) - sm
         else
           pos = mp - sm
-        pos * scale + margin
+        pos * scale + topBotMargin
 
       drawLine = (colour, value) ->
         pos = energyToPixel value
@@ -57,7 +57,6 @@ exports.controllers =
           ctx.fillStyle = colour
           ctx.fill()
 
-      # draw the tick marks
       drawTicks = () ->
         ctx.clearRect 20, 0, w, h
         w = 8
@@ -71,8 +70,8 @@ exports.controllers =
           drawLine 'red', i * 1000
         w = 70
         drawLine 'lightgray', 0
-        ctx.moveTo 0, margin
-        ctx.lineTo 0, h-margin
+        ctx.moveTo 0, topBotMargin
+        ctx.lineTo 0, h-topBotMargin
         ctx.stroke()
 
       $scope.$on 'set.readings', (event, key, value, oldVal) ->
