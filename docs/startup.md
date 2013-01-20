@@ -25,8 +25,8 @@ The server is normally started using `npm start`. Here's what that does:
 * it then launches `node` with `app.js` as script (see the note below)
 * `app.js` is just a tiny wrapper to launch `server/launch.coffee`
 * `launch.coffee` is more or less a standard SocketStream app startup file
-* non-standard is that all files in `briqlets/` are scanned and loaded
-* also extra, is some code in `server/...` to manage briqlets and shared state
+* non-standard is that all files in `briqs/` are scanned and loaded
+* also extra, is some code in `server/...` to manage briqs and shared state
 
 For develoment, it's better to launch the app with `nodemon`, because it'll
 restart the server on relevant file changes. To install nodemon globally, use

@@ -3,41 +3,41 @@
   .three.columns
     h3 Installed
     ul.square
-      li(ng-repeat='obj in actives',ng-click='selectActive(obj)')
-        {{obj.key}}
-    h3 Briqlets
+      li(ng-repeat='bob in bobs',ng-click='selectBob(bob)')
+        {{bob.key}}
+    h3 Briqs
     ul.square
-      li(ng-repeat='obj in briqlets',ng-click='selectBriqlet(obj)')
-        {{obj.info.name}}
+      li(ng-repeat='briq in briqs',ng-click='selectBriq(briq)')
+        {{briq.info.name}}
              
-  .nine.columns(ng-show='briqlet')
+  .nine.columns(ng-show='briq')
     .panel
-      h4 {{briqlet.info.name}}
-      h4.subheader {{briqlet.info.description}}
-      .row(ng-repeat='input in briqlet.info.inputs')
+      h4 {{briq.info.name}}
+      h4.subheader {{briq.info.description}}
+      .row(ng-repeat='input in briq.info.inputs')
         .three.columns
           label.right.inline {{input.name}}:
         .nine.columns(ng-switch='input.type')
           textarea.eight(ng-switch-when='text'
                          ng-model='input.value'
-                         ng-disabled='active'
+                         ng-disabled='bob'
                          rows=10)
           input.four(ng-switch-default
                      type='text'
                      ng-model='input.value'
-                     ng-disabled='active'
+                     ng-disabled='bob'
                      placeholder='{{input.default}}')
       .row
         .nine.columns
           input.button(type='submit'
                        value='Install'
-                       ng-click='createActive()'
-                       ng-disabled='active')
+                       ng-click='createBob()'
+                       ng-disabled='bob')
         .three.columns
           input.button.right(type='submit'
                              value='Remove'
-                             ng-click='removeActive()'
-                             ng-show='active')
+                             ng-click='removeBob()'
+                             ng-show='bob')
 
 .row
   .twelve.columns

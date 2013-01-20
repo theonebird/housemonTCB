@@ -10,8 +10,8 @@ routes = require '/routes'
 #     ss.store @remoteName, @
 # 
 # classes = 
-#   briqlets: class Briqlet extends RemoteObject
-#   actives: class Actives extends RemoteObject 
+#   briqs: class Briq extends RemoteObject
+#   bobs: class Bobs extends RemoteObject 
 #   readings: class Readings extends RemoteObject
 
 exports.config = [

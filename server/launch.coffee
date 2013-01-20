@@ -4,14 +4,14 @@ global._ = require 'underscore'
 
 # This list is also the order in which everything gets initialised
 state = require './state'
-briqlets = require('./briqlets') state
+briqs = require('./briqs') state
 local = require '../local'
 http = require 'http'
 ss = require 'socketstream'
 
-# Auto-load all briqlets from a central directory
-briqlets.loadAll ->
-  console.info "briqlets loaded"
+# Auto-load all briqs from a central directory
+briqs.loadAll ->
+  console.info "briqs loaded"
 
 # Hook state management into SocketStream
 ss.api.add 'fetch', state.fetch
@@ -32,7 +32,7 @@ ss.http.route '/', (req, res) ->
 # Persistent sessions and storage based on Redis
 ss.session.store.use 'redis', local.redisConfig
 # ss.publish.transport.use 'redis', local.redisConfig
-state.setupStorage ['actives', 'readings'], local.redisConfig
+state.setupStorage ['bobs', 'readings'], local.redisConfig
 
 # Code Formatters known by SocketStream
 ss.client.formatters.add require('ss-coffee')

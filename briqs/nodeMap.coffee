@@ -1,5 +1,5 @@
 # temporary static node map for now
-# module is not treated as a briqlet, because it does not export an 'info' entry
+# module is not treated as a briq, because it does not export an 'info' entry
 
 module.exports =
 

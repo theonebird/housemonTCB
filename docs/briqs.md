@@ -3,19 +3,20 @@
 Briqs are an attempt to "compartmentalise" an application into manageable yet
 loosely-coupled parts. Instead of having to put code in one directory, html
 files in another, stylesheets in yet another, and so on for tests, data files,
-and who knows what else - with briqs it would all reside in the briqlet which
-implementents a certain aspect of the application.
+and who knows what else - with briqs it would all reside in the briq component
+which implementents a certain aspect of the application.
 
 The intended benefit is that features could be enabled and disabled at will,
 and that exchange and re-use would become trivial. That's the utopian view.
 
-In practice, briqs hardly do anything now. There's an admin interface (reached
-via the "/admin" client-side route) which lists all available briqs, and allows
-installing / uninstalling them. But that process is not yet well-defined.
+In practice, briqs only work on the server for now. There's an admin interface
+(reached via the "/admin" client-side route) which lists all available briqs,
+and allows installing / uninstalling them. Installed briqs are called "briq
+objects" or "bobs". A "briq" is a _class_, a "bob" is an _instance_ of a briq.
 
 ## Today
 
-So for now, Briqs are just a hand-waving attempt to get modularity implemented.
+So for now, briqs are just a hand-waving attempt to get modularity implemented.
 
 The current way to add a feature to the application is much more complex, and
 depends on whether it is a server-side or client-side feature, or perhaps both.
