@@ -29,12 +29,10 @@ ss.client.define 'main',
 ss.http.route '/', (req, res) ->
   res.serveClient 'main'
 
-# Persistent sessions with Redis
-if local.useRedis
-  console.info 'redisConfig', local.redisConfig
-  ss.session.store.use 'redis', local.redisConfig
-  # ss.publish.transport.use 'redis', local.redisConfig
-  state.setupStorage ['installed', 'readings'], local.redisConfig
+# Persistent sessions and storage based on Redis
+ss.session.store.use 'redis', local.redisConfig
+# ss.publish.transport.use 'redis', local.redisConfig
+state.setupStorage ['installed', 'readings'], local.redisConfig
 
 # Code Formatters known by SocketStream
 ss.client.formatters.add require('ss-coffee')
