@@ -1,15 +1,16 @@
 .row
+
   .three.columns
-    h1 Briqlets
-    ul.square
-      li(ng-repeat='id in briqlets'
-         ng-click='selectBriq(id)')
-        {{id.info.name}}
-    h1 Installed
+    h3 Installed
     ul.square
       li(ng-repeat='(k,v) in installed'
-         ng-click='uninstallBriq(k)')
+         ng-click='selectInstalled(k)')
         {{k}}
+    h3 Briqlets
+    ul.square
+      li(ng-repeat='id in briqlets'
+         ng-click='selectBriqlet(id)')
+        {{id.info.name}}
              
   .nine.columns(ng-show='id')
     .panel
@@ -22,17 +23,27 @@
           input.four(ng-switch-when='line'
                      type='text'
                      ng-model='input.value'
+                     ng-disabled='idConf'
                      placeholder='{{input.default}}')
           select.five(ng-switch-when='briq'
                       ng-model='input.value'
+                      ng-disabled='idConf'
                       ng-options='k for (k,v) in installed')
           textarea.eight(ng-switch-when='text'
                          ng-model='input.value'
+                         ng-disabled='idConf'
                          rows=10)
-      .row.twelve.columns
-        input.button(type='submit'
-                     value='Install'
-                     ng-click='installBriq()')
+      .row
+        .nine.columns
+          input.button(type='submit'
+                       value='Install'
+                       ng-click='installBriqlet()'
+                       ng-disabled='idConf')
+        .three.columns
+          input.button(type='submit'
+                       value='Remove'
+                       ng-click='removeInstalled()'
+                       ng-show='idConf')
 
 .row
   .twelve.columns
