@@ -8,10 +8,10 @@ module.exports = (state) ->
   models = state.fetch()
   
   state.on 'set.installed', (key, newVal, oldVal) ->
-    briq = models.briqlets[newVal.briq]
-    if briq.factory
+    briqlet = models.briqlets[newVal.briqlet]
+    if briqlet.factory
       args = key.split(':').slice 1
-      installedBriqlets[key] = new briq.factory(args...)
+      installedBriqlets[key] = new briqlet.factory(args...)
     
   state.on 'unset.installed', (key, value) ->
     briqlet = installedBriqlets[key]

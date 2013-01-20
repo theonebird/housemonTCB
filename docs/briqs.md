@@ -3,7 +3,7 @@
 Briqs are an attempt to "compartmentalise" an application into manageable yet
 loosely-coupled parts. Instead of having to put code in one directory, html
 files in another, stylesheets in yet another, and so on for tests, data files,
-and who knows what else - with briqs it would all reside in the briq which
+and who knows what else - with briqs it would all reside in the briqlet which
 implementents a certain aspect of the application.
 
 The intended benefit is that features could be enabled and disabled at will,

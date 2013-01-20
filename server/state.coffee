@@ -24,32 +24,32 @@ state = new events.EventEmitter2
 state.fetch = ->
   models
   
-state.store = (hash, key, value) ->
-  collection = models[hash] ? {}
-  oldValue = collection[key]
+state.store = (key, id, value) ->
+  collection = models[key] ? {}
+  oldValue = collection[id]
   unless value is oldValue 
     if value?
-      collection[key] = value
-      state.emit "set.#{hash}", key, value, oldValue
+      collection[id] = value
+      state.emit "set.#{key}", id, value, oldValue
     else if oldValue?
-      delete collection[key]
-      state.emit "unset.#{hash}", key, oldValue
-    models[hash] = collection
-    state.emit 'store', hash, key, value
+      delete collection[id]
+      state.emit "unset.#{key}", id, oldValue
+    models[key] = collection
+    state.emit 'store', key, id, value
     
 state.setupStorage = (collections, config) ->
   redis = require 'redis'
-  client = redis.createClient(config.port, config.host, config)
+  db = redis.createClient(config.port, config.host, config)
   
-  state.on 'store', (hash, key, value) ->
+  state.on 'store', (key, id, value) ->
     if value?
-      client.hmset hash, key, JSON.stringify value
+      db.hmset key, id, JSON.stringify value
     else
-      client.hdel hash, key
+      db.hdel key, id
 
-  client.select config.db, ->
+  db.select config.db, ->
     loadData = (coll) ->
-      client.hgetall coll, (err, res) ->
+      db.hgetall coll, (err, res) ->
         throw err  if err
         for k,v of res
           state.store coll, k, JSON.parse(v)

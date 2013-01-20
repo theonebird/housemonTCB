@@ -14,7 +14,7 @@
 #   key = briname:and:args
 #   fields:
 #     keys = own key
-#     briq: key in briqlets
+#     briqlet: key in briqlets
 #     more... config settings for this installed instance?
 
 exports.controllers = 
@@ -40,7 +40,7 @@ exports.controllers =
           keys.push input.value?.keys or input.value or input.default
         keyStr = keys.join(':')
         $scope.store 'installed', keyStr,
-          briq: $scope.selBriq.filename
+          briqlet: $scope.selBriq.filename
           keys: keyStr
         # TODO: hacked to capture actual store once it comes back from server
         done = $scope.$on 'set.installed', () ->
@@ -50,7 +50,7 @@ exports.controllers =
       $scope.selectInstalled = (id) ->
         keys = id.split(':').slice 1
         $scope.selInst = inst = $scope.installed[id]
-        $scope.selBriq = briqlet = $scope.briqlets[inst.briq]
+        $scope.selBriq = briqlet = $scope.briqlets[inst.briqlet]
         for input in briqlet.info.inputs or []
           input.value = keys.shift()
           input.type ?= 'line'
