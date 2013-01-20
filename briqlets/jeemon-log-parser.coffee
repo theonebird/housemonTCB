@@ -10,13 +10,28 @@ exports.info =
 
 events = require 'events'
 lazy = require 'lazy'
+fs = require 'fs'
+state = require '../server/state'
 
 # L 01:02:03.537 usb-A40117UK OK 9 25 54 66 235 61 139 183 235 210 226 33 19
 
 class JeeMonLogParser extends events.EventEmitter
   
   info = {}
-  
+
+# TODO: test code  
+  constructor: (filename) ->
+    if filename
+      @on 'packet', (packet) ->
+        if packet.id is 20
+          packet.band = 868
+          packet.group = 5
+          state.emit 'rf12.packet', packet, { name: 'slowLogger' }
+      setTimeout =>
+        @parseStream fs.createReadStream("/Users/jcw/Desktop/logger.txt")
+      , 5000
+#end test code
+
   parse: (line) ->
     words = line.split ' '
     if words[0] is 'L'
