@@ -15,7 +15,6 @@ briqlets.loadAll ->
 
 # Hook state management into SocketStream
 ss.api.add 'fetch', state.fetch
-ss.api.add 'newid', state.newid
 ss.api.add 'store', state.store
 state.on 'store', (hash, key, value) ->
   ss.api.publish.all 'ss-store', [hash, key, value]

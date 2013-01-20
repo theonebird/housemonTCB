@@ -5,31 +5,29 @@
 # would much better to load rows as instances with extra behavior
 
 # briqlets:
-#   key = filename ("demo.coffee")
-#   fields:
-#     filename = own key
-#     info: object from exports, i.e. description, inputs, etc
+#   id = unique id
+#   filename = own key
+#   info: object from exports, i.e. description, inputs, etc
 #
 # installed:
-#   key = briname:and:args
-#   fields:
-#     keys = own key
-#     briqlet: key in briqlets
-#     more... config settings for this installed instance?
+#   id = unique id
+#   keys = own key, briname:and:args
+#   briqlet: key in briqlets
+#   more... config settings for this installed instance?
 
 exports.controllers = 
   AdminCtrl: [
     '$scope',
     ($scope) ->
 
-      $scope.selectBriqlet = (id) ->
+      $scope.selectBriqlet = (obj) ->
         # if there are no args, it may already have been installed
-        if $scope.installed?[id.info.name]
-          $scope.selectInstalled id.info.name
+        if $scope.installed?[obj.info.name]
+          $scope.selectInstalled obj.info.name
         else
           $scope.selInst = null
-          $scope.selBriq = id
-          for input in id.info.inputs or []
+          $scope.selBriq = obj
+          for input in obj.info.inputs or []
             input.value = null
             input.type ?= 'line'
       
