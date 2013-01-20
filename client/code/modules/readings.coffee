@@ -17,7 +17,7 @@ exports.controllers =
       mc = mapFun maxConsumed 
       sm = mapFun scaleMinimum 
       
-      canvas = $('#mybar')[0]
+      canvas = jQuery('#mybar')[0]
       ctx = canvas.getContext '2d'
       w = canvas.width
       h = canvas.height
@@ -79,7 +79,7 @@ exports.controllers =
         if key is 'RF12:868:5:9.homePower'
           produced = value.p2 / 10
           # ignore small residual readings when the inverter is off
-          if produced < 15 and
+          if produced < 20 and
               $scope.readings['RF12:868:5:15.smaRelay']?.acw is 0
             produced = 0
           consumed = (value.p1 + value.p3) / 10

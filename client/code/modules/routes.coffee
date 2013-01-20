@@ -15,6 +15,9 @@ module.exports = [
   title: 'Readings'
   controller: 'ReadingsCtrl'
 ,
+  title: 'Graphs'
+  controller: 'GraphsCtrl'
+,
   title: 'Sandbox'
   controller: 'SandboxCtrl'
 ]
