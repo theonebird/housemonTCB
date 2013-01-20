@@ -18,61 +18,66 @@ for k,v of process
 # fetch and store implement a simple replicated key-value store
 # when optionally tied to Redis, the store becomes persistent
 
-# primary key lookup to id, issue a new id if it doesn't exist
-idOf = (name, key, cb) ->
-  db.hget "#{name}:ids", key, (err, id)->
-    throw err  if err
-    if id
-      cb id
-    else
-      db.hincrby 'ids', name, 1, (err, id) ->
-        throw err  if err
-        cb id
-      
-state = new events.EventEmitter2
+module.exports = state = new events.EventEmitter2
 
-# state.onAny (arg) ->
-#   console.info '>', @event, arg
+# state.onAny (args...) ->
+#   console.info '>', @event, args...
   
+# make sure this object has an id, issue a new one via redis if needed
+# TODO: could avoid async with a scan for highest ID on node.js startup
+setId = (name, obj, cb) ->
+  if obj.id
+    # noting to do
+    cb obj.id
+  else if obj.key?
+    db.hget "#{name}:ids", obj.key, (err, id)->
+      throw err  if err
+      if id
+        # there is an existing entry with this key, use it
+        cb obj.id = id
+      else
+        db.hincrby 'ids', name, 1, (err, id) ->
+          throw err  if err
+          # issue and assign a new id
+          cb obj.id = id
+
 state.fetch = (cb) ->
   cb models
 
-state.store = (name, id, value, cb) ->
-  collection = models[name] ? {}
-  oldValue = collection[id]
-  unless value is oldValue 
-    if value?
-      collection[id] = value
-      state.emit "set.#{name}", id, value, oldValue
-    else if oldValue?
-      delete collection[id]
-      state.emit "unset.#{name}", id, oldValue
-    models[name] = collection
-    state.emit 'store', name, id, value
-  cb?()
+state.store = (name, obj, cb) ->
+  setId name, obj, (id) ->
+    collection = models[name] ? {}
+    oldObj = collection[id]
+    unless obj is oldObj # TODO: is this comparison useful?
+      if obj.key?
+        collection[id] = obj
+        state.emit "set.#{name}", obj, oldObj
+      else if oldObj?
+        delete collection[id]
+        state.emit "unset.#{name}", oldObj
+      models[name] = collection
+      state.emit 'store', name, obj
+    cb?()
     
 state.setupStorage = (collections, config) ->
   db = redis.createClient(config.port, config.host, config)
   
-  state.on 'store', (name, key, obj) ->
-    idOf name, key, (id) ->
-      if obj?
-        obj.id = id
-        db.hmset name, id, JSON.stringify(obj)
-        db.hmset "#{name}:ids", key, id
-      else
-        db.srem name, xid
-        db.hmdel "#{name}:ids", key, xid
+  state.on 'store', (name, obj) ->
+    if obj.key?
+      db.hset name, obj.id, JSON.stringify(obj)
+      db.hset "#{name}:ids", obj.key, obj.id
+    else
+      # key is gone, need to fetch original to recover it
+      db.hget name, obj.id, (err, res) ->
+        throw err  if err
+        obj = JSON.parse res
+        db.hdel name, obj.id
+        db.hdel "#{name}:ids", obj.key
 
   db.select config.db, ->
     loadData = (name) ->
-      db.hgetall "#{name}:ids", (err, ids) ->
-        throw err  if err
-        db.hgetall name, (err, res) ->        
-          for k,v of ids
-            state.store name, k, JSON.parse(res[v])
-      
-    # loaded asynchronously, would need async module for completion callback
+      db.hgetall name, (err, ids) ->        
+        for k,v of ids
+          state.store name, k, JSON.parse(v)
+    # loaded asynchronously, will need async module for completion callback
     loadData name  for name in collections
-
-module.exports = state

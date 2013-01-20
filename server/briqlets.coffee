@@ -7,23 +7,23 @@ module.exports = (state) ->
   
   state.fetch (models) ->
   
-    state.on 'set.installed', (key, newVal, oldVal) ->
-      briqlet = models.briqlets[newVal.briqlet]
+    state.on 'set.actives', (newVal, oldVal) ->
+      briqlet = models.briqlets[newVal.briqlet_id]
       if briqlet.factory
-        args = key.split(':').slice 1
-        installedBriqlets[key] = new briqlet.factory(args...)
+        args = newVal.key.split(':').slice 1
+        installedBriqlets[newVal.key] = new briqlet.factory(args...)
     
-    state.on 'unset.installed', (key, value) ->
-      briqlet = installedBriqlets[key]
+    state.on 'unset.actives', (value) ->
+      briqlet = installedBriqlets[value.key]
       if briqlet?
         briqlet.destroy?()
-        delete installedBriqlets[key]
+        delete installedBriqlets[value.key]
 
     loadFile = (filename) ->
       loaded = require "../briqlets/#{filename}"
-      if loaded.info
-        loaded.filename = filename # TODO: really put the key inside the object?
-        state.store 'briqlets', filename, loaded.info.name and loaded
+      if loaded.info?.name
+        loaded.key = filename
+        state.store 'briqlets', loaded
 
     loadAll: (cb) ->
       # TODO: delete existing briqlets
@@ -36,4 +36,4 @@ module.exports = (state) ->
       # TODO: need newer node.js to use fs.watch on Mac OS X
       #  see: https://github.com/joyent/node/issues/3343
       # fs.watch './briqlets', (event, filename) ->
-      #   console.log event, filename
+      #   briqlet_id event, filename

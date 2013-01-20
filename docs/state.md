@@ -26,4 +26,4 @@ Such changes will "round-trip" to the server before they end up being updated
 in (all!) client scopes.
 
 Lots of details yet to be worked out. For now, it works for the 'briqlets'
-and 'installed' objects, and also includes some read-only server information.
+and 'actives' objects, and also includes some read-only server information.

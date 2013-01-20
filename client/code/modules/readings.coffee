@@ -75,14 +75,14 @@ exports.controllers =
         ctx.lineTo 0, h-topBotMargin
         ctx.stroke()
 
-      $scope.$on 'set.readings', (event, key, value, oldVal) ->
-        if key is 'RF12:868:5:9.homePower'
-          produced = value.p2 / 10
+      $scope.$on 'set.readings', (event, reading) ->
+        if reading.key is 'RF12:868:5:9.homePower'
+          produced = reading.p2 / 10
           # ignore small residual readings when the inverter is off
           if produced < 20 and
               $scope.readings['RF12:868:5:15.smaRelay']?.acw is 0
             produced = 0
-          consumed = (value.p1 + value.p3) / 10
+          consumed = (reading.p1 + reading.p3) / 10
           drawTicks()
           drawCircle 'red', -consumed
           drawCircle 'green', produced
@@ -92,4 +92,4 @@ exports.controllers =
 exports.filters =
   cleanup: ->
     (obj) ->
-      _.omit obj, 'time', '$$hashKey'
+      _.omit obj, 'key', 'time', '$$hashKey'

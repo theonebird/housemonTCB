@@ -92,16 +92,16 @@ packetListener = (packet, ainfo) ->
   decoder = decoders[name]
   if decoder 
     decoder packet.buffer, (info) ->
-      channel = "RF12:#{packet.band}:#{packet.group}:#{packet.id}.#{name}"
+      info.key = "RF12:#{packet.band}:#{packet.group}:#{packet.id}.#{name}"
       if info.tag
-        channel += ":#{info.tag}"
+        info.key += ":#{info.tag}"
         delete info.tag
       now = Date.now()
       time = packet.time or now
       if time < 86400000
         time += now - now % 86400000
       info.time = time
-      state.store 'readings', channel, info
+      state.store 'readings', info
   else
     console.info 'raw', packet
         

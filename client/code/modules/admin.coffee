@@ -6,13 +6,13 @@
 
 # briqlets:
 #   id = unique id
-#   filename = own key
+#   key = filename
 #   info: object from exports, i.e. description, inputs, etc
 #
-# installed:
+# actives:
 #   id = unique id
-#   keys = own key, briname:and:args
-#   briqlet: key in briqlets
+#   key = briqname:and:args
+#   briqlet_id: parent briqlet
 #   more... config settings for this installed instance?
 
 exports.controllers = 
@@ -21,39 +21,40 @@ exports.controllers =
     ($scope) ->
 
       $scope.selectBriqlet = (obj) ->
-        # if there are no args, it may already have been installed
-        if $scope.installed?[obj.info.name]
-          $scope.selectInstalled obj.info.name
-        else
-          $scope.selInst = null
-          $scope.selBriq = obj
-          for input in obj.info.inputs or []
-            input.value = null
-            input.type ?= 'line'
+        # # if there are no args, it may already have been installed
+        # if $scope.actives?[obj.info.name]
+        #   $scope.selectActive obj.info.name
+        # else
+        $scope.active = null
+        $scope.briqlet = obj
+        for input in obj.info.inputs or []
+          input.value = null
       
-      $scope.installBriqlet = ->
-        info = $scope.selBriq.info
-        keys = [info.name]
-        for input in info.inputs or []
-          keys.push input.value?.keys or input.value or input.default
-        keyStr = keys.join(':')
-        $scope.store 'installed', keyStr,
-          briqlet: $scope.selBriq.filename
-          keys: keyStr
-        # TODO: hacked to capture actual store once it comes back from server
-        done = $scope.$on 'set.installed', () ->
-          $scope.selectInstalled keyStr
-          done() # simulates $scope.$once
-      
-      $scope.selectInstalled = (id) ->
-        keys = id.split(':').slice 1
-        $scope.selInst = inst = $scope.installed[id]
-        $scope.selBriq = briqlet = $scope.briqlets[inst.briqlet]
+      $scope.selectActive = (obj) ->
+        $scope.active = obj
+        $scope.briqlet = briqlet = $scope.briqlets[obj.briqlet_id]
+
+        keys = obj.key.split(':').slice 1
         for input in briqlet.info.inputs or []
           input.value = keys.shift()
-          input.type ?= 'line'
 
-      $scope.removeInstalled = () ->
-        $scope.selBriq = null
-        $scope.store 'installed', $scope.selInst.keys
+      $scope.createActive = ->
+        # TODO: candidate for a Bricklet method
+        keys = [$scope.briqlet.info.name]
+        for input in $scope.briqlet.info.inputs or []
+          keys.push input.value?.keys or input.value or input.default
+
+        $scope.store 'actives',
+          briqlet_id: $scope.briqlet.id
+          key: keys.join(':')
+
+        # TODO: hacked to capture actual store once it comes back from server
+        done = $scope.$on 'set.actives', (event, obj) ->
+          $scope.selectActive obj
+          done() # simulates $scope.$once
+      
+      $scope.removeActive = () ->
+        $scope.store 'actives', _.omit $scope.active, 'key'
+        $scope.briqlet = null
+        $scope.active = null
   ]

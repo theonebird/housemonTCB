@@ -3,43 +3,41 @@
   .three.columns
     h3 Installed
     ul.square
-      li(ng-repeat='(k,v) in installed'
-         ng-click='selectInstalled(k)')
-        {{k}}
+      li(ng-repeat='obj in actives',ng-click='selectActive(obj)')
+        {{obj.key}}
     h3 Briqlets
     ul.square
-      li(ng-repeat='id in briqlets'
-         ng-click='selectBriqlet(id)')
-        {{id.info.name}}
+      li(ng-repeat='obj in briqlets',ng-click='selectBriqlet(obj)')
+        {{obj.info.name}}
              
-  .nine.columns(ng-show='selBriq')
+  .nine.columns(ng-show='briqlet')
     .panel
-      h4 {{selBriq.info.name}}
-      h4.subheader {{selBriq.info.description}}
-      .row(ng-repeat='input in selBriq.info.inputs')
+      h4 {{briqlet.info.name}}
+      h4.subheader {{briqlet.info.description}}
+      .row(ng-repeat='input in briqlet.info.inputs')
         .three.columns
           label.right.inline {{input.name}}:
-        .nine.columns(ng-switch on='input.type')
-          input.four(ng-switch-when='line'
-                     type='text'
-                     ng-model='input.value'
-                     ng-disabled='selInst'
-                     placeholder='{{input.default}}')
+        .nine.columns(ng-switch='input.type')
           textarea.eight(ng-switch-when='text'
                          ng-model='input.value'
-                         ng-disabled='selInst'
+                         ng-disabled='active'
                          rows=10)
+          input.four(ng-switch-default
+                     type='text'
+                     ng-model='input.value'
+                     ng-disabled='active'
+                     placeholder='{{input.default}}')
       .row
         .nine.columns
           input.button(type='submit'
                        value='Install'
-                       ng-click='installBriqlet()'
-                       ng-disabled='selInst')
+                       ng-click='createActive()'
+                       ng-disabled='active')
         .three.columns
           input.button.right(type='submit'
                              value='Remove'
-                             ng-click='removeInstalled()'
-                             ng-show='selInst')
+                             ng-click='removeActive()'
+                             ng-show='active')
 
 .row
   .twelve.columns
