@@ -5,35 +5,35 @@ installedBriqlets = {}
 
 module.exports = (state) ->
   
-  models = state.fetch()
+  state.fetch (models) ->
   
-  state.on 'set.installed', (key, newVal, oldVal) ->
-    briqlet = models.briqlets[newVal.briqlet]
-    if briqlet.factory
-      args = key.split(':').slice 1
-      installedBriqlets[key] = new briqlet.factory(args...)
+    state.on 'set.installed', (key, newVal, oldVal) ->
+      briqlet = models.briqlets[newVal.briqlet]
+      if briqlet.factory
+        args = key.split(':').slice 1
+        installedBriqlets[key] = new briqlet.factory(args...)
     
-  state.on 'unset.installed', (key, value) ->
-    briqlet = installedBriqlets[key]
-    if briqlet?
-      briqlet.destroy?()
-      delete installedBriqlets[key]
+    state.on 'unset.installed', (key, value) ->
+      briqlet = installedBriqlets[key]
+      if briqlet?
+        briqlet.destroy?()
+        delete installedBriqlets[key]
 
-  loadFile = (filename) ->
-    loaded = require "../briqlets/#{filename}"
-    if loaded.info
-      loaded.filename = filename # TODO: really put the key inside the object?
-      state.store 'briqlets', filename, loaded.info.name and loaded
+    loadFile = (filename) ->
+      loaded = require "../briqlets/#{filename}"
+      if loaded.info
+        loaded.filename = filename # TODO: really put the key inside the object?
+        state.store 'briqlets', filename, loaded.info.name and loaded
 
-  loadAll: (cb) ->
-    # TODO: delete existing briqlets
-    # scan and add all briqlets, async
-    fs.readdir './briqlets', (err, files) ->
-      throw err  if err
-      for f in files
-        loadFile f
-      cb?()
-    # TODO: need newer node.js to use fs.watch on Mac OS X
-    #  see: https://github.com/joyent/node/issues/3343
-    # fs.watch './briqlets', (event, filename) ->
-    #   console.log event, filename
+    loadAll: (cb) ->
+      # TODO: delete existing briqlets
+      # scan and add all briqlets, async
+      fs.readdir './briqlets', (err, files) ->
+        throw err  if err
+        for f in files
+          loadFile f
+        cb?()
+      # TODO: need newer node.js to use fs.watch on Mac OS X
+      #  see: https://github.com/joyent/node/issues/3343
+      # fs.watch './briqlets', (event, filename) ->
+      #   console.log event, filename

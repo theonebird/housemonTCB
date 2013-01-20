@@ -29,4 +29,3 @@ for r in routes
 ss.server.once 'ready', ->
   jQuery ->
     console.info 'app ready'
-    ss.rpc 'host.api','log','client app is ready', ->

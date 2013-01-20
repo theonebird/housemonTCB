@@ -1,5 +1,7 @@
 # Manage the state which is shared with all clients
 events = require 'eventemitter2'
+redis = require 'redis'
+db = null
 
 # set up the central data models used by each client
 models = 
@@ -21,10 +23,16 @@ state = new events.EventEmitter2
 # state.onAny (arg) ->
 #   console.info '>', @event, arg
   
-state.fetch = ->
-  models
+state.fetch = (cb) ->
+  cb models
+
+state.newid = (key, cb) ->
+  console.log 'newid',key,value
+  db.hincr 'ids', key, (err, res) ->
+    throw err  if err
+    cb res
   
-state.store = (key, id, value) ->
+state.store = (key, id, value, cb) ->
   collection = models[key] ? {}
   oldValue = collection[id]
   unless value is oldValue 
@@ -36,9 +44,9 @@ state.store = (key, id, value) ->
       state.emit "unset.#{key}", id, oldValue
     models[key] = collection
     state.emit 'store', key, id, value
+  cb?()
     
 state.setupStorage = (collections, config) ->
-  redis = require 'redis'
   db = redis.createClient(config.port, config.host, config)
   
   state.on 'store', (key, id, value) ->
