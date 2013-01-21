@@ -28,7 +28,7 @@ module.exports =
       13: 'roomNode'
       14: 'otRelay'
       15: 'smaRelay'
-      # 18: 'p1scanner'
+      18: 'p1scanner'
       20: 'slowLogger'
       23: 'roomNode'
       24: 'roomNode'

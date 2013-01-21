@@ -82,7 +82,7 @@ exports.controllers =
           produced = reading.p2 / 10
           # ignore small residual readings when the inverter is off
           if produced < 20 and
-              $scope.readings['RF12:868:5:15.smaRelay']?.acw is 0
+              $scope.readings.find('RF12:868:5:15.smaRelay')?.acw is 0
             produced = 0
           consumed = (reading.p1 + reading.p3) / 10
           drawTicks()

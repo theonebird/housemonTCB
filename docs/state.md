@@ -48,11 +48,11 @@ and the object as arguments. There are three cases for the object:
 
 Collections are can be created as follows (does nothing if it already exists):
 
-    ss.collection 'jobs'
+    state.collection 'jobs'
 
 We can now store a job item in this shared collection called "jobs":
 
-    ss.jobs.store { key: 'me', activity: 'doodle', duration: '30m' }
+    state.jobs.store { key: 'me', activity: 'doodle', duration: '30m' }
 
 Once stored on the server, an async event will come back to update the client.
 This will have the same info, but also a new "id" field (id's start at 1):
@@ -61,24 +61,28 @@ This will have the same info, but also a new "id" field (id's start at 1):
     
 This job item can now also be reached anywhere in the client via its id:
 
-    myjob = ss.jobs[1]
+    myjob = state.jobs[1]
 
 To make a change, just change some fields and store the object:
 
     myjob.duration = '5m'
     myjob.priority = 123
-    ss.jobs.store myjob
+    state.jobs.store myjob
     
 To delete an object from the server, clear its key and store it again:
 
     myjob.key = null
-    ss.jobs.store myjob
+    state.jobs.store myjob
 
 To iterate over all the job objects, use the collection in the client:
 
-    for k,v of ss.jobs
+    for k,v of state.jobs
       console.log k,'=',v
       
-Do not make changes to the ss.jobs collection, as this will not be properly
+Finding an object from its key is also straightforward:
+
+    job = state.jobs.find 'me'
+
+Do not make changes to the state.jobs collection, as this will not be properly
 sent out to the server and other clients. You *can* change the object itself,
 as long as you always finish by calling "store" on it.

@@ -35,10 +35,12 @@ exports.controllers =
           # create an array and add some object attributes to it
           # this way the extra attributes won't be enumerated
           coll = $scope[name] = []
-          coll.name = name # TODO: could stay in local scope
+          # map ID's to objects
           coll.byId = {}
+          # find object in collection, given its key
           coll.find = (value) -> _.find @, (obj) -> obj.key is value
-          coll.store = (obj) -> ss.rpc 'host.api', 'store', @name, obj, ->
+          # store an object (must have either a key, an id, or both)
+          coll.store = (obj) -> ss.rpc 'host.api', 'store', name, obj, ->
         $scope[name]
     
       storeOne = (name, obj, cb) ->
