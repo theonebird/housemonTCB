@@ -5,6 +5,8 @@ exports.controllers =
     '$scope',
     ($scope) ->
 
+      $scope.collection 'readings'
+
       topBotMargin = 22   # pixels
       maxProduced = 5000  # Watt
       maxConsumed = 5000  # Watt

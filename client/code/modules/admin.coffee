@@ -23,6 +23,8 @@ exports.controllers =
     '$scope',
     ($scope) ->
 
+      $scope.collection 'bobs'
+      
       $scope.selectBriq = (obj) ->
         # # if there are no args, it may already have been installed
         # if $scope.bobs?[obj.info.name]
@@ -53,7 +55,7 @@ exports.controllers =
       
       $scope.selectBob = (obj) ->
         $scope.bob = obj
-        $scope.briq = $scope.briqs[obj.briq_id]
+        $scope.briq = $scope.briqs.byId[obj.briq_id]
 
         # TODO: candidate for a Briq method
         keys = obj.key.split(':').slice 1

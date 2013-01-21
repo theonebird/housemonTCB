@@ -37,8 +37,8 @@ exports.controllers =
           coll = $scope[name] = []
           coll.name = name # TODO: could stay in local scope
           coll.byId = {}
-          coll.store = (obj) ->
-            ss.rpc 'host.api', 'store', @name, obj, ->
+          coll.find = (value) -> _find @, (obj) -> obj.key is value
+          coll.store = (obj) -> ss.rpc 'host.api', 'store', @name, obj, ->
         $scope[name]
     
       storeOne = (name, obj, cb) ->
