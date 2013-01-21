@@ -26,15 +26,15 @@ exports.controllers =
       $scope.collection 'bobs'
       
       $scope.selectBriq = (obj) ->
-        # # if there are no args, it may already have been installed
-        # if $scope.bobs?[obj.info.name]
-        #   $scope.selectBob obj.info.name
-        # else
-        $scope.bob = null
-        $scope.briq = obj
-        # TODO: candidate for a Briq method
-        for input in obj.info.inputs or []
-          input.value = null
+        # if there are no args, it may already have been installed
+        if bob = $scope.bobs.find obj.info.name
+          $scope.selectBob bob
+        else
+          $scope.bob = null
+          $scope.briq = obj
+          # TODO: candidate for a Briq method
+          for input in obj.info.inputs or []
+            input.value = null
       
       $scope.createBob = ->
         # TODO: candidate for a Briq method
