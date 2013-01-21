@@ -41,7 +41,7 @@ exports.controllers =
           keyList.push input.value?.keys or input.value or input.default
         key = keyList.join(':')
 
-        $scope.store 'bobs',
+        $scope.bobs.store
           briq_id: $scope.briq.id
           key: key
 
@@ -61,7 +61,7 @@ exports.controllers =
           input.value = keys.shift()
 
       $scope.removeBob = () ->
-        $scope.store 'bobs', _.omit $scope.bob, 'key'
+        $scope.bobs.store _.omit $scope.bob, 'key'
         $scope.bob = null
         $scope.briq = null
   ]

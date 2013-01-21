@@ -21,7 +21,7 @@ state is kept in the "MainCtrl" scope, which is inherited by all other scopes,
 due to the way NG and JavaScript's prototypal inheritance works.
 
 The key point to keep in mind is that clients can easily read all shared state,
-but that they have to use `$scope.store hash, key, value` to make any changes.
+but that they have to call `$scope.hash.store value` after making any changes.
 Such changes will "round-trip" to the server before they end up being updated
 in (all!) client scopes.
 
@@ -46,10 +46,13 @@ and the object as arguments. There are three cases for the object:
 * MOD: normally, the object has an id as well as a key, and will be updated
 * DEL: if the "key" field is null, the object will be deleted via its id field
 
-Collections are created on the fly, so this will create a new shared collection
-called "jobs" on the server, and then store a first job item in it:
+Collections are can be created as follows (does nothing if it already exists):
 
-    ss.store 'jobs', { key: 'me', activity: 'doodle', duration: '30m' }
+    ss.collection 'jobs'
+
+We can now store a job item in this shared collection called "jobs":
+
+    ss.jobs.store { key: 'me', activity: 'doodle', duration: '30m' }
 
 Once stored on the server, an async event will come back to update the client.
 This will have the same info, but also a new "id" field (id's start at 1):
@@ -64,12 +67,12 @@ To make a change, just change some fields and store the object:
 
     myjob.duration = '5m'
     myjob.priority = 123
-    ss.store 'jobs', myjob
+    ss.jobs.store myjob
     
 To delete an object from the server, clear its key and store it again:
 
     myjob.key = null
-    ss.store 'jobs', myjob
+    ss.jobs.store myjob
 
 To iterate over all the job objects, use the collection in the client:
 

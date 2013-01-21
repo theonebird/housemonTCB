@@ -10,7 +10,7 @@
           .two.columns: h5 Time
           .seven.columns: h5 Readings
 
-        .row(ng-repeat='reading in readings')
+        .row(ng-repeat='reading in readings | orderBy:"key"')
           .three.columns
             | {{reading.key}}
           .two.columns

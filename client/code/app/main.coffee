@@ -3,17 +3,6 @@
 routes = require '/routes'
 # classes = '/classes'
 
-# TODO: instantiate all incoming hashes as objects?
-#
-# class RemoteObject
-#   save: (key) ->
-#     ss.store @remoteName, @
-# 
-# classes = 
-#   briqs: class Briq extends RemoteObject
-#   bobs: class Bobs extends RemoteObject 
-#   readings: class Readings extends RemoteObject
-
 exports.config = [
   '$routeProvider','$locationProvider',
   ($routeProvider, $locationProvider) ->
@@ -40,28 +29,52 @@ exports.controllers =
       $scope.tick = '?'
       $scope.$on 'ss-tick', (event, msg) ->
         $scope.tick = msg
+        
+      $scope.collection = (name) ->
+        unless $scope[name]
+          # create an array and add some object attributes to it
+          # this way the extra attributes won't be enumerated
+          coll = $scope[name] = []
+          coll.name = name # TODO: could stay in local scope
+          coll.byId = {}
+          coll.store = (obj) ->
+            ss.rpc 'host.api', 'store', @name, obj, ->
+        $scope[name]
     
-      $scope.store = (hash, obj) ->
-        ss.rpc 'host.api', 'store', hash, obj, ->
-
-      # the server emits ss-store events to update each of the client models
-      $scope.$on 'ss-store', (event, [hash, obj]) ->
-        collection = $scope[hash] ?= {}
-        oldObj = collection[obj.id]
+      storeOne = (name, obj, cb) ->
+        coll = $scope.collection name
+        oldObj = coll.byId[obj.id]
+        if oldObj 
+          oldPos = coll.indexOf(oldObj)
         if obj.key
-          collection[obj.id] = obj
-          $scope.$broadcast "set.#{hash}", obj, oldObj
-          # $scope.$broadcast 'set', hash, obj, oldObj
+          coll.byId[obj.id] = obj
+          if oldObj
+            coll[oldPos] = obj
+          else
+            coll.push obj
+          cb? "set.#{name}", obj, oldObj
+          # cb? 'set', name, obj, oldObj
         else
-          delete collection[obj.id]
-          $scope.$broadcast "unset.#{hash}", oldObj
-          # $scope.$broadcast 'unset', hash, oldObj
+          delete coll[obj.id]
+          if oldObj
+            coll.splice oldPos, 1
+          cb? "unset.#{name}", oldObj
+          # cb? 'unset', name, oldObj
+          if coll.length is 0
+            delete $scope[name]
+          
+      # the server emits ss-store events to update each of the client models
+      $scope.$on 'ss-store', (event, [name, obj]) ->
+        storeOne name, obj, (args...) ->
+          $scope.$broadcast args...
 
       # postpone RPC's until the app is ready for use
       ss.server.once 'ready', ->
         # get initial models from the server
         ss.rpc 'host.api', 'fetch', (models) ->
-          $scope[k] = v  for k,v of models
+          for name,coll of models
+            # use storeOne to get all the collection details right
+            storeOne name, v  for k,v of coll
           console.info 'models fetched:', _.keys models
           $scope.ready = true
   ]
