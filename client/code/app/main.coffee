@@ -62,7 +62,7 @@ exports.controllers =
         # get initial models from the server
         ss.rpc 'host.api', 'fetch', (models) ->
           $scope[k] = v  for k,v of models
-          console.info 'models fetched:', _.keys models  
+          console.info 'models fetched:', _.keys models
           $scope.ready = true
   ]
 

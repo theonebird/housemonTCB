@@ -15,8 +15,10 @@ for k,v of process
     unless typeof v is 'function'
       models.process[k] = v
       
-# fetch and store implement a simple replicated key-value store
-# when optionally tied to Redis, the store becomes persistent
+# fetch and store implement a simple persistent and sharable key-value store
+# "fetch" returnss everything, "store" saves & propagates keyed object changes
+# if the object has no "id", a new one will be assigned
+# if the object has no "key", the old copy will be deleted
 
 module.exports = state = new events.EventEmitter2
 
@@ -78,6 +80,6 @@ state.setupStorage = (collections, config) ->
     loadData = (name) ->
       db.hgetall name, (err, ids) ->        
         for k,v of ids
-          state.store name, k, JSON.parse(v)
+          state.store name, JSON.parse(v)
     # loaded asynchronously, will need async module for completion callback
     loadData name  for name in collections
