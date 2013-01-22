@@ -2,22 +2,10 @@
 # Everything in this top-level scope is available in all the other scopes
 routes = require '/routes'
   
-setRouteDefaults = (route) ->
-  if route.title
-    route.route ?= "/#{route.title.toLowerCase()}"
-    route.templateUrl ?= "#{route.title.toLowerCase()}.html"
-
 exports.config = [
-  '$routeProvider','$locationProvider',
-  ($routeProvider, $locationProvider) ->
-    
-    for r in routes.routes
-      if r.title
-        setRouteDefaults r
-        $routeProvider.when r.route, r
-    $routeProvider.otherwise
-      redirectTo: '/'
-
+  '$routeProvider','$locationProvider','$controllerProvider',
+  ($routeProvider, $locationProvider, $controllerProvider) ->
+    routes.setup $routeProvider, $controllerProvider
     $locationProvider.html5Mode true
 ]
 
@@ -37,17 +25,8 @@ exports.controllers =
         if obj
           briq = $scope.briqs.byId[obj.briq_id] # TODO: generic parent lookup
           for r in briq.info.menus or []
-            if r.title
-              setRouteDefaults r
-              if add
-                $route.routes[r.route] = r
-                $scope.routes.push r
-                routes.loadModule r
-              else
-                delete $route.routes[r.route]
-                $scope.routes = _.reject $scope.routes, (obj) ->
-                                                          obj.route is r.route
-                # TODO: wishful thinking ... routes.unloadModule r
+            console.log 888
+            routes.adjustScope $scope, $route, r, add
       
       # TODO: combine set.* and unset.* (in second case, pass new obj as undef)
       $scope.$on 'set.bobs', (event, obj, oldObj) ->
