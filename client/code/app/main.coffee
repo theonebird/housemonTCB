@@ -3,9 +3,14 @@
 routes = require '/routes'
   
 exports.config = [
-  '$routeProvider','$locationProvider','$controllerProvider',
-  ($routeProvider, $locationProvider, $controllerProvider) ->
-    routes.setup $routeProvider, $controllerProvider
+  '$routeProvider','$locationProvider','$controllerProvider','$filterProvider'
+  ($routeProvider, $locationProvider, $controllerProvider, $filterProvider) ->
+    
+    # pass the extra providers to the routes module for lazy registrations later
+    routes.setup $routeProvider,
+       controller: $controllerProvider
+       filter: $filterProvider
+       
     $locationProvider.html5Mode true
 ]
 
@@ -25,7 +30,6 @@ exports.controllers =
         if obj
           briq = $scope.briqs.byId[obj.briq_id] # TODO: generic parent lookup
           for r in briq.info.menus or []
-            console.log 888
             routes.adjustScope $scope, $route, r, add
       
       # TODO: combine set.* and unset.* (in second case, pass new obj as undef)
