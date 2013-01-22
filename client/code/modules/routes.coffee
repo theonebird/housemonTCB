@@ -26,15 +26,6 @@ exports.routes = routes = [
 ,
   title: 'Admin'
   controller: 'AdminCtrl'
-# ,
-#   title: 'Readings'
-#   controller: 'ReadingsCtrl'
-# ,
-#   title: 'Graphs'
-#   controller: 'GraphsCtrl'
-# ,
-#   title: 'Sandbox'
-#   controller: 'SandboxCtrl'
 ]
 
 exports.setup = (routeProvider, providers) ->
