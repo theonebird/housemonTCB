@@ -1,16 +1,19 @@
 # Main app setup and controller, this all hooks into AngularJS
 # Everything in this top-level scope is available in all the other scopes
 routes = require '/routes'
-# classes = '/classes'
+  
+setRouteDefaults = (route) ->
+  if route.title
+    route.route ?= "/#{route.title.toLowerCase()}"
+    route.templateUrl ?= "#{route.title.toLowerCase()}.html"
 
 exports.config = [
   '$routeProvider','$locationProvider',
   ($routeProvider, $locationProvider) ->
     
-    for r in routes
+    for r in routes.routes
       if r.title
-        r.route ?= "/#{r.title.toLowerCase()}"
-        r.templateUrl ?= "#{r.title.toLowerCase()}.html"
+        setRouteDefaults r
         $routeProvider.when r.route, r
     $routeProvider.otherwise
       redirectTo: '/'
@@ -20,10 +23,38 @@ exports.config = [
 
 exports.controllers = 
   MainCtrl: [
-    '$scope','pubsub','rpc',
-    ($scope, pubsub, rpc) ->
+    '$scope','$route','pubsub','rpc',
+    ($scope, $route, pubsub, rpc) ->
     
-      $scope.routes = routes
+      $scope.routes = routes.routes
+      
+      # update routes dynamically, based on installed briq objects
+      # TODO - this is a hack, see http://jsfiddle.net/4zwdf/6/
+      # http://stackoverflow.com/questions/12800084
+      #  /how-do-i-get-angularjs-routes-to-display-partials-in-ie-7-and-8
+      
+      eachMenu = (obj, add) ->
+        if obj
+          briq = $scope.briqs.byId[obj.briq_id] # TODO: generic parent lookup
+          for r in briq.info.menus or []
+            if r.title
+              setRouteDefaults r
+              if add
+                $route.routes[r.route] = r
+                $scope.routes.push r
+                routes.loadModule r
+              else
+                delete $route.routes[r.route]
+                $scope.routes = _.reject $scope.routes, (obj) ->
+                                                          obj.route is r.route
+                # TODO: wishful thinking ... routes.unloadModule r
+      
+      # TODO: combine set.* and unset.* (in second case, pass new obj as undef)
+      $scope.$on 'set.bobs', (event, obj, oldObj) ->
+        eachMenu oldObj, off
+        eachMenu obj, on
+      $scope.$on 'unset.bobs', (event, obj) ->
+        eachMenu obj, off
       
       # pick up the 'ss-tick' events sent from server/launch
       $scope.tick = '?'
@@ -54,21 +85,20 @@ exports.controllers =
             coll[oldPos] = obj
           else
             coll.push obj
-          cb? "set.#{name}", obj, oldObj
-          # cb? 'set', name, obj, oldObj
+          $scope.$broadcast "set.#{name}", obj, oldObj
+          # $scope.$broadcast 'set', name, obj, oldObj
         else
           delete coll[obj.id]
           if oldObj
             coll.splice oldPos, 1
-          cb? "unset.#{name}", oldObj
-          # cb? 'unset', name, oldObj
+          $scope.$broadcast "unset.#{name}", oldObj
+          # $scope.$broadcast 'unset', name, oldObj
           if coll.length is 0
             delete $scope[name]
           
       # the server emits ss-store events to update each of the client models
       $scope.$on 'ss-store', (event, [name, obj]) ->
-        storeOne name, obj, (args...) ->
-          $scope.$broadcast args...
+        storeOne name, obj
 
       # postpone RPC's until the app is ready for use
       ss.server.once 'ready', ->

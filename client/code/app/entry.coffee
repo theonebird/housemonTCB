@@ -14,17 +14,7 @@ ss.server.on 'reconnect', ->
 
 myApp = angular.module 'myApp', []
 
-# set up all NG modules, the '/main' entry must always be the first one
-# this now uses the routes list to figure out what files to load
-for r in routes
-  loadPath = r.load or (r.title and "/#{r.title.toLowerCase()}")
-  if loadPath
-    module = require loadPath
-    myApp.config module.config  if module.config
-    myApp.filter name, def  for name,def of module.filters
-    myApp.factory name, def  for name,def of module.services
-    myApp.directive name, def  for name,def of module.directives
-    myApp.controller name, def  for name,def of module.controllers
+routes.loadStandardModules myApp
 
 ss.server.once 'ready', ->
   jQuery ->
