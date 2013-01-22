@@ -38,14 +38,14 @@ For more info, see the [Developer Guide](http://docs.angularjs.org/guide/index).
 
 ## Directories
 
-The files in `client/code/app/` contain most of the application logic, using
-the mechanisms and terminology just described. The files in `code/libs/` serve
-a similar purpose, but they get auto-loaded and are paricularly suited for
+The files in `client/code/modules/` contain most of the application logic, using
+the mechanisms and terminology just described. Any files placed in `code/libs/`
+serve a similar purpose, but they get auto-loaded. It's an excellent place for
 3rd-party packages, because they won't get wrapped or modified in any way.
 
 Everything in `client/code/` ends up in the browser through SocketStream's
 magic and the [Browserify](https://github.com/substack/node-browserify#readme)
-tool it uses internally. That's why something like "require './main" works.
+tool it uses internally. That's why something like "require './main'" works.
 
 Everyting in `code/static/` is served as is, i.e. images and other raw files.
 

@@ -6,9 +6,9 @@ know about each other on initial application startup.
 
 ## Client-side startup
 
-This is how the browser code starts up all the cient-side bits & bobs:
+This is how the browser code starts up all the cient-side pieces:
 
-* SocketStream runs `entry.coffee`, it has no idea about NG yet
+* SocketStream runs `entry.coffee`, it has no idea yet about AngularJS ("NG")
 * entry.coffee sets up `main.coffee` to hook up routes and NG's RPC & pubsub
 * entry.coffee sets up all the other files listed, i.e. controllers, etc
 * last step in entry.coffee is to wait for DOM loading and then show a greeting
@@ -28,7 +28,7 @@ The server is normally started using `npm start`. Here's what that does:
 * non-standard is that all files in `briqs/` are scanned and loaded
 * also extra, is some code in `server/...` to manage briqs and shared state
 
-For develoment, it's better to launch the app with `nodemon`, because it'll
+During develoment, it's better to launch the app with `nodemon`, because it'll
 restart the server on relevant file changes. To install nodemon globally, use
 `npm install -g nodemon`. To launch the server, run `nodemon` in the top dir.
 

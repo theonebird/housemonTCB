@@ -19,6 +19,7 @@ In software terms, a "briq" is a _class_, a "bob" is an _instance_ of a briq.
 
 The current way to add a feature to the application is still quite complex, and
 depends on whether it is a server-side or client-side feature, or perhaps both.
+So right now, in _practice_, files are still all over the place, unfortunately.
 
 Server-side features need to be added as code inside the `server/` directory.
 There are no examples of this yet, other than the generic `host.api` RPC code.
