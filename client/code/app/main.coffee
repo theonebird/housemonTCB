@@ -89,8 +89,11 @@ exports.controllers =
         ss.rpc 'host.api', 'fetch', (models) ->
           $scope.$apply -> 
             for name,coll of models
-              # use storeOne to get all the collection details right
-              storeOne name, v  for k,v of coll
+              if name in ['pkg', 'local', 'process']
+                $scope[name] = coll
+              else
+                # use storeOne to get all the collection details right
+                storeOne name, v  for k,v of coll
             console.info 'models fetched:', _.keys models
             $scope.ready = true
   ]
