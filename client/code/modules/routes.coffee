@@ -11,6 +11,15 @@ exports.routes = routes = [
 ,
   title: 'Admin'
   controller: 'AdminCtrl'
+# ,
+#   title: 'Readings'
+#   controller: 'ReadingsCtrl'
+# ,
+#   title: 'Graphs'
+#   controller: 'GraphsCtrl'
+# ,
+#   title: 'Sandbox'
+#   controller: 'SandboxCtrl'
 ]
 
 exports.loadModule = loadModule = (route) ->
@@ -18,6 +27,7 @@ exports.loadModule = loadModule = (route) ->
   loadPath = route.load or (route.title and "/#{route.title.toLowerCase()}")
   if loadPath
     module = require loadPath
+    console.log 'm',module
     myApp.config module.config  if module.config
     myApp.filter name, def  for name,def of module.filters
     myApp.factory name, def  for name,def of module.services

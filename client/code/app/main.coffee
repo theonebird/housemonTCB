@@ -104,11 +104,12 @@ exports.controllers =
       ss.server.once 'ready', ->
         # get initial models from the server
         ss.rpc 'host.api', 'fetch', (models) ->
-          for name,coll of models
-            # use storeOne to get all the collection details right
-            storeOne name, v  for k,v of coll
-          console.info 'models fetched:', _.keys models
-          $scope.ready = true
+          $scope.$apply -> 
+            for name,coll of models
+              # use storeOne to get all the collection details right
+              storeOne name, v  for k,v of coll
+            console.info 'models fetched:', _.keys models
+            $scope.ready = true
   ]
 
 # Credit to https://github.com/polidore/ss-angular for ss rpc/pubsub wrapping
