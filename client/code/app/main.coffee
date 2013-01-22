@@ -6,7 +6,7 @@ exports.config = [
   '$routeProvider','$locationProvider','$controllerProvider','$filterProvider'
   ($routeProvider, $locationProvider, $controllerProvider, $filterProvider) ->
     
-    # pass the extra providers to the routes module for lazy registrations later
+    # pass extra providers to the routes module for lazy registrations later on
     routes.setup $routeProvider,
        controller: $controllerProvider
        filter: $filterProvider

@@ -27,7 +27,7 @@ exports.controllers =
       
       $scope.selectBriq = (obj) ->
         # if there are no args, it may already have been installed
-        if bob = $scope.bobs.find obj.info.name
+        if bob = $scope.bobs?.find obj.info.name
           $scope.selectBob bob
         else
           $scope.bob = null
