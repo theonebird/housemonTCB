@@ -23,7 +23,7 @@ state.on 'store', (hash, key, value) ->
 ss.client.define 'main',
   view: 'index.jade'
   css: ['libs', 'app.styl']
-  code: ['app', 'modules']
+  code: ['libs', 'app', 'modules']
 
 # Serve this client on the root URL
 ss.http.route '/', (req, res) ->
