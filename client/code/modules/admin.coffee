@@ -62,7 +62,7 @@ exports.controllers =
         for input in $scope.briq.info.inputs or []
           input.value = keys.shift()
 
-      $scope.removeBob = () ->
+      $scope.removeBob = ->
         $scope.bobs.store _.omit $scope.bob, 'key'
         $scope.bob = null
         $scope.briq = null

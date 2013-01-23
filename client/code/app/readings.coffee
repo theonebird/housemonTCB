@@ -60,7 +60,7 @@ exports.controllers =
           ctx.fillStyle = colour
           ctx.fill()
 
-      drawTicks = () ->
+      drawTicks = ->
         ctx.clearRect 20, 0, w, h
         w = 8
         for i in [-29..29]

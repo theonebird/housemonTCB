@@ -2,7 +2,7 @@
 # the order in the menu is the order in the routes array below
 # load and route both default to "/title-in-lowercase" if title is set
 
-myApp = null
+myApp = angular.module 'myApp', []
 
 setRouteDefaults = (r) ->
   if r.title
@@ -49,7 +49,6 @@ exports.adjustScope = ($scope, $route, r, add) ->
       $scope.routes = _.reject $scope.routes, (obj) -> obj.route is r.route
       # TODO: wishful thinking ... routes.unloadModule r
 
-exports.loadStandardModules = (app) ->
-  myApp = _.clone app
+exports.loadStandardModules =  ->
   loadModule load: '/main'
   loadModule r  for r in routes

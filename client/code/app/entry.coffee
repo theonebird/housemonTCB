@@ -12,10 +12,8 @@ ss.server.on 'reconnect', ->
   # force full reload to re-establish all model links
   window.location.reload true
 
-myApp = angular.module 'myApp', []
-
-routes.loadStandardModules myApp
-
 ss.server.once 'ready', ->
   jQuery ->
     console.info 'app ready'
+
+routes.loadStandardModules()
