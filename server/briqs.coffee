@@ -31,7 +31,7 @@ module.exports = (state) ->
       fs.readdir './briqs', (err, files) ->
         throw err  if err
         for f in files
-          loadFile f
+          loadFile f  unless f[0] is '.'
         cb?()
       # TODO: need newer node.js to use fs.watch on Mac OS X
       #  see: https://github.com/joyent/node/issues/3343
