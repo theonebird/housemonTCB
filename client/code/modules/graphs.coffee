@@ -1,6 +1,6 @@
 # Readings module definitions
 
-exports.controllers = 
+exports.controllers =
   GraphsCtrl: [
     '$scope',
     ($scope) ->

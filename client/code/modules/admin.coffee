@@ -18,7 +18,7 @@
 #   briq_id: parent briq
 #   more... config settings for this installed instance?
 
-exports.controllers = 
+exports.controllers =
   AdminCtrl: [
     '$scope',
     ($scope) ->

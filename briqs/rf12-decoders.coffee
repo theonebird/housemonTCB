@@ -15,7 +15,7 @@ decoders =
   radioBlip: (raw, cb) ->
     count = raw.readUInt32LE(1)
     cb
-      ping: count 
+      ping: count
       age: Math.floor(count / (86400 / 64))
   
   homePower: (raw, cb) ->
@@ -90,7 +90,7 @@ packetListener = (packet, ainfo) ->
   name = ainfo?.name or
           nodeMap[packet.band]?[packet.group]?[packet.id]
   decoder = decoders[name]
-  if decoder 
+  if decoder
     decoder packet.buffer, (info) ->
       info.key = "RF12:#{packet.band}:#{packet.group}:#{packet.id}.#{name}"
       if info.tag

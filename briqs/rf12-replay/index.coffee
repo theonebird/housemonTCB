@@ -44,7 +44,7 @@ exports.factory = class
       _.extend packet, nodeMap[packet.device]  unless packet.band
       logs.push packet
 
-    parser.parseStream stream 
+    parser.parseStream stream
     
   destroy: ->
     clearTimeout @timer

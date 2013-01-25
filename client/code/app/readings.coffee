@@ -1,6 +1,6 @@
 # Readings module definitions
 
-exports.controllers = 
+exports.controllers =
   ReadingsCtrl: [
     '$scope',
     ($scope) ->
@@ -15,15 +15,15 @@ exports.controllers =
       # 0 gives sqrt scaling, 30 is a nice value for log scaling
       mapFun = if scaleMinimum >= 1 then Math.log else Math.sqrt
       
-      mp = mapFun maxProduced 
-      mc = mapFun maxConsumed 
-      sm = mapFun scaleMinimum 
+      mp = mapFun maxProduced
+      mc = mapFun maxConsumed
+      sm = mapFun scaleMinimum
       
       canvas = jQuery('#mybar')[0]
       ctx = canvas.getContext '2d'
       w = canvas.width
       h = canvas.height
-      scale = (h - 2 * topBotMargin) / ((mp - sm) + (mc - sm))      
+      scale = (h - 2 * topBotMargin) / ((mp - sm) + (mc - sm))
       
       energyToPixel = (value) ->
         if value > scaleMinimum

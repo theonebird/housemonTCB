@@ -14,7 +14,7 @@ exports.config = [
     $locationProvider.html5Mode true
 ]
 
-exports.controllers = 
+exports.controllers =
   MainCtrl: [
     '$scope','$route','pubsub','rpc',
     ($scope, $route, pubsub, rpc) ->
@@ -60,7 +60,7 @@ exports.controllers =
       storeOne = (name, obj, cb) ->
         coll = $scope.collection name
         oldObj = coll.byId[obj.id]
-        if oldObj 
+        if oldObj
           oldPos = coll.indexOf(oldObj)
         if obj.key
           coll.byId[obj.id] = obj
@@ -87,7 +87,7 @@ exports.controllers =
       ss.server.once 'ready', ->
         # get initial models from the server
         ss.rpc 'host.api', 'fetch', (models) ->
-          $scope.$apply -> 
+          $scope.$apply ->
             for name,coll of models
               if name in ['pkg', 'local', 'process']
                 $scope[name] = coll
