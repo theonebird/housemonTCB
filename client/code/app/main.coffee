@@ -5,8 +5,7 @@ module.exports = (ng) ->
   ng.controller 'MainCtrl', [
     'models','$scope','pubsub','rpc',
     (models, $scope, pubsub, rpc) ->
-      console.log 'main controller'
-    
+
       # pick up the 'ss-tick' events sent from server/launch
       $scope.tick = '?'
       $scope.$on 'ss-tick', (event, msg) ->

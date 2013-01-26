@@ -99,7 +99,7 @@ app.service 'pubsub', [
     old$on = $rootScope.$on
     Object.getPrototypeOf($rootScope).$on = (name, listener) ->
       scope = this
-      ss.event.on name, (args) ->
+      ss.event.on name, (args...) ->
         scope.$apply -> scope.$broadcast name, args...
       # call angular's $on version
       old$on.call scope, name, listener
