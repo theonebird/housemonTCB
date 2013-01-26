@@ -78,7 +78,7 @@ state.setupStorage = (collections, config) ->
 
   db.select config.db, ->
     loadData = (name) ->
-      db.hgetall name, (err, ids) ->        
+      db.hgetall name, (err, ids) ->
         for k,v of ids
           state.store name, JSON.parse(v)
     # loaded asynchronously, will need async module for completion callback

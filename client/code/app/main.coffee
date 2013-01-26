@@ -2,30 +2,35 @@
 # Everything in this top-level scope is available in all the other scopes
 routes = require '/routes'
   
-exports.config = [
-  '$routeProvider','$locationProvider','$controllerProvider','$filterProvider'
-  ($routeProvider, $locationProvider, $controllerProvider, $filterProvider) ->
-    
-    # pass extra providers to the routes module for lazy registrations later on
-    routes.setup $routeProvider,
-       controller: $controllerProvider
-       filter: $filterProvider
-       
-    $locationProvider.html5Mode true
-]
+module.exports = (ng) ->
 
-exports.controllers =
-  MainCtrl: [
-    '$scope','$route','pubsub','rpc',
-    ($scope, $route, pubsub, rpc) ->
+  ng.config [
+    '$routeProvider','$locationProvider',
+    ($routeProvider, $locationProvider) ->
+      
+      console.log 'main config'
+      for r in routes.routes
+        $routeProvider.when r.route, r
+      $routeProvider.otherwise
+        redirectTo: '/'
+         
+      $locationProvider.html5Mode true
+  ]
+
+  ng.run [
+    '$rootScope',
+    ($rootScope) ->
+      console.log 'main run'
+  ]
+
+  ng.controller 'MainCtrl', [
+    '$scope','$route','models','pubsub','rpc',
+    ($scope, $route, models, pubsub, rpc) ->
+      console.log 'main controller'
     
       $scope.routes = routes.routes
       
       # update routes dynamically, based on installed briq objects
-      # TODO - this is a hack, see http://jsfiddle.net/4zwdf/6/
-      # http://stackoverflow.com/questions/12800084
-      #  /how-do-i-get-angularjs-routes-to-display-partials-in-ie-7-and-8
-      
       eachMenu = (obj, add) ->
         if obj
           briq = $scope.briqs.byId[obj.briq_id] # TODO: generic parent lookup
@@ -79,31 +84,22 @@ exports.controllers =
           if coll.length is 0
             delete $scope[name]
           
+      for name,coll of models
+        if name in ['pkg', 'local', 'process']
+          $scope[name] = coll
+        else
+          # use storeOne to get all the collection details right
+          storeOne name, v  for k,v of coll
+          
       # the server emits ss-store events to update each of the client models
       $scope.$on 'ss-store', (event, [name, obj]) ->
         storeOne name, obj
-
-      # postpone RPC's until the app is ready for use
-      ss.server.once 'ready', ->
-        # get initial models from the server
-        ss.rpc 'host.api', 'fetch', (models) ->
-          $scope.$apply ->
-            for name,coll of models
-              if name in ['pkg', 'local', 'process']
-                $scope[name] = coll
-              else
-                # use storeOne to get all the collection details right
-                storeOne name, v  for k,v of coll
-            console.info 'models fetched:', _.keys models
-            $scope.ready = true
   ]
 
-# Credit to https://github.com/polidore/ss-angular for ss rpc/pubsub wrapping
-# Thx also to https://github.com/americanyak/ss-angular-demo for the demo code
+  # Credit to https://github.com/polidore/ss-angular for ss rpc/pubsub wrapping
+  # Thx also to https://github.com/americanyak/ss-angular-demo for the demo code
 
-exports.services =
-  
-  rpc: [
+  ng.service 'rpc', [
     '$q','$rootScope',
     ($q, $rootScope) ->
 
@@ -120,7 +116,7 @@ exports.services =
       cache: {}
   ]
 
-  pubsub: [
+  ng.service 'pubsub', [
     '$rootScope',
     ($rootScope) ->
 

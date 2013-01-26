@@ -1,7 +1,8 @@
 # Readings module definitions
 
-exports.controllers =
-  ReadingsCtrl: [
+module.exports = (ng) ->
+
+  ng.controller 'ReadingsCtrl', [
     '$scope',
     ($scope) ->
 
@@ -91,7 +92,6 @@ exports.controllers =
           drawCircle 'blue', produced - consumed
   ]
 
-exports.filters =
-  cleanup: ->
+  ng.filter 'cleanup', ->
     (obj) ->
-      _.omit obj, 'key', 'time', '$$hashKey'
+      _.omit obj, 'id', 'key', 'time', '$$hashKey'

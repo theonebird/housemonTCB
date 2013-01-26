@@ -1,8 +1,8 @@
 # Home module definitions
 
-exports.controllers = 
-  HomeCtrl: [
+module.exports = (ng) ->
+
+  ng.controller 'HomeCtrl', [
     '$scope',
     ($scope) ->
-
   ]

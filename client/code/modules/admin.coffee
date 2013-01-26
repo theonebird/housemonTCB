@@ -18,8 +18,9 @@
 #   briq_id: parent briq
 #   more... config settings for this installed instance?
 
-exports.controllers =
-  AdminCtrl: [
+module.exports = (ng) ->
+
+  ng.controller 'AdminCtrl', [
     '$scope',
     ($scope) ->
 

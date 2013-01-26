@@ -15,5 +15,6 @@ ss.server.on 'reconnect', ->
 ss.server.once 'ready', ->
   jQuery ->
     console.info 'app ready'
-
-routes.loadStandardModules()
+    ss.rpc 'host.api', 'fetch', (models) ->
+      console.info 'models fetched:', _.keys models
+      routes.loadStandardModules models
