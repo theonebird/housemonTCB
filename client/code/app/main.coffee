@@ -3,12 +3,10 @@
 module.exports = (ng) ->
 
   ng.controller 'MainCtrl', [
-    'ss','models','routes','$scope','$route','pubsub','rpc',
-    (ss, models, routes, $scope, $route, pubsub, rpc) ->
+    'ss','models','$scope','pubsub','rpc',
+    (ss, models, $scope, pubsub, rpc) ->
       console.log 'main controller'
     
-      $scope.routes = routes
-      
       # pick up the 'ss-tick' events sent from server/launch
       $scope.tick = '?'
       $scope.$on 'ss-tick', (event, msg) ->
@@ -59,39 +57,4 @@ module.exports = (ng) ->
       # the server emits ss-store events to update each of the client models
       $scope.$on 'ss-store', (event, [name, obj]) ->
         storeOne name, obj
-  ]
-
-  # Credit to https://github.com/polidore/ss-angular for ss rpc/pubsub wrapping
-  # Thx also to https://github.com/americanyak/ss-angular-demo for the demo code
-
-  ng.service 'rpc', [
-    'ss','$q','$rootScope',
-    (ss, $q, $rootScope) ->
-
-      # call ss.rpc with 'demoRpc.foobar', args..., {callback}
-      exec: (args...) ->
-        deferred = $q.defer()
-        ss.rpc args, (err, res) ->
-          $rootScope.$apply (scope) ->
-            return deferred.reject(err)  if err
-            deferred.resolve res
-        deferred.promise
-
-      # use cache across controllers for client-side caching
-      cache: {}
-  ]
-
-  ng.service 'pubsub', [
-    'ss','$rootScope',
-    (ss, $rootScope) ->
-
-      # override the $on function
-      old$on = $rootScope.$on
-      Object.getPrototypeOf($rootScope).$on = (name, listener) ->
-        scope = this
-        ss.event.on name, (message) ->
-          scope.$apply (s) ->
-            scope.$broadcast name, message
-        # call angular's $on version
-        old$on.call scope, name, listener
   ]

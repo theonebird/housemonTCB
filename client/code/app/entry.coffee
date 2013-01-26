@@ -35,6 +35,47 @@ app.config [
     $locationProvider.html5Mode true
 ]
 
+app.run [
+  '$rootScope',
+  ($rootScope) ->
+    $rootScope.routes = routes
+]
+
+# Credit to https://github.com/polidore/ss-angular for ss rpc/pubsub wrapping
+# Thx also to https://github.com/americanyak/ss-angular-demo for the demo code
+
+app.service 'rpc', [
+  '$q','$rootScope',
+  ($q, $rootScope) ->
+
+    # call ss.rpc with 'demoRpc.foobar', args..., {callback}
+    exec: (args...) ->
+      deferred = $q.defer()
+      ss.rpc args, (err, res) ->
+        $rootScope.$apply (scope) ->
+          return deferred.reject(err)  if err
+          deferred.resolve res
+      deferred.promise
+
+    # use cache across controllers for client-side caching
+    cache: {}
+]
+
+app.service 'pubsub', [
+  '$rootScope',
+  ($rootScope) ->
+
+    # override the $on function
+    old$on = $rootScope.$on
+    Object.getPrototypeOf($rootScope).$on = (name, listener) ->
+      scope = this
+      ss.event.on name, (message) ->
+        scope.$apply (s) ->
+          scope.$broadcast name, message
+      # call angular's $on version
+      old$on.call scope, name, listener
+]
+
 ss.server.once 'ready', ->
   #jQuery ->
     console.info 'app ready'
@@ -58,7 +99,6 @@ ss.server.once 'ready', ->
       # make these values available via dependency injection
       app.value 'ss', ss
       app.value 'models', models
-      app.value 'routes', routes
 
       console.info 'require', paths
       require(path) app  for path in paths
