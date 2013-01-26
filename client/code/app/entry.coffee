@@ -51,7 +51,7 @@ app.service 'rpc', [
     # call ss.rpc with 'demoRpc.foobar', args..., {callback}
     exec: (args...) ->
       deferred = $q.defer()
-      ss.rpc args, (err, res) ->
+      ss.rpc args..., (err, res) ->
         $rootScope.$apply (scope) ->
           return deferred.reject(err)  if err
           deferred.resolve res
@@ -69,9 +69,8 @@ app.service 'pubsub', [
     old$on = $rootScope.$on
     Object.getPrototypeOf($rootScope).$on = (name, listener) ->
       scope = this
-      ss.event.on name, (message) ->
-        scope.$apply (s) ->
-          scope.$broadcast name, message
+      ss.event.on name, (args) ->
+        scope.$apply -> scope.$broadcast name, args...
       # call angular's $on version
       old$on.call scope, name, listener
 ]
@@ -96,8 +95,7 @@ ss.server.once 'ready', ->
           r.templateUrl ?= "#{name}.html"
           paths.push "/#{name}"
 
-      # make these values available via dependency injection
-      app.value 'ss', ss
+      # make the models available via dependency injection
       app.value 'models', models
 
       console.info 'require', paths
