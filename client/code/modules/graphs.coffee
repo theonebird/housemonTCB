@@ -1,7 +1,8 @@
 # Readings module definitions
 
-exports.controllers =
-  GraphsCtrl: [
+module.exports = (ng) ->
+
+  ng.controller 'GraphsCtrl', [
     '$scope',
     ($scope) ->
 
