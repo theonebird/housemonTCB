@@ -1,7 +1,8 @@
 # Sandbox module definitions
 
-exports.controllers = 
-  SandboxCtrl: [
+module.exports = (ng) ->
+
+  ng.controller 'SandboxCtrl', [
     '$scope',
     ($scope) ->
 
