@@ -1,48 +1,13 @@
 # Main app setup and controller, this all hooks into AngularJS
-# Everything in this top-level scope is available in all the other scopes
-routes = require '/routes'
-  
+
 module.exports = (ng) ->
 
-  ng.config [
-    '$routeProvider','$locationProvider',
-    ($routeProvider, $locationProvider) ->
-      
-      console.log 'main config'
-      for r in routes.routes
-        $routeProvider.when r.route, r
-      $routeProvider.otherwise
-        redirectTo: '/'
-         
-      $locationProvider.html5Mode true
-  ]
-
-  ng.run [
-    '$rootScope',
-    ($rootScope) ->
-      console.log 'main run'
-  ]
-
   ng.controller 'MainCtrl', [
-    '$scope','$route','models','pubsub','rpc',
-    ($scope, $route, models, pubsub, rpc) ->
+    'ss','models','routes','$scope','$route','pubsub','rpc',
+    (ss, models, routes, $scope, $route, pubsub, rpc) ->
       console.log 'main controller'
     
-      $scope.routes = routes.routes
-      
-      # update routes dynamically, based on installed briq objects
-      eachMenu = (obj, add) ->
-        if obj
-          briq = $scope.briqs.byId[obj.briq_id] # TODO: generic parent lookup
-          for r in briq.info.menus or []
-            routes.adjustScope $scope, $route, r, add
-      
-      # TODO: combine set.* and unset.* (in second case, pass new obj as undef)
-      $scope.$on 'set.bobs', (event, obj, oldObj) ->
-        eachMenu oldObj, off
-        eachMenu obj, on
-      $scope.$on 'unset.bobs', (event, obj) ->
-        eachMenu obj, off
+      $scope.routes = routes
       
       # pick up the 'ss-tick' events sent from server/launch
       $scope.tick = '?'
@@ -100,8 +65,8 @@ module.exports = (ng) ->
   # Thx also to https://github.com/americanyak/ss-angular-demo for the demo code
 
   ng.service 'rpc', [
-    '$q','$rootScope',
-    ($q, $rootScope) ->
+    'ss','$q','$rootScope',
+    (ss, $q, $rootScope) ->
 
       # call ss.rpc with 'demoRpc.foobar', args..., {callback}
       exec: (args...) ->
@@ -117,8 +82,8 @@ module.exports = (ng) ->
   ]
 
   ng.service 'pubsub', [
-    '$rootScope',
-    ($rootScope) ->
+    'ss','$rootScope',
+    (ss, $rootScope) ->
 
       # override the $on function
       old$on = $rootScope.$on
