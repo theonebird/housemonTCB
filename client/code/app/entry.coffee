@@ -32,8 +32,9 @@ ss.server.once 'ready', ->
           r.templateUrl ?= "#{name}.html"
           paths.push "/#{name}"
 
-      # make the models available via dependency injection
+      # make models and routes available via dependency injection
       app.value 'models', models
+      app.value 'routes', routes
 
       console.info 'require', paths
       require(path) app  for path in paths
@@ -66,9 +67,55 @@ app.config [
 ]
 
 app.run [
-  '$rootScope',
-  ($rootScope) ->
-    $rootScope.routes = routes
+  'models','$rootScope','rpc',
+  (models, $rootScope, rpc) ->
+    console.info 'app run'
+
+    # forward all incoming ss-* pubsub events to NG
+    ss.event.onAny (args...) ->
+      $rootScope.$apply => $rootScope.$broadcast @event, args...
+
+    $rootScope.collection = (name) ->
+      unless $rootScope[name]
+        # create an array and add some object attributes to it
+        # this way the extra attributes won't be enumerated
+        coll = $rootScope[name] = []
+        # map ID's to objects
+        coll.byId = {}
+        # find object in collection, given its key
+        coll.find = (value) -> _.find @, (obj) -> obj.key is value
+        # store an object (must have either a key, an id, or both)
+        coll.store = (obj) -> rpc.exec 'host.api', 'store', name, obj
+      $rootScope[name]
+  
+    # the server emits ss-store events to update each of the client models
+    $rootScope.$on 'ss-store', (event, name, obj) ->
+      coll = $rootScope.collection name
+      oldObj = coll.byId[obj.id]
+      if oldObj
+        oldPos = coll.indexOf(oldObj)
+      if obj.key
+        coll.byId[obj.id] = obj
+        if oldObj
+          coll[oldPos] = obj
+        else
+          coll.push obj
+      else
+        if oldObj
+          delete coll[obj.id]
+          coll.splice oldPos, 1
+        obj = null
+      $rootScope.$broadcast "set.#{name}", obj, oldObj
+      # $rootScope.$broadcast 'unset', name, oldObj
+          
+    for name,coll of models
+      if name in ['pkg', 'local', 'process']
+        $rootScope[name] = coll
+      else
+        # make sure the collection gets set up, even if it has no data
+        $rootScope.collection name
+        # emit an ss-store event to get all the collection details right
+        $rootScope.$broadcast 'ss-store', name, v  for k,v of coll
 ]
 
 # Credit to https://github.com/polidore/ss-angular for ss rpc/pubsub wrapping
@@ -82,25 +129,11 @@ app.service 'rpc', [
     exec: (args...) ->
       deferred = $q.defer()
       ss.rpc args..., (err, res) ->
-        $rootScope.$apply (scope) ->
+        $rootScope.$apply () ->
           return deferred.reject(err)  if err
           deferred.resolve res
       deferred.promise
 
     # use cache across controllers for client-side caching
     cache: {}
-]
-
-app.service 'pubsub', [
-  '$rootScope',
-  ($rootScope) ->
-
-    # override the $on function
-    old$on = $rootScope.$on
-    Object.getPrototypeOf($rootScope).$on = (name, listener) ->
-      scope = this
-      ss.event.on name, (args...) ->
-        scope.$apply -> scope.$broadcast name, args...
-      # call angular's $on version
-      old$on.call scope, name, listener
 ]
