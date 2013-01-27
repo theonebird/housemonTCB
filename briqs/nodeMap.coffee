@@ -3,12 +3,12 @@
 
 module.exports =
 
-  11: 'roomNode'  
-  12: 'ookRelay2'  
-  13: 'smaRelay'  
-  14: 'otRelay'  
-  15: 'p1scanner'  
-  16: 'homePower'  
+  11: 'roomNode'
+  12: 'ookRelay2'
+  13: 'smaRelay'
+  14: 'otRelay'
+  15: 'p1scanner'
+  16: 'homePower'
   17: 'radioBlip'
   18: 'slowLogger'
 
@@ -29,6 +29,7 @@ module.exports =
       14: 'otRelay'
       15: 'smaRelay'
       18: 'p1scanner'
+      19: 'ookRelay2'
       20: 'slowLogger'
       23: 'roomNode'
       24: 'roomNode'

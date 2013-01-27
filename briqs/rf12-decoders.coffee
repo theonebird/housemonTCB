@@ -87,21 +87,21 @@ announceListener = (ainfo) ->
 
 packetListener = (packet, ainfo) ->
   # use announcer info if present, else look for own static mapping
-  name = ainfo?.name or
-          nodeMap[packet.band]?[packet.group]?[packet.id]
-  decoder = decoders[name]
-  if decoder
-    decoder packet.buffer, (info) ->
-      info.key = "RF12:#{packet.band}:#{packet.group}:#{packet.id}.#{name}"
-      if info.tag
-        info.key += ":#{info.tag}"
-        delete info.tag
-      now = Date.now()
-      time = packet.time or now
-      if time < 86400000
-        time += now - now % 86400000
-      info.time = time
-      state.store 'readings', info
+  name = ainfo?.name or nodeMap[packet.band]?[packet.group]?[packet.id]
+  if name
+    decoder = decoders[name]
+    if decoder
+      decoder packet.buffer, (info) ->
+        info.key = "RF12:#{packet.band}:#{packet.group}:#{packet.id}.#{name}"
+        if info.tag
+          info.key += ":#{info.tag}"
+          delete info.tag
+        now = Date.now()
+        time = packet.time or now
+        if time < 86400000
+          time += now - now % 86400000
+        info.time = time
+        state.store 'readings', info
   else
     console.info 'raw', packet
         
