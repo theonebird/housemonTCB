@@ -1,4 +1,4 @@
-# temporary static node map for now
+# temporary static node map and other data for now
 # module is not treated as a briq, because it does not export an 'info' entry
 
 module.exports =
@@ -43,40 +43,23 @@ module.exports =
 
   locations:
 
-    "RF12:868:5:2":
-      title: 'boekenkast JC'
-    "RF12:868:5:3":
-      title: 'buro JC'
-    "RF12:868:5:4":
-      title: 'wasmachine'
-    "RF12:868:5:5":
-      title: 'schoorsteen'
-    "RF12:868:5:6":
-      title: 'hal vloer'
-    "RF12:868:5:9":
-      title: 'meterkast'
-    "RF12:868:5:10":
-      title: 'hal voor'
-    "RF12:868:5:11":
-      title: 'logeerkamer'
-    "RF12:868:5:12":
-      title: 'boekenkast L'
-    "RF12:868:5:13":
-      title: 'raam halfhoog'
-    "RF12:868:5:14":
-      title: 'zolderkamer'
-    "RF12:868:5:15":
-      title: 'wasmachine'
-    "RF12:868:5:18":
-      title: 'meterkast'
-    "RF12:868:5:19":
-      title: 'kantoor'
-    "RF12:868:5:20":
-      title: 'labtafel'
-    "RF12:868:5:23":
-      title: 'gang boven'
-    "RF12:868:5:24":
-      title: 'zolderkamer'
+    "RF12:868:5:2": title: 'boekenkast JC'
+    "RF12:868:5:3": title: 'buro JC'
+    "RF12:868:5:4": title: 'washok'
+    "RF12:868:5:5": title: 'woonkamer'
+    "RF12:868:5:6": title: 'hal vloer'
+    "RF12:868:5:9": title: 'meterkast'
+    "RF12:868:5:10": title: 'hal voor'
+    "RF12:868:5:11": title: 'logeerkamer'
+    "RF12:868:5:12": title: 'boekenkast L'
+    "RF12:868:5:13": title: 'raam halfhoog'
+    "RF12:868:5:14": title: 'zolderkamer'
+    "RF12:868:5:15": title: 'washok'
+    "RF12:868:5:18": title: 'meterkast'
+    "RF12:868:5:19": title: 'kantoor'
+    "RF12:868:5:20": title: 'labtafel'
+    "RF12:868:5:23": title: 'gang boven'
+    "RF12:868:5:24": title: 'zolderkamer'
 
   drivers:
 
@@ -143,39 +126,73 @@ module.exports =
 
     #otRelay:
 
-    #p1scanner:
+    p1scanner:
+      use1:
+        title: 'Elec usage - low'
+        unit: 'kWh'
+        scale: 3
+      use2:
+        title: 'Elec usage - high'
+        unit: 'kWh'
+        scale: 3
+      gen1:
+        title: 'Elec return - low'
+        unit: 'kWh'
+        scale: 3
+      gen2:
+        title: 'Elec return - high'
+        unit: 'kWh'
+        scale: 3
+      mode:
+        title: 'Mode'
+      usew:
+        title: 'Elec usage now'
+        unit: 'W'
+        min: 0
+        max: 15000
+        scale: -1
+      genw:
+        title: 'Elec return now'
+        unit: 'W'
+        min: 0
+        max: 10000
+        scale: -1
+      gas:
+        title: 'Gas total'
+        unit: 'm3'
+        scale: 3
 
     homePower:
-      c1:
-        title: 'Stove pulse counter'
-        unit: 'x'
-        min: 0
-        max: 66000
-      c2:
-        title: 'Solar pulse counter'
-        unit: 'x'
-        min: 0
-        max: 66000
-      c3:
-        title: 'House pulse counter'
-        unit: 'x'
-        min: 0
-        max: 66000
+#     c1:
+#       title: 'Stove pulse counter'
+#       min: 0
+#       max: 66000
+#     c2:
+#       title: 'Solar pulse counter'
+#       min: 0
+#       max: 66000
+#     c3:
+#       title: 'House pulse counter'
+#       min: 0
+#       max: 66000
       p1:
-        title: 'Stove power'
+        title: 'Usage stove'
         unit: 'W'
         min: 0
         max: 10000
+        scale: 1
       p2:
-        title: 'Solar power'
+        title: 'Production PV'
         unit: 'W'
         min: 0
         max: 10000
+        scale: 1
       p3:
-        title: 'House power'
+        title: 'Usage house'
         unit: 'W'
         min: 0
         max: 10000
+        scale: 1
 
     radioBlip:
       age:
@@ -184,26 +201,34 @@ module.exports =
         min: 0
       ping:
         title: 'Ping count'
-        unit: 'x'
         min: 0
+
     slowLogger:
+      a0:
+        title: 'Input 0'
+        unit: 'V'
+        min: 0
+        max: 4
+        factor: 3.3 / 32
+        scale: 3
       a1:
         title: 'Input 1'
+        unit: 'V'
         min: 0
-        max: 1023
-        factor: 0.03125
+        max: 4
+        factor: 3.3 / 32
+        scale: 3
       a2:
         title: 'Input 2'
+        unit: 'V'
         min: 0
-        max: 1023
-        factor: 0.03125
+        max: 4
+        factor: 3.3 / 32
+        scale: 3
       a3:
         title: 'Input 3'
+        unit: 'V'
         min: 0
-        max: 1023
-        factor: 0.03125
-      a4:
-        title: 'Input 4'
-        min: 0
-        max: 1023
-        factor: 0.03125
+        max: 4
+        factor: 3.3 / 32
+        scale: 3

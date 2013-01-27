@@ -1,18 +1,42 @@
 .row
   .twelve.columns
+
+    h1 Status
+
+    .row(ng-repeat='row in status')
+      .two.columns
+        .right {{row[0]}}
+      .two.columns
+        | {{row[1]}}
+      .one.columns
+        .right {{row[2]}}
+      .two.columns.end
+        | {{row[3]}}
+
+    //-
+      table
+        tr
+          th Where
+          th Parameter
+          th Value
+          th Unit
+        tr(ng-repeat='row in status')
+          td(ng-repeat='v in row')
+            | {{v}}
+
     h1 Locations
 
-    .row(ng-repeat='l in locations')
+    .row(ng-repeat='row in locations')
       .two.columns
-        b {{l.key}}
+        b {{row.key}}
       .ten.columns
-        | {{l}}
+        | {{row}}
 
     h1 Drivers
 
-    div(ng-repeat='d in drivers')
-      h6 {{d.key}}
-      .row(ng-repeat='(k,v) in d')
+    div(ng-repeat='row in drivers')
+      h6 {{row.key}}
+      .row(ng-repeat='(k,v) in row')
         .one.columns.offset-by-one
           b {{k}}
         .ten.columns
