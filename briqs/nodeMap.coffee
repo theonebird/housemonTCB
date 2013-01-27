@@ -163,18 +163,18 @@ module.exports =
         scale: 3
 
     homePower:
-#     c1:
-#       title: 'Stove pulse counter'
-#       min: 0
-#       max: 66000
-#     c2:
-#       title: 'Solar pulse counter'
-#       min: 0
-#       max: 66000
-#     c3:
-#       title: 'House pulse counter'
-#       min: 0
-#       max: 66000
+      c1:
+        title: 'Counter stove'
+        min: 0
+        max: 66000
+      c2:
+        title: 'Counter solar'
+        min: 0
+        max: 66000
+      c3:
+        title: 'Counter house'
+        min: 0
+        max: 66000
       p1:
         title: 'Usage stove'
         unit: 'W'
@@ -182,7 +182,7 @@ module.exports =
         max: 10000
         scale: 1
       p2:
-        title: 'Production PV'
+        title: 'Production solar'
         unit: 'W'
         min: 0
         max: 10000

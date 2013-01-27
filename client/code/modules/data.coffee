@@ -1,10 +1,10 @@
 module.exports = (ng) ->
 
-  ng.controller 'DataCtrl', [
-    '$scope',
-    ($scope) ->
+  ng.run [
+    '$rootScope',
+    ($rootScope) ->
 
-      $scope.status = {}
+      $rootScope.status = {}
 
       updateStatus = (where, info, value) ->
         if info.factor
@@ -14,22 +14,22 @@ module.exports = (ng) ->
         else if info.scale >= 0
           value /= Math.pow 10, info.scale
           value = value.toFixed info.scale
-        $scope.status["#{where}/#{info.title}"] = [
+        $rootScope.status["#{where}/#{info.title}"] = [
           where, info.title, value, info.unit
         ]
 
       processReading = (obj) ->
         segments = obj.key.split '.'
-        loc = $scope.locations.find _.first segments
-        drv = $scope.drivers.find _.last segments
+        loc = $rootScope.locations.find _.first segments
+        drv = $rootScope.drivers.find _.last segments
         if loc and drv
           for param, value of obj
             unless param in ['id','key']
               info = drv[param]
               updateStatus loc.title, info, value  if info
 
-      $scope.$on 'set.readings', (event, obj, oldObj) ->
+      $rootScope.$on 'set.readings', (event, obj, oldObj) ->
         processReading obj  if obj
 
-      processReading obj  for obj in $scope.readings
+      processReading obj  for obj in $rootScope.readings
     ]

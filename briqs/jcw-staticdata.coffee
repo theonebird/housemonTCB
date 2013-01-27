@@ -3,7 +3,6 @@ exports.info =
   description: 'Static data definitions (temporary)'
   menus: [
     title: 'Data'
-    controller: 'DataCtrl'
   ]
   
 nodeMap = require './nodeMap'
