@@ -5,7 +5,6 @@ module.exports = (ng) ->
   ng.controller 'MainCtrl', [
     'routes','$scope',
     (routes, $scope) ->
-      console.info 'main controller'
 
       $scope.routes = routes
 
