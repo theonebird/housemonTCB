@@ -80,9 +80,9 @@ module.exports =
       temp:
         title: 'Temperature'
         unit: '°C'
+        scale: 1
         min: -50
         max: 50
-        scale: 1
 
     #ookRelay2:
 
@@ -115,14 +115,14 @@ module.exports =
       total:
         title: 'PV total'
         unit: 'MWh'
-        min: 0
         scale: 3
+        min: 0
       yield:
         title: 'PV daily yield'
         unit: 'kWh'
+        scale: 3
         min: 0
         max: 50
-        scale: 3
 
     #otRelay:
 
@@ -131,68 +131,82 @@ module.exports =
         title: 'Elec usage - low'
         unit: 'kWh'
         scale: 3
+        min: 0
       use2:
         title: 'Elec usage - high'
         unit: 'kWh'
         scale: 3
+        min: 0
       gen1:
         title: 'Elec return - low'
         unit: 'kWh'
         scale: 3
+        min: 0
       gen2:
         title: 'Elec return - high'
         unit: 'kWh'
         scale: 3
+        min: 0
       mode:
         title: 'Mode'
       usew:
         title: 'Elec usage now'
         unit: 'W'
+        scale: -1
         min: 0
         max: 15000
-        scale: -1
       genw:
         title: 'Elec return now'
         unit: 'W'
+        scale: -1
         min: 0
         max: 10000
-        scale: -1
       gas:
         title: 'Gas total'
         unit: 'm3'
         scale: 3
+        min: 0
 
     homePower:
       c1:
         title: 'Counter stove'
+        unit: 'kWh'
+        factor: 0.5
+        scale: 3
         min: 0
-        max: 66000
+        max: 33
       c2:
         title: 'Counter solar'
+        unit: 'kWh'
+        factor: 0.5
+        scale: 3
         min: 0
-        max: 66000
+        max: 33
       c3:
         title: 'Counter house'
+        unit: 'kWh'
+        factor: 0.5
+        scale: 3
         min: 0
-        max: 66000
+        max: 33
       p1:
         title: 'Usage stove'
         unit: 'W'
+        scale: 1
         min: 0
         max: 10000
-        scale: 1
       p2:
         title: 'Production solar'
         unit: 'W'
+        scale: 1
         min: 0
         max: 10000
-        scale: 1
       p3:
         title: 'Usage house'
         unit: 'W'
+        scale: 1
         min: 0
         max: 10000
-        scale: 1
 
     radioBlip:
       age:
@@ -207,28 +221,28 @@ module.exports =
       a0:
         title: 'Input 0'
         unit: 'V'
-        min: 0
-        max: 4
         factor: 3.3 / 32
         scale: 3
+        min: 0
+        max: 4
       a1:
         title: 'Input 1'
         unit: 'V'
-        min: 0
-        max: 4
         factor: 3.3 / 32
         scale: 3
+        min: 0
+        max: 4
       a2:
         title: 'Input 2'
         unit: 'V'
-        min: 0
-        max: 4
         factor: 3.3 / 32
         scale: 3
+        min: 0
+        max: 4
       a3:
         title: 'Input 3'
         unit: 'V'
-        min: 0
-        max: 4
         factor: 3.3 / 32
         scale: 3
+        min: 0
+        max: 4
