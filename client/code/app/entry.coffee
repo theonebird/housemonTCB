@@ -67,13 +67,28 @@ app.config [
 ]
 
 app.run [
-  'models','$rootScope','rpc',
-  (models, $rootScope, rpc) ->
+  'models','$rootScope','store',
+  (models, $rootScope, store) ->
     console.info 'app run'
 
     # forward all incoming ss-* pubsub events to NG
     ss.event.onAny (args...) ->
       $rootScope.$apply => $rootScope.$broadcast @event, args...
+
+    store.setup models
+]
+
+# This service sets up a listener to ss-store events, and creates pseudo-arrays
+# in the root scope which track all changes. These changes are also broadcast,
+# so that any module can tie into these changes and act whenever they occur.
+# Intitial setup generates a set of fake events, as if all rows were new ones.
+#
+#  - broadcasts row change y on collection x as ('set.x', y, oldY)
+#  - for new rows, oldY is null, for deleted rows, y will be null
+
+app.service 'store', [
+  '$rootScope','rpc',
+  ($rootScope, rpc) ->
 
     $rootScope.collection = (name) ->
       unless $rootScope[name]
@@ -108,14 +123,15 @@ app.run [
       $rootScope.$broadcast "set.#{name}", obj, oldObj
       # $rootScope.$broadcast 'unset', name, oldObj
           
-    for name,coll of models
-      if name in ['pkg', 'local', 'process']
-        $rootScope[name] = coll
-      else
-        # make sure the collection gets set up, even if it has no data
-        $rootScope.collection name
-        # emit an ss-store event to get all the collection details right
-        $rootScope.$broadcast 'ss-store', name, v  for k,v of coll
+    setup: (models) ->
+      for name,coll of models
+        if name in ['pkg', 'local', 'process']
+          $rootScope[name] = coll
+        else
+          # make sure the collection gets set up, even if it has no data
+          $rootScope.collection name
+          # emit an ss-store event to get all the collection details right
+          $rootScope.$broadcast 'ss-store', name, v  for k,v of coll
 ]
 
 # Credit to https://github.com/polidore/ss-angular for ss rpc/pubsub wrapping
