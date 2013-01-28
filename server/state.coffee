@@ -51,14 +51,20 @@ state.store = (name, obj, cb) ->
     collection = models[name] ? {}
     oldObj = collection[id]
     unless obj is oldObj # TODO: is this comparison useful?
-      if obj.key?
+      key = obj.key
+      if key?
         collection[id] = obj
         state.emit "set.#{name}", obj, oldObj
       else if oldObj?
         delete collection[id]
         state.emit "unset.#{name}", oldObj
+        key = oldObj.key
+      else
+        return
       models[name] = collection
       state.emit 'store', name, obj
+      state.emit "store.#{name}", obj
+      state.emit "store.#{name}.#{key}", obj
     cb?()
     
 state.setupStorage = (collections, config) ->

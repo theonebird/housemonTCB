@@ -33,12 +33,12 @@ module.exports = (ng) ->
         else
           $scope.bob = null
           $scope.briq = obj
-          # TODO: candidate for a Briq method
+          # TODO candidate for a Briq method
           for input in obj.info.inputs or []
             input.value = null
       
       $scope.createBob = ->
-        # TODO: candidate for a Briq method
+        # TODO candidate for a Briq method
         keyList = [$scope.briq.info.name]
         for input in $scope.briq.info.inputs or []
           keyList.push input.value?.keys or input.value or input.default
@@ -48,17 +48,11 @@ module.exports = (ng) ->
           briq_id: $scope.briq.id
           key: key
 
-        # TODO: hacked to capture actual store once it comes back from server
-        done = $scope.$on 'set.bobs', (event, obj) ->
-          if obj.key is key
-            $scope.selectBob obj
-            done() # similar to $scope.$once
-      
       $scope.selectBob = (obj) ->
         $scope.bob = obj
         $scope.briq = $scope.briqs.byId[obj.briq_id]
 
-        # TODO: candidate for a Briq method
+        # TODO candidate for a Briq method
         keys = obj.key.split(':').slice 1
         for input in $scope.briq.info.inputs or []
           input.value = keys.shift()
