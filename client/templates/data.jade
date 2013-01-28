@@ -1,27 +1,6 @@
 .row
   .twelve.columns
 
-    h1 Status
-
-    .row(ng-repeat='row in status')
-      .two.columns: .right {{row[0]}}
-      .two.columns {{row[1]}}
-      .one.columns: .right {{row[2]}}
-      .one.columns {{row[3]}}
-      .two.columns {{row[4] | date:"MM-dd &nbsp; HH:mm:ss" }}
-      .four.columns {{row[5]}}
-
-    //-
-      table
-        tr
-          th Where
-          th Parameter
-          th Value
-          th Unit
-        tr(ng-repeat='row in status')
-          td(ng-repeat='v in row')
-            | {{v}}
-
     h1 Locations
 
     .row(ng-repeat='row in locations')

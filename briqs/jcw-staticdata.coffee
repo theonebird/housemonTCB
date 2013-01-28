@@ -4,7 +4,6 @@ exports.info =
   menus: [
     title: 'Data'
   ]
-  # FIXME depends on readings
   
 nodeMap = require './nodeMap'
 state = require '../server/state'
