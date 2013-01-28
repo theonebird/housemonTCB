@@ -6,7 +6,7 @@ module.exports = (ng) ->
 
       $rootScope.status = {}
 
-      updateStatus = (where, info, value) ->
+      updateStatus = (obj, loc, info, param, value) ->
         if info.factor
           value *= info.factor
         if info.scale < 0
@@ -14,8 +14,9 @@ module.exports = (ng) ->
         else if info.scale >= 0
           value /= Math.pow 10, info.scale
           value = value.toFixed info.scale
-        $rootScope.status["#{where}/#{info.title}"] = [
-          where, info.title, value, info.unit
+        tag = obj.key.split('.').concat(param).join ' - '
+        $rootScope.status["#{loc.title}/#{info.title}"] = [
+          loc.title, info.title, value, info.unit, obj.time, tag
         ]
 
       processReading = (obj) ->
@@ -26,7 +27,7 @@ module.exports = (ng) ->
           for param, value of obj
             unless param in ['id','key']
               info = drv[param]
-              updateStatus loc.title, info, value  if info
+              updateStatus obj, loc, info, param, value  if info
 
       $rootScope.$on 'set.readings', (event, obj, oldObj) ->
         processReading obj  if obj

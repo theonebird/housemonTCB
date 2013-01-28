@@ -88,7 +88,7 @@ module.exports =
 
     smaRelay:
       acw:
-        title: 'AC power'
+        title: 'PV power AC'
         unit: 'W'
         min: 0
         max: 6000

@@ -4,14 +4,12 @@
     h1 Status
 
     .row(ng-repeat='row in status')
-      .two.columns
-        .right {{row[0]}}
-      .two.columns
-        | {{row[1]}}
-      .one.columns
-        .right {{row[2]}}
-      .two.columns.end
-        | {{row[3]}}
+      .two.columns: .right {{row[0]}}
+      .two.columns {{row[1]}}
+      .one.columns: .right {{row[2]}}
+      .one.columns {{row[3]}}
+      .two.columns {{row[4] | date:"MM-dd &nbsp; HH:mm:ss" }}
+      .four.columns {{row[5]}}
 
     //-
       table
