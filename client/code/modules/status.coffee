@@ -28,7 +28,7 @@ module.exports = (ng) ->
         loc = $rootScope.locations.find locName
         unless loc
           loc = $rootScope.locations.find drvName
-          drvName = drvName.replace /-.*/, ''
+          drvName = drvName?.replace /-.*/, ''
         drv = $rootScope.drivers.find drvName
 
         if loc and drv

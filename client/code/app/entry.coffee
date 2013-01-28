@@ -109,19 +109,24 @@ app.service 'store', [
       oldObj = coll.byId[obj.id]
       if oldObj
         oldPos = coll.indexOf(oldObj)
-      if obj.key
+      key = obj.key
+      if key
         coll.byId[obj.id] = obj
         if oldObj
           coll[oldPos] = obj
         else
           coll.push obj
-      else
-        if oldObj
-          delete coll[obj.id]
-          coll.splice oldPos, 1
+      else if oldObj
+        delete coll[obj.id]
+        coll.splice oldPos, 1
+        key = oldObj.key
         obj = null
+      else
+        console.log 'store?', name, obj
+        return
       $rootScope.$broadcast "set.#{name}", obj, oldObj
-      # $rootScope.$broadcast 'unset', name, oldObj
+      $rootScope.$broadcast "set.#{name}.#{key}", obj, oldObj
+      # $rootScope.$broadcast 'set', name, oldObj
           
     setup: (models) ->
       for name,coll of models

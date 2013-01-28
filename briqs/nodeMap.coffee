@@ -79,6 +79,8 @@ module.exports =
         title: 'Light intensity'
         min: 0
         max: 100
+        factor: 100 / 255
+        scale: 0
       moved:
         title: 'Motion'
         min: 0
@@ -101,15 +103,19 @@ module.exports =
     KS300:
       temp:
         title: 'Temperature'
+        unit: '°C'
         scale: 1
       humi:
         title: 'Relative humidity'
+        unit: '%'
       rain:
         title: 'Precipitation'
       rnow:
         title: 'Raining'
       wind:
         title: 'Wind speed'
+        unit: 'km/h'
+        scale: 1
 
     S300:
       temp:
@@ -183,7 +189,7 @@ module.exports =
         scale: 3
         min: 0
       mode:
-        title: 'Mode'
+        title: 'Elec tariff'
       usew:
         title: 'Elec usage now'
         unit: 'W'
