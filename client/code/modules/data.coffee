@@ -23,9 +23,14 @@ module.exports = (ng) ->
         $rootScope.$broadcast 'status', row
 
       processReading = (obj) ->
-        segments = obj.key.split '.'
-        loc = $rootScope.locations.find _.first segments
-        drv = $rootScope.drivers.find _.last segments
+        [locName, other..., drvName] = obj.key.split '.'
+
+        loc = $rootScope.locations.find locName
+        unless loc
+          loc = $rootScope.locations.find drvName
+          drvName = drvName.replace /-.*/, ''
+        drv = $rootScope.drivers.find drvName
+
         if loc and drv
           for param, value of obj
             unless param in ['id','key']
@@ -35,5 +40,5 @@ module.exports = (ng) ->
       $rootScope.$on 'set.readings', (event, obj, oldObj) ->
         processReading obj  if obj
 
-      processReading obj  for obj in $rootScope.readings
+      processReading obj  for obj in $rootScope.readings or []
     ]

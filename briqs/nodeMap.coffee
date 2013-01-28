@@ -43,23 +43,29 @@ module.exports =
 
   locations:
 
-    "RF12:868:5:2": title: 'boekenkast JC'
-    "RF12:868:5:3": title: 'buro JC'
-    "RF12:868:5:4": title: 'washok'
-    "RF12:868:5:5": title: 'woonkamer'
-    "RF12:868:5:6": title: 'hal vloer'
-    "RF12:868:5:9": title: 'meterkast'
-    "RF12:868:5:10": title: 'hal voor'
-    "RF12:868:5:11": title: 'logeerkamer'
-    "RF12:868:5:12": title: 'boekenkast L'
-    "RF12:868:5:13": title: 'raam halfhoog'
-    "RF12:868:5:14": title: 'zolderkamer'
-    "RF12:868:5:15": title: 'washok'
-    "RF12:868:5:18": title: 'meterkast'
-    "RF12:868:5:19": title: 'kantoor'
-    "RF12:868:5:20": title: 'labtafel'
-    "RF12:868:5:23": title: 'gang boven'
-    "RF12:868:5:24": title: 'zolderkamer'
+    'RF12:868:5:2': title: 'boekenkast JC'
+    'RF12:868:5:3': title: 'buro JC'
+    'RF12:868:5:4': title: 'washok'
+    'RF12:868:5:5': title: 'woonkamer'
+    'RF12:868:5:6': title: 'hal vloer'
+    'RF12:868:5:9': title: 'meterkast'
+    'RF12:868:5:10': title: 'hal voor'
+    'RF12:868:5:11': title: 'logeerkamer'
+    'RF12:868:5:12': title: 'boekenkast L'
+    'RF12:868:5:13': title: 'raam halfhoog'
+    'RF12:868:5:14': title: 'zolderkamer'
+    'RF12:868:5:15': title: 'washok'
+    'RF12:868:5:18': title: 'meterkast'
+    #'RF12:868:5:19': title: 'kantoor'
+    'RF12:868:5:20': title: 'labtafel'
+    'RF12:868:5:23': title: 'gang boven'
+    'RF12:868:5:24': title: 'zolderkamer'
+    'DCF77': title: 'radioklok'
+    'KS300': title: 'weerstation'
+    'S300-1': title: 'vlonder'
+    'S300-2': title: 'balkon'
+    'S300-3': title: 'badkamer'
+    'EMX-2': title: 'labtafel'
 
   drivers:
 
@@ -84,7 +90,34 @@ module.exports =
         min: -50
         max: 50
 
-    #ookRelay2:
+    DCF77:
+      date:
+        title: 'Date'
+      tod:
+        title: 'Time'
+      dst:
+        title: 'Summer'
+
+    KS300:
+      temp:
+        title: 'Temperature'
+        scale: 1
+      humi:
+        title: 'Relative humidity'
+      rain:
+        title: 'Precipitation'
+      rnow:
+        title: 'Raining'
+      wind:
+        title: 'Wind speed'
+
+    S300:
+      temp:
+        title: 'Temperature'
+        scale: 1
+      humi:
+        title: 'Relative humidity'
+        scale: 1
 
     smaRelay:
       acw:
@@ -95,11 +128,13 @@ module.exports =
       dcv1:
         title: 'PV level east'
         unit: 'V'
+        scale: 2
         min: 0
         max: 250
       dcv2:
         title: 'PV level west'
         unit: 'V'
+        scale: 2
         min: 0
         max: 250
       dcw1:
@@ -221,21 +256,21 @@ module.exports =
       a0:
         title: 'Input 0'
         unit: 'V'
-        factor: 3.3 / 32
+        factor: 3300 / 1023 / 32
         scale: 3
         min: 0
         max: 4
       a1:
         title: 'Input 1'
         unit: 'V'
-        factor: 3.3 / 32
+        factor: 3300 / 1023 / 32
         scale: 3
         min: 0
         max: 4
       a2:
         title: 'Input 2'
         unit: 'V'
-        factor: 3.3 / 32
+        factor: 3300 / 1023 / 32
         scale: 3
         min: 0
         max: 4

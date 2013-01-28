@@ -87,16 +87,14 @@ ookRelayDecoder = (raw, cb) ->
         tag: name
         hex: seg.toString('hex').toUpperCase()
 
-# TODO this duplicates code in rf12-decoders.coffee!
+# TODO this is very similar to code in rf12-decoders.coffee!
 packetListener = (packet, ainfo) ->
   name = ainfo?.name or
           nodeMap[packet.band]?[packet.group]?[packet.id]
   if name is 'ookRelay2'
     ookRelayDecoder packet.buffer, (info) ->
-      info.key = "RF12:#{packet.band}:#{packet.group}:#{packet.id}.ook"
-      if info.tag
-        info.key += ":#{info.tag}"
-        delete info.tag
+      info.key = "RF12:#{packet.band}:#{packet.group}:#{packet.id}.#{info.tag}"
+      delete info.tag
       now = Date.now()
       time = packet.time or now
       if time < 86400000
