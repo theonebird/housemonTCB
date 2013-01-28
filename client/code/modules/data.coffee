@@ -14,10 +14,13 @@ module.exports = (ng) ->
         else if info.scale >= 0
           value /= Math.pow 10, info.scale
           value = value.toFixed info.scale
+
+        key = "#{loc.title}/#{info.title}"
         tag = obj.key.split('.').concat(param).join ' - '
-        $rootScope.status["#{loc.title}/#{info.title}"] = [
-          loc.title, info.title, value, info.unit, obj.time, tag
-        ]
+        row = [ loc.title, info.title, value, info.unit, obj.time, tag ]
+
+        $rootScope.status[key] = row
+        $rootScope.$broadcast 'status', row
 
       processReading = (obj) ->
         segments = obj.key.split '.'
