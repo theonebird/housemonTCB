@@ -18,8 +18,10 @@ class RF12demo extends serialport.SerialPort
     info = {}
     ainfo = {}
     
-    # TODO: expand platform-specific shorthands, not just Mac
-    device = device.replace /^usb-/, '/dev/tty.usbserial-'
+    # support some platform-specific shorthands
+    switch process.platform
+      when 'darwin' then device = device.replace /^usb-/, '/dev/tty.usbserial-'
+      when 'linux' then device = device.replace /^tty/, '/dev/tty'
     
     # construct the serial port object
     super device,
