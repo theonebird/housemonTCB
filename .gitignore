@@ -1,2 +1,3 @@
-node_modules/
 client/static/assets/
+node_modules/
+uploads/

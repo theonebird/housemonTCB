@@ -15,16 +15,16 @@ state = require '../server/state'
 
 exports.factory = class extends serialport.SerialPort
   
-  info = key: 'blink', b1: false, b2: false, l1: false, l2: false
-
   constructor: (device) ->
-    # TODO: expand platform-specific shorthands, not just Mac
+    # TODO expand platform-specific shorthands, not just Mac
     device = device.replace /^usb-/, '/dev/tty.usbserial-'
     
     # construct the serial port object
     super device,
       baudrate: 57600
       parser: serialport.parsers.readline '\r\n'
+
+    info = key: 'blink', b1: false, b2: false, l1: false, l2: false
 
     @on 'data', (data) ->
       switch data

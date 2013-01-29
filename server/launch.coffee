@@ -44,7 +44,22 @@ ss.client.formatters.add require('ss-stylus')
 ss.client.templateEngine.use 'angular'
 
 # Minimise and pack assets if you type: SS_ENV=production node app.js
-ss.client.packAssets()  if ss.env is 'production'
+if ss.env is 'production'
+  ss.client.packAssets()
+else
+  # show request log in dev mode
+  # see http://www.senchalabs.org/connect/middleware-logger.html
+  ss.http.middleware.prepend ss.http.connect.logger 'dev'
+
+# support uploads, this will generate an 'upload' event with details
+# TODO clean up files if this was not done by any event handlers
+require('fs').mkdir './uploads'
+ss.http.middleware.prepend ss.http.connect.bodyParser
+  uploadDir: './uploads'
+ss.http.middleware.prepend (req, res, next) ->
+  state.emit 'upload', req.files  unless _.isEmpty req.files
+  next()
+#state.on 'upload', (f) -> console.log f
 
 # Start web server
 server = http.Server ss.http.middleware
