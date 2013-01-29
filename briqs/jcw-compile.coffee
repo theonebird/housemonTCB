@@ -1,5 +1,5 @@
 # see http://jeelabs.org/2013/01/30/remote-compilation/
-
+#
 exports.info =
   name: 'jcw-compile'
   description: 'Compile for embedded systems'
@@ -32,7 +32,7 @@ ss.api.add 'compile', (path, cb) ->
     make.on 'exit', (code) ->
       cb? null, code
 
-# triggered when bodyParser middleware completes processing a file upload
+# triggered when bodyParser middleware finishes processing a file upload
 state.on 'upload', (url, files) ->
   for file, info of files
     state.store 'uploads',
