@@ -1,3 +1,5 @@
+# see http://jeelabs.org/2013/01/30/remote-compilation/
+
 exports.info =
   name: 'jcw-compile'
   description: 'Compile for embedded systems'
@@ -14,7 +16,7 @@ ss = require 'socketstream'
 # TODO hardcoded paths for now
 SKETCHDIR = switch process.platform
   when 'darwin' then '/Users/jcw/Tools/sketch'
-  when 'linux' then '/home/pi/sketchbook'
+  when 'linux' then '/home/pi/sketchbook/sketch'
 
 # callable from client as: rpc.exec 'host.api', 'compile', path
 ss.api.add 'compile', (path, cb) ->
@@ -32,12 +34,11 @@ ss.api.add 'compile', (path, cb) ->
 
 # triggered when bodyParser middleware completes processing a file upload
 state.on 'upload', (url, files) ->
-  for file, info of files # FIXME multiple files won't work async
+  for file, info of files
     state.store 'uploads',
       key: info.path
       file: file
       name: info.name
-      type: info.type
       size: info.size
       date: Date.parse(info.lastModifiedDate)
 
