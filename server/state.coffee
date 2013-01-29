@@ -62,9 +62,9 @@ state.store = (name, obj, cb) ->
       else
         return
       models[name] = collection
-      state.emit 'store', name, obj
-      state.emit "store.#{name}", obj
-      state.emit "store.#{name}.#{key}", obj
+      state.emit 'store', name, obj, oldObj
+      state.emit "store.#{name}", obj, oldObj
+      state.emit "store.#{name}.#{key}", obj, oldObj
     cb?()
     
 state.setupStorage = (collections, config) ->

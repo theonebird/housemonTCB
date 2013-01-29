@@ -32,7 +32,7 @@ ss.http.route '/', (req, res) ->
 # Persistent sessions and storage based on Redis
 ss.session.store.use 'redis', local.redisConfig
 # ss.publish.transport.use 'redis', local.redisConfig
-collections = ['bobs', 'readings', 'locations', 'drivers']
+collections = ['bobs', 'readings', 'locations', 'drivers', 'uploads']
 state.setupStorage collections, local.redisConfig
 
 # Code Formatters known by SocketStream
@@ -57,9 +57,8 @@ require('fs').mkdir './uploads'
 ss.http.middleware.prepend ss.http.connect.bodyParser
   uploadDir: './uploads'
 ss.http.middleware.prepend (req, res, next) ->
-  state.emit 'upload', req.files  unless _.isEmpty req.files
+  state.emit 'upload', req.url, req.files  unless _.isEmpty req.files
   next()
-#state.on 'upload', (f) -> console.log f
 
 # Start web server
 server = http.Server ss.http.middleware
