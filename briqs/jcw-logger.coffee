@@ -29,15 +29,13 @@ exports.factory = class
     now = new Date
     # L 01:02:03.537 usb-A40117UK OK 9 25 54 66 235 61 210 226 33 19
     log = "L #{timeString now} #{device} #{data}\n"
-    if now.getUTCDate() is @currdate
+    if now.getUTCDate() is @currDate
       fs.write @fd, log
     else
       @currDate = now.getUTCDate() 
       fs.close @fd  if @fd?
-      @fd = null
-      fs.open dateFilename(now), 'a', (err, @fd) ->
-        throw err  if err
-        fs.write @fd, log
+      @fd = fs.openSync dateFilename(now), 'a'
+      fs.write @fd, log
 
   constructor: ->
     @fd = null
