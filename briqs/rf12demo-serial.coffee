@@ -20,16 +20,19 @@ class RF12demo extends serialport.SerialPort
     
     # support some platform-specific shorthands
     switch process.platform
-      when 'darwin' then device = device.replace /^usb-/, '/dev/tty.usbserial-'
-      when 'linux' then device = device.replace /^tty/, '/dev/tty'
+      when 'darwin' then port = device.replace /^usb-/, '/dev/tty.usbserial-'
+      when 'linux' then port = device.replace /^tty/, '/dev/tty'
+      else port = device
     
     # construct the serial port object
-    super device,
+    super port,
       baudrate: 57600
       parser: serialport.parsers.readline '\n'
 
     @on 'data', (data) ->
       data = data.slice(0, -1)  if data.slice(-1) is '\r'
+      # broadcast raw event for data logging
+      state.emit 'incoming', 'rf12demo', device, data
       words = data.split ' '
       if words.shift() is 'OK' and info.recvid
         # TODO: conversion to ints can fail if the serial data is garbled

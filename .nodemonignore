@@ -4,5 +4,6 @@
 
 /.git/*
 /client/*
+/logger/*
 /uploads/*
 ./README.md
