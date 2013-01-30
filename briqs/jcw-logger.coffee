@@ -27,13 +27,17 @@ exports.factory = class
   
   logger: (type, device, data) ->
     now = new Date
-    name = dateFilename(now)
-    if name isnt @currName
-      @fd?.close()
-      @currName = name
-      @fd = fs.createWriteStream name
-    # L 01:02:03.537 usb-A40117UK OK 9 25 54 66 235 61 13 183 235 210 226 33 19
-    @fd.write "L #{timeString now} #{device} #{data}\n"
+    # L 01:02:03.537 usb-A40117UK OK 9 25 54 66 235 61 210 226 33 19
+    log = "L #{timeString now} #{device} #{data}\n"
+    if now.getUTCDate() is @currdate
+      fs.write @fd, log
+    else
+      @currDate = now.getUTCDate() 
+      fs.close @fd  if @fd?
+      @fd = null
+      fs.open dateFilename(now), 'a', (err, @fd) ->
+        throw err  if err
+        fs.write @fd, log
 
   constructor: ->
     @fd = null
@@ -41,4 +45,4 @@ exports.factory = class
           
   destroy: ->
     state.off 'incoming', @logger
-    @fd?.close()
+    fs.close @fd  if @fd?
