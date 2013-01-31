@@ -3,6 +3,9 @@
 
 module.exports =
 
+  # this is a list of announcer IDs used during testing
+  # it's not needed if the 868: 5: 2: etc data below is set up properly
+  # see http://jeelabs.org/2013/01/17/arduino-sketches-on-rpi/
   11: 'roomNode'
   12: 'ookRelay2'
   13: 'smaRelay'
@@ -36,11 +39,14 @@ module.exports =
 
   # devices are mapped to RF12 configs, since that is not present in log files
   # TODO: same time-dependent comment as above, this mapping is not fixed
+  # this section is only used by the 'rf12-replay' briq
   'usb-A40117UK':
     recvid: 1
     group: 5
     band: 868
 
+  # static data, used for local testing and for replay of the JeeLabs data
+  # these map incoming sensor identifiers to locations in the house (in Dutch)
   locations:
 
     'RF12:868:5:2': title: 'boekenkast JC'
@@ -67,6 +73,8 @@ module.exports =
     'S300-3': title: 'badkamer'
     'EMX-2': title: 'labtafel'
 
+  # static data, used for local testing and for replay of the JeeLabs data
+  # this is meta information which really needs to be moved into the drivers
   drivers:
 
     roomNode:
