@@ -5,6 +5,7 @@
     ul.square
       li(ng-repeat='bob in bobs',ng-click='selectBob(bob)')
         {{bob.key}}
+    button(ng-click='saveNow()') Save now
     h3 Briqs
     ul.square
       li(ng-repeat='briq in briqs',ng-click='selectBriq(briq)')

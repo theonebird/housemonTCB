@@ -21,8 +21,8 @@
 module.exports = (ng) ->
 
   ng.controller 'AdminCtrl', [
-    '$scope',
-    ($scope) ->
+    '$scope','rpc',
+    ($scope, rpc) ->
 
       $scope.collection 'bobs'
       
@@ -61,4 +61,7 @@ module.exports = (ng) ->
         $scope.bobs.store _.omit $scope.bob, 'key'
         $scope.bob = null
         $scope.briq = null
+
+      $scope.saveNow = ->
+        rpc.exec 'host.api', 'saveNow'
   ]

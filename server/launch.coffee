@@ -16,6 +16,7 @@ briqs.loadAll ->
 # Hook state management into SocketStream
 ss.api.add 'fetch', state.fetch
 ss.api.add 'store', state.store
+ss.api.add 'saveNow', state.saveNow
 state.on 'store', (hash, value) ->
   ss.api.publish.all 'ss-store', hash, value
   

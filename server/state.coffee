@@ -89,3 +89,8 @@ state.setupStorage = (collections, config) ->
           state.store name, JSON.parse(v)
     # loaded asynchronously, will need async module for completion callback
     loadData name  for name in collections
+
+# force an explicit Redis save, see https://github.com/jcw/housemon/issues/6
+state.saveNow = (cb) ->
+  db.bgsave()
+  cb()
