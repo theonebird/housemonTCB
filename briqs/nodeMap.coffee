@@ -23,7 +23,7 @@ fs = require 'fs'
 localPath = "#{__dirname}/nodeMap-local.coffee"
 if fs.existsSync localPath
   console.info 'extending nodeMap with', localPath
-  _.extend module.exports require localPath
+  _.extend module.exports, require localPath
 
 module.exports =
 
