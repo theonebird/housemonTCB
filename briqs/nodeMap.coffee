@@ -19,12 +19,6 @@
 
 fs = require 'fs'
 
-# TODO need a way to prevent local extension/alteration, for the replay briq
-localPath = "#{__dirname}/nodeMap-local.coffee"
-if fs.existsSync localPath
-  console.info 'extending nodeMap with', localPath
-  _.extend module.exports, require localPath
-
 module.exports =
 
   # this is a list of announcer IDs used during testing
@@ -327,3 +321,9 @@ module.exports =
         scale: 3
         min: 0
         max: 4
+
+# TODO need a way to prevent local extension/alteration, for the replay briq
+localPath = "#{__dirname}/nodeMap-local.coffee"
+if fs.existsSync localPath
+  console.info 'extending nodeMap with', localPath
+  _.extend module.exports, require localPath
