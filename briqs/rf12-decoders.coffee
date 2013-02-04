@@ -12,6 +12,10 @@ time2watt = (t) ->
 
 decoders =
 
+  lightNode: (raw, cb) ->
+    cb
+      value: raw[1]
+
   radioBlip: (raw, cb) ->
     count = raw.readUInt32LE(1)
     cb

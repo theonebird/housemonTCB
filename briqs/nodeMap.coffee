@@ -38,6 +38,7 @@ module.exports =
   16: 'homePower'
   17: 'radioBlip'
   18: 'slowLogger'
+  19: 'lightNode'
 
   # this is still used for parsing logs which do not include announcer packets
   # TODO: needs to be time-dependent, since the config can change over time
@@ -60,6 +61,10 @@ module.exports =
       20: 'slowLogger'
       23: 'roomNode'
       24: 'roomNode'
+
+    # included for the DIJN LDR example
+    212:
+      1: 'lightNode'
 
   # devices are mapped to RF12 configs, since that is not present in log files
   # TODO: same time-dependent comment as above, this mapping is not fixed
@@ -90,6 +95,9 @@ module.exports =
     'RF12:868:5:20': title: 'labtafel'
     'RF12:868:5:23': title: 'gang boven'
     'RF12:868:5:24': title: 'zolderkamer'
+
+    'RF12:868:212:1': title: 'test location'
+
     'DCF77': title: 'radioklok'
     'KS300': title: 'weerstation'
     'S300-1': title: 'vlonder'
