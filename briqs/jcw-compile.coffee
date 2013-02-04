@@ -15,8 +15,9 @@ ss = require 'socketstream'
 
 # TODO hardcoded paths for now
 SKETCHDIR = switch process.platform
-  when 'darwin' then '/Users/jcw/Tools/sketch'
-  when 'linux' then '/home/pi/sketchbook/sketch'
+  when 'darwin' then "#{process.env.HOME}/Tools/sketch"
+  when 'linux' then "#{process.env.HOME}/sketchbook/sketch"
+  when 'windows' then "#{process.env.HOME}/My Documents/Arduino/sketch"
 
 # callable from client as: rpc.exec 'host.api', 'compile', path
 ss.api.add 'compile', (path, cb) ->
