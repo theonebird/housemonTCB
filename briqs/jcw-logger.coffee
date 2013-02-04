@@ -10,7 +10,9 @@ fs.mkdir LOGGER_PATH
 
 dateFilename = (now) ->
   # construct the date value as 8 digits
-  d = now.getUTCDate() + 100 * (now.getUTCMonth() + 100 * now.getUTCFullYear())
+  d = now.getUTCDate() + 100 *
+     (now.getUTCMonth() + 1 + 100 *
+      now.getUTCFullYear())
   # then massage it as a string to produce a file name
   "#{LOGGER_PATH}/#{d}.txt"
 
