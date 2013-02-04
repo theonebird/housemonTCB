@@ -1,5 +1,29 @@
-# temporary static node map and other data for now
-# module is not treated as a briq, because it does not export an 'info' entry
+# Static node map and other data. This information is temporary, until a real
+# admin/config interface is implemented on the client side. The information in
+# here reflects the settings used at JeeLabs, but is also used by the "replay"
+# briq, which currently works off one of the JeeLabs log files.
+#
+# This file is not treated as briq because it does not export an 'info' entry.
+#
+# To add your own settings: do *NOT* edit this file, but create a new one next
+# to it called "nodeMap-local.coffee". For example, if you use group 212:
+#
+#   module.exports = 
+#     868:
+#       212:
+#         1: 'roomNode'
+#         2: ...etc
+#
+# The settings in the local file will be merged (and can override) the settings
+# in this file. If you override settings, the "replay" briq may no longer work.
+
+fs = require 'fs'
+
+# TODO need a way to prevent local extension/alteration, for the replay briq
+localPath = "#{__dirname}/nodeMap-local.coffee"
+if fs.existsSync localPath
+  console.info 'extending nodeMap with', localPath
+  _.extend module.exports require localPath
 
 module.exports =
 
