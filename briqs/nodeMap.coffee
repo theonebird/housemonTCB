@@ -57,7 +57,7 @@ module.exports =
       24: 'roomNode'
 
     # included for the DIJN LDR example
-    212:
+    100:
       1: 'lightNode'
 
   # devices are mapped to RF12 configs, since that is not present in log files
@@ -90,7 +90,7 @@ module.exports =
     'RF12:868:5:23': title: 'gang boven'
     'RF12:868:5:24': title: 'zolderkamer'
 
-    'RF12:868:212:1': title: 'test location'
+    'RF12:868:100:1': title: 'test location'
 
     'DCF77': title: 'radioklok'
     'KS300': title: 'weerstation'
