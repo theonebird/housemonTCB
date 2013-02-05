@@ -90,7 +90,7 @@ ookRelayDecoder = (raw, cb) ->
 # TODO this is very similar to code in rf12-decoders.coffee!
 packetListener = (packet, ainfo) ->
   name = ainfo?.name or
-          nodeMap[packet.band]?[packet.group]?[packet.id]
+          nodeMap.rf12nodes?[packet.band]?[packet.group]?[packet.id]
   if name is 'ookRelay2'
     ookRelayDecoder packet.buffer, (info) ->
       info.key = "RF12:#{packet.band}:#{packet.group}:#{packet.id}.#{info.tag}"

@@ -86,12 +86,12 @@ decoders =
 
 announceListener = (ainfo) ->
   ainfo.swid = ainfo.buffer.readUInt16LE(3)
-  ainfo.name = nodeMap[ainfo.swid]
+  ainfo.name = nodeMap.announcers?[ainfo.swid]
   console.info 'swid', ainfo.swid, ainfo.name, ainfo.buffer
 
 packetListener = (packet, ainfo) ->
   # use announcer info if present, else look for own static mapping
-  name = ainfo?.name or nodeMap[packet.band]?[packet.group]?[packet.id]
+  name = ainfo?.name or nodeMap.rf12nodes?[packet.band]?[packet.group]?[packet.id]
   if name
     decoder = decoders[name]
     if decoder

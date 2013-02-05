@@ -41,7 +41,7 @@ exports.factory = class
     
     parser.on 'packet', (packet) ->
       # add static info to the packet, if the device is listed in nodeMap
-      _.extend packet, nodeMap[packet.device]  unless packet.band
+      _.extend packet, nodeMap.rf12devices?[packet.device]  unless packet.band
       logs.push packet
 
     parser.parseStream stream
