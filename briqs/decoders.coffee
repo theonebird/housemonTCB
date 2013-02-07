@@ -2,8 +2,8 @@ exports.info =
   name: 'decoders'
   description: 'Decoder collection'
   
-nodeMap = require '../nodeMap'
-state = require '../../server/state'
+nodeMap = require './nodeMap'
+state = require '../server/state'
 fs = require 'fs'
 
 announcers = nodeMap.announcers or {}
@@ -37,11 +37,12 @@ packetListener = (packet, ainfo) ->
     console.info 'raw', packet
         
 loadAllDecoders = ->
-  fs.readdir './briqs/decoders', (err, files) ->
+  fs.readdir './decoders', (err, files) ->
     throw err  if err
+    console.log files
     for f in files
       f = f.replace /\..*/, ''
-      obj = require "./#{f}"
+      obj = require "../decoders/#{f}"
       if obj.descriptions
         drivers[f] = obj.descriptions
       if obj.announcer
