@@ -8,7 +8,7 @@
 # To add your own settings: do *NOT* edit this file, but create a new one next
 # to it called "nodeMap-local.coffee". For example, if you use group 212:
 #
-#   module.exports = 
+#   exports.rf12nodes = 
 #     868:
 #       212:
 #         1: 'roomNode'
@@ -22,16 +22,8 @@ fs = require 'fs'
 # this is a list of announcer IDs used during testing
 # it's not needed if the 868: 5: 2: etc data below is set up properly
 # see http://jeelabs.org/2013/01/17/arduino-sketches-on-rpi/
-exports.announcers =
-  11: 'roomNode'
+exports.announcers = 
   12: 'ookRelay2'
-  13: 'smaRelay'
-  14: 'otRelay'
-  15: 'p1scanner'
-  16: 'homePower'
-  17: 'radioBlip'
-  18: 'slowLogger'
-  19: 'lightNode'
 
 # this is still used for parsing logs which do not include announcer packets
 # TODO: needs to be time-dependent, since the config can change over time

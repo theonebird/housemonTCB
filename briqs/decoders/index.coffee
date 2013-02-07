@@ -48,7 +48,6 @@ loadAllDecoders = ->
         announcers[obj.announcer] = f
       if obj.decode
         decoders[f] = obj
-    console.log 'f',announcers
 
 exports.factory = class
   
