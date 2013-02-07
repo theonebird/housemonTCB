@@ -9,7 +9,7 @@ module.exports = (state) ->
   
     state.on 'set.bobs', (newVal, oldVal) ->
       briq = models.briqs[newVal.briq_id]
-      if briq.factory
+      if briq?.factory
         args = newVal.key.split(':').slice 1
         installedBriqs[newVal.key] = new briq.factory(args...)
     
