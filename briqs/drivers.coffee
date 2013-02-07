@@ -1,6 +1,6 @@
 exports.info =
-  name: 'decoders'
-  description: 'Decoder collection'
+  name: 'drivers'
+  description: 'Driver collection'
   
 nodeMap = require './nodeMap'
 state = require '../server/state'
@@ -37,12 +37,11 @@ packetListener = (packet, ainfo) ->
     console.info 'raw', packet
         
 loadAllDecoders = ->
-  fs.readdir './decoders', (err, files) ->
+  fs.readdir './drivers', (err, files) ->
     throw err  if err
-    console.log files
     for f in files
       f = f.replace /\..*/, ''
-      obj = require "../decoders/#{f}"
+      obj = require "../drivers/#{f}"
       if obj.descriptions
         drivers[f] = obj.descriptions
       if obj.announcer
