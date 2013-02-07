@@ -8,6 +8,7 @@ fs = require 'fs'
 
 announcers = nodeMap.announcers or {}
 rf12nodes = nodeMap.rf12nodes or {}
+drivers = nodeMap.drivers or {}
 decoders = {}
 
 announceListener = (ainfo) ->
@@ -41,6 +42,8 @@ loadAllDecoders = ->
     for f in files
       f = f.replace /\..*/, ''
       obj = require "./#{f}"
+      if obj.descriptions
+        drivers[f] = obj.descriptions
       if obj.announcer
         announcers[obj.announcer] = f
       if obj.decode
