@@ -15,11 +15,19 @@ module.exports = (ng) ->
           value /= Math.pow 10, info.scale
           value = value.toFixed info.scale
 
-        key = "#{loc.title}/#{info.title}"
-        tag = obj.key.split('.').concat(param).join ' - '
-        row = [ loc.title, info.title, value, info.unit, obj.time, tag ]
+        tag = obj.key.split '.'
+        row =
+          key: "#{loc.title}/#{info.title}"
+          location: loc.title
+          parameter: info.title
+          value: value
+          unit: info.unit
+          time: obj.time
+          origin: tag[0]
+          type: tag[1]
+          name: param
 
-        $rootScope.status[key] = row
+        $rootScope.status[row.key] = row
         $rootScope.$broadcast 'status', row
 
       processReading = (obj) ->
@@ -41,4 +49,11 @@ module.exports = (ng) ->
         processReading obj  if obj
 
       processReading obj  for obj in $rootScope.readings or []
-    ]
+  ]
+
+  ng.controller 'StatusCtrl', [
+    '$scope',
+    ($scope) ->
+      $scope.search = (item) ->
+        item.toString().indexOf($scope.query) >= 0
+  ]

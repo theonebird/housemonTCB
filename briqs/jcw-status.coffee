@@ -3,6 +3,7 @@ exports.info =
   description: 'Collect and show the current status'
   menus: [
     title: 'Status'
+    controller: 'StatusCtrl'
   ]
   # FIXME depends on readings
   
