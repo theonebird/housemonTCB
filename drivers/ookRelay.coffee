@@ -1,9 +1,60 @@
-exports.info =
-  name: 'rf12ookrelay'
-  description: 'Decoders for packets forwarded by the OOK relay'
+module.exports =
 
-nodeMap = require './nodeMap'
-state = require '../server/state'
+  announcer: 12
+
+  descriptions:
+    ['DCF77', 'KS300', 'S300']
+
+  DCF77:
+    date:
+      title: 'Date'
+    tod:
+      title: 'Time'
+    dst:
+      title: 'Summer'
+
+  KS300:
+    temp:
+      title: 'Temperature'
+      unit: '°C'
+      scale: 1
+    humi:
+      title: 'Relative humidity'
+      unit: '%'
+    rain:
+      title: 'Precipitation'
+    rnow:
+      title: 'Raining'
+    wind:
+      title: 'Wind speed'
+      unit: 'km/h'
+      scale: 1
+
+  S300:
+    temp:
+      title: 'Temperature'
+      scale: 1
+    humi:
+      title: 'Relative humidity'
+      scale: 1
+
+  feed: 'rf12.packet'
+
+  decode: (raw, cb) ->
+    offset = 1
+    while offset < raw.length
+      type = raw[offset] & 0x0F
+      size = raw[offset] >> 4
+      name = ookDecoderType[type]
+      offset += 1
+      seg = raw.slice(offset, offset+size)
+      offset += size
+      if ookDecoders[name]
+        ookDecoders[name] seg, cb
+      else
+        cb
+          tag: name
+          hex: seg.toString('hex').toUpperCase()
 
 ookDecoderType = [ 'dcf', 'viso', 'emx', 'ksx', 'fsx',
                    'orsc', 'cres', 'kaku', 'xrf', 'hez', 'elro' ]
@@ -70,42 +121,3 @@ ookDecoders =
       cb
         tag: "FS20-#{house}:#{addr}"
         cmd: v[3] & 31
-
-ookRelayDecoder = (raw, cb) ->
-  offset = 1
-  while offset < raw.length
-    type = raw[offset] & 0x0F
-    size = raw[offset] >> 4
-    name = ookDecoderType[type]
-    offset += 1
-    seg = raw.slice(offset, offset+size)
-    offset += size
-    if ookDecoders[name]
-      ookDecoders[name] seg, cb
-    else
-      cb
-        tag: name
-        hex: seg.toString('hex').toUpperCase()
-
-# TODO this is very similar to code in rf12-decoders.coffee!
-packetListener = (packet, ainfo) ->
-  name = ainfo?.name or
-          nodeMap.rf12nodes?[packet.band]?[packet.group]?[packet.id]
-  if name is 'ookRelay2'
-    ookRelayDecoder packet.buffer, (info) ->
-      info.key = "RF12:#{packet.band}:#{packet.group}:#{packet.id}.#{info.tag}"
-      delete info.tag
-      now = Date.now()
-      time = packet.time or now
-      if time < 86400000
-        time += now - now % 86400000
-      info.time = time
-      state.store 'readings', info
-        
-exports.factory = class
-  
-  constructor: ->
-    state.on 'rf12.packet', packetListener
-
-  destroy: ->
-    state.off 'rf12.packet', packetListener

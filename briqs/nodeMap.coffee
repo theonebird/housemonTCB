@@ -19,12 +19,6 @@
 
 fs = require 'fs'
 
-# this is a list of announcer IDs used during testing
-# it's not needed if the 868: 5: 2: etc data below is set up properly
-# see http://jeelabs.org/2013/01/17/arduino-sketches-on-rpi/
-exports.announcers = 
-  12: 'ookRelay2'
-
 # this is still used for parsing logs which do not include announcer packets
 # TODO: needs to be time-dependent, since the config can change over time
 exports.rf12nodes =
@@ -43,7 +37,7 @@ exports.rf12nodes =
       14: 'otRelay'
       15: 'smaRelay'
       18: 'p1scanner'
-      19: 'ookRelay2'
+      19: 'ookRelay'
       20: 'slowLogger'
       23: 'roomNode'
       24: 'roomNode'
@@ -89,43 +83,6 @@ exports.locations =
   'S300-2': title: 'balkon'
   'S300-3': title: 'badkamer'
   'EMX-2': title: 'labtafel'
-
-# static data, used for local testing and for replay of the JeeLabs data
-# this is meta information which really needs to be moved into the drivers
-exports.drivers =
-
-  DCF77:
-    date:
-      title: 'Date'
-    tod:
-      title: 'Time'
-    dst:
-      title: 'Summer'
-
-  KS300:
-    temp:
-      title: 'Temperature'
-      unit: '°C'
-      scale: 1
-    humi:
-      title: 'Relative humidity'
-      unit: '%'
-    rain:
-      title: 'Precipitation'
-    rnow:
-      title: 'Raining'
-    wind:
-      title: 'Wind speed'
-      unit: 'km/h'
-      scale: 1
-
-  S300:
-    temp:
-      title: 'Temperature'
-      scale: 1
-    humi:
-      title: 'Relative humidity'
-      scale: 1
 
 # TODO need a way to prevent local extension/alteration, for the replay briq
 localPath = "#{__dirname}/nodeMap-local.coffee"

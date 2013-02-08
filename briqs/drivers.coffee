@@ -23,10 +23,10 @@ packetListener = (packet, ainfo) ->
     decoder = decoders[name]
     if decoder
       decoder.decode packet.buffer, (info) ->
-        info.key = "RF12:#{packet.band}:#{packet.group}:#{packet.id}.#{name}"
         if info.tag
-          info.key += ":#{info.tag}"
+          name = info.tag
           delete info.tag
+        info.key = "RF12:#{packet.band}:#{packet.group}:#{packet.id}.#{name}"
         now = Date.now()
         time = packet.time or now
         if time < 86400000
@@ -43,7 +43,11 @@ loadAllDecoders = ->
       f = f.replace /\..*/, ''
       obj = require "../drivers/#{f}"
       if obj.descriptions
-        drivers[f] = obj.descriptions
+        if obj.descriptions.length # TODO real array check
+          # demultiplexing driver, with multiple descriptions
+          drivers[d] = obj[d]  for d in obj.descriptions
+        else
+          drivers[f] = obj.descriptions
       if obj.announcer
         announcers[obj.announcer] = f
       if obj.decode
