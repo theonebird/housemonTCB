@@ -1,8 +1,3 @@
-time2watt = (t) ->
-  if t > 60000
-    t = 1000 * (t - 60000)
-  Math.floor(18000000 / t) if t > 0
-
 module.exports =
 
   announcer: 16
@@ -52,11 +47,22 @@ module.exports =
 
   decode: (raw, cb) ->
     ints = (raw.readUInt16LE(1+2*i, true) for i in [0..5])
-    cb
-      c1: ints[0]
-      p1: time2watt ints[1]
-      c2: ints[2]
-      p2: time2watt ints[3]
-      c3: ints[4]
-      p3: time2watt ints[5]
+    # only report values which have changed
+    result = {}
+    @prev ?= []
+    if ints[0] isnt @prev[0]
+      result.c1 = ints[0]
+      result.p1 = time2watt ints[1]
+    if ints[2] isnt @prev[2]
+      result.c2 = ints[2]
+      result.p2 = time2watt ints[3]
+    if ints[4] isnt @prev[4]
+      result.c3 = ints[4]
+      result.p3 = time2watt ints[5]
+    @prev = ints
+    cb result
 
+time2watt = (t) ->
+  if t > 60000
+    t = 1000 * (t - 60000)
+  Math.floor(18000000 / t) if t > 0
