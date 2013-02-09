@@ -18,7 +18,7 @@ announceListener = (ainfo) ->
 
 packetListener = (packet, ainfo) ->
   # use announcer info if present, else look for own static mapping
-  name = ainfo?.name or rf12nodes[packet.band]?[packet.group]?[packet.id]
+  name = ainfo?.name or rf12nodes[packet.group]?[packet.id]
   if name
     decoder = decoders[name]
     if decoder
@@ -26,7 +26,7 @@ packetListener = (packet, ainfo) ->
         if info.tag
           name = info.tag
           delete info.tag
-        info.key = "RF12:#{packet.band}:#{packet.group}:#{packet.id}.#{name}"
+        info.key = "RF12:#{packet.group}:#{packet.id}.#{name}"
         now = Date.now()
         time = packet.time or now
         if time < 86400000
