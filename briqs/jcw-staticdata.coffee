@@ -14,6 +14,3 @@ exports.factory = class
     for k,v of nodeMap.locations
       v.key = k
       state.store 'locations', v
-    for k,v of nodeMap.drivers
-      v.key = k
-      state.store 'drivers', v

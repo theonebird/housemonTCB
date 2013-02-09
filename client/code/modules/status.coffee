@@ -37,7 +37,7 @@ module.exports = (ng) ->
         unless loc
           loc = $rootScope.locations.find drvName
           drvName = drvName?.replace /-.*/, ''
-        drv = $rootScope.drivers.find drvName
+        drv = $rootScope.drivers?.find drvName
 
         if loc and drv
           for param, value of obj

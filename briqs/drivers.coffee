@@ -6,9 +6,9 @@ nodeMap = require './nodeMap'
 state = require '../server/state'
 fs = require 'fs'
 
-announcers = nodeMap.announcers or {}
 rf12nodes = nodeMap.rf12nodes or {}
-drivers = nodeMap.drivers or {}
+announcers = {}
+drivers = {}
 decoders = {}
 
 announceListener = (ainfo) ->
@@ -52,6 +52,10 @@ loadAllDecoders = ->
         announcers[obj.announcer] = f
       if obj.decode
         decoders[f] = obj
+    console.log 'ddd',drivers
+    for k,v of drivers
+      v.key = k
+      state.store 'drivers', v
 
 exports.factory = class
   
