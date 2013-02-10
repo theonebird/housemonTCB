@@ -1,5 +1,5 @@
 exports.info =
-  name: 'jcw-status'
+  name: 'status'
   description: 'Collect and show the current status'
   menus: [
     title: 'Status'
