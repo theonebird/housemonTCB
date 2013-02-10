@@ -46,7 +46,7 @@ and the object as arguments. There are three cases for the object:
 * MOD: normally, the object has an id as well as a key, and will be updated
 * DEL: if the "key" field is null, the object will be deleted via its id field
 
-Collections are can be created as follows (does nothing if it already exists):
+Collections can be created as follows (it does nothing if it already exists):
 
     state.collection 'jobs'
 
@@ -79,7 +79,7 @@ To iterate over all the job objects, use the collection in the client:
     for k,v of state.jobs
       console.log k,'=',v
       
-Finding an object from its key is also straightforward:
+Finding an object by key is also straightforward:
 
     job = state.jobs.find 'me'
 

@@ -15,7 +15,7 @@ This is how the browser code starts up all the cient-side pieces:
 
 In terms of modularity, on the client side everything should be done as NG
 "services", since these can be interconnected via NG's dependency injection.
-See `admin.coffee for an example, with `MainCtrl` "calling" rpc and pubsub.
+See `admin.coffee for an example, with `MainCtrl` "calling" the rpc service.
 
 ## Server-side startup
 

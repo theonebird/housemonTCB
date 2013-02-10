@@ -34,28 +34,33 @@ such a new feature can be added as follows right now:
 
 * pick a short name (e.g. 'jobs') to use application-wide, and as URL prefix
 
-* add a file called `client/templates/jobs.jade`, to contain the HTML structure
+* add a file called `client/templates/jobs.jade`, to contain the HTML structure:
+
+        .row
+          .twelve.columns
+            h1 Jobs
+            p ...
 
 * create a file `client/code/modules/jobs.coffee` with the following contents:
 
-        exports.controllers = 
-          JobsCtrl: [
+        module.exports = (ng) ->
+          ng.controller 'JobsCtrl', [
             '$scope',
             ($scope) ->
-              // your code here, using "the Angular way"
+              # your code here, using "the Angular way"
           ]
           
-* you can also add filters, services, and directives, by adding lines such as:
+* you can also add filters, services, directives, etc. by adding lines such as:
 
-        exports.filters = ...
-        exports.services = ...
-        exports.directives = ...
+        ng.filter ...
+        ng.factory ...
+        ng.directive ...
 
 * lastly, create a briq file, i.e. `briqs/jobs.coffee`, with these lines in it:
 
         exports.info =
           name: 'jobs-menu'
-          description: 'This is a briq which enables a menu and route'
+          description: 'This is a briq which enables a menu and a route'
           menus: [
             title: 'Jobs'
             controller: 'JobsCtrl'
