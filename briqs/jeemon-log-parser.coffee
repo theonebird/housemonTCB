@@ -28,7 +28,7 @@ class JeeMonLogParser extends events.EventEmitter
           packet.group = 5
           state.emit 'rf12.packet', packet, { name: 'slowLogger' }
       setTimeout =>
-        @parseStream fs.createReadStream("/Users/jcw/Desktop/logger.txt")
+        @parseStream fs.createReadStream filename
       , 5000
 #end test code
 
