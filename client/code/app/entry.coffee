@@ -122,7 +122,7 @@ app.service 'store', [
         key = oldObj.key
         obj = null
       else
-        console.log 'store?', name, obj
+        console.info 'store?', name, obj
         return
       $rootScope.$broadcast "set.#{name}", obj, oldObj
       $rootScope.$broadcast "set.#{name}.#{key}", obj, oldObj

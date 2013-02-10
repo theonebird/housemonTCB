@@ -7,17 +7,19 @@ module.exports = (state) ->
   
   state.fetch (models) ->
   
-    state.on 'set.bobs', (newVal, oldVal) ->
-      briq = models.briqs[newVal.briq_id]
-      if briq?.factory
-        args = newVal.key.split(':').slice 1
-        installedBriqs[newVal.key] = new briq.factory(args...)
-    
-    state.on 'unset.bobs', (value) ->
-      briq = installedBriqs[value.key]
-      if briq?
-        briq.destroy?()
-        delete installedBriqs[value.key]
+    state.on 'set.bobs', (obj, oldObj) ->
+      if obj?
+        briq = models.briqs[obj.briq_id]
+        if briq?.factory
+          console.info 'install briq', obj.key
+          args = obj.key.split(':').slice 1
+          installedBriqs[obj.key] = new briq.factory(args...)
+      else
+        briq = installedBriqs[oldObj.key]
+        if briq?
+          console.info 'uninstall briq', oldObj.key
+          briq.destroy?()
+          delete installedBriqs[oldObj.key]
 
     loadFile = (filename) ->
       loaded = require "../briqs/#{filename}"

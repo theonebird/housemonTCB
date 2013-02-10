@@ -17,7 +17,7 @@ briqs.loadAll ->
 ss.api.add 'fetch', state.fetch
 ss.api.add 'store', state.store
 ss.api.add 'saveNow', state.saveNow
-state.on 'store', (hash, value) ->
+state.on 'publish', (hash, value) ->
   ss.api.publish.all 'ss-store', hash, value
   
 # Define a single-page client called 'main'
@@ -33,7 +33,7 @@ ss.http.route '/', (req, res) ->
 # Persistent sessions and storage based on Redis
 ss.session.store.use 'redis', local.redisConfig
 # ss.publish.transport.use 'redis', local.redisConfig
-collections = ['bobs', 'readings', 'locations', 'drivers', 'uploads']
+collections = ['bobs','readings','locations','drivers','uploads','status']
 state.setupStorage collections, local.redisConfig
 
 # Code Formatters known by SocketStream

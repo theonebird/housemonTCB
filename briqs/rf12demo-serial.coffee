@@ -24,10 +24,13 @@ class RF12demo extends serialport.SerialPort
       when 'linux' then port = device.replace /^tty/, '/dev/tty'
       else port = device
     
-    # construct the serial port object
-    super port,
-      baudrate: 57600
-      parser: serialport.parsers.readline '\n'
+    # FIXME open with delay to work around an FTDI serial kernel bug (!)
+    setTimeout =>
+      # construct the serial port object
+      super port,
+        baudrate: 57600
+        parser: serialport.parsers.readline '\n'
+    , 1000
 
     @on 'data', (data) ->
       data = data.slice(0, -1)  if data.slice(-1) is '\r'

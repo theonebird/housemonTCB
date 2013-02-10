@@ -44,6 +44,6 @@ state.on 'upload', (url, files) ->
       date: Date.parse(info.lastModifiedDate)
 
 # triggered when the uploads collection changes, used to clean up files
-state.on 'store.uploads', (obj, oldObj) ->
+state.on 'set.uploads', (obj, oldObj) ->
   unless obj.key # only act on deletions
     fs.unlink oldObj.key

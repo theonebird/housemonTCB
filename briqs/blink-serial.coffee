@@ -42,7 +42,9 @@ exports.factory = class extends serialport.SerialPort
     # FIXME without the delay, MacOSX will kernel panic (reliably!!!)
     #   maybe the FTDI driver can't handle output immediately after opening?
     setTimeout =>
-      state.on 'store.readings.blink', adjustLeds
+      state.on 'set.readings', (obj, oldObj) ->
+        if obj?.key is 'blink'
+          adjustLeds obj
     , 1000
           
   destroy: -> @close()

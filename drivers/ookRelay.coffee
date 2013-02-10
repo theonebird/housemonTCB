@@ -109,7 +109,7 @@ ookDecoders =
   fsx: (raw, cb) ->
     # TODO decoding looks like it's still a bit off
     v = (getBits(raw, i*9, 8) for i in [0..4])
-    console.log 'fsx',v
+    # console.log 'fsx',v
     house = 256 * v[1] + v[0]
     addr = 2 * v[2] + (v[3] >> 7)
     if v[3] & 32

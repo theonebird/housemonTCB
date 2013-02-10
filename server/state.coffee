@@ -22,8 +22,8 @@ for k,v of process
 
 module.exports = state = new events.EventEmitter2
 
-# state.onAny (args...) ->
-#   console.info '>', @event, args...
+#state.onAny (args...) ->
+#  console.info '>', @event, args...
   
 # make sure this object has an id, issue a new one via redis if needed
 # TODO: could avoid async with a scan for highest ID on node.js startup
@@ -50,6 +50,8 @@ state.store = (name, obj, cb) ->
   setId name, obj, (id) ->
     collection = models[name] ? {}
     oldObj = collection[id]
+    if obj is oldObj
+      console.info 'store same?',name,obj.key
     unless obj is oldObj # TODO: is this comparison useful?
       key = obj.key
       if key?
@@ -57,20 +59,18 @@ state.store = (name, obj, cb) ->
         state.emit "set.#{name}", obj, oldObj
       else if oldObj?
         delete collection[id]
-        state.emit "unset.#{name}", oldObj
+        state.emit "set.#{name}", null, oldObj
         key = oldObj.key
       else
         return
       models[name] = collection
-      state.emit 'store', name, obj, oldObj
-      state.emit "store.#{name}", obj, oldObj
-      state.emit "store.#{name}.#{key}", obj, oldObj
+      state.emit 'publish', name, obj, oldObj
     cb?()
     
 state.setupStorage = (collections, config) ->
   db = redis.createClient(config.port, config.host, config)
   
-  state.on 'store', (name, obj) ->
+  state.on 'publish', (name, obj) ->
     if obj.key?
       db.hset name, obj.id, JSON.stringify(obj)
       db.hset "#{name}:ids", obj.key, obj.id
