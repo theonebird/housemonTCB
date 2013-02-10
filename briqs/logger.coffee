@@ -1,6 +1,6 @@
 exports.info =
-  name: 'jcw-logger'
-  description: 'Log incoming data to rotating text files'
+  name: 'logger'
+  description: 'Log incoming data to daily rotating text files'
 
 state = require '../server/state'
 fs = require 'fs'
