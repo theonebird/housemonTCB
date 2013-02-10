@@ -52,7 +52,6 @@ loadAllDecoders = ->
         announcers[obj.announcer] = f
       if obj.decode
         decoders[f] = obj
-    console.log 'ddd',drivers
     for k,v of drivers
       v.key = k
       state.store 'drivers', v
