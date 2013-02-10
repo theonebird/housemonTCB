@@ -4,7 +4,7 @@ exports.info =
   menus: [
     title: 'Status'
   ]
-  # FIXME depends on readings
+  # FIXME depends on readings collection
   
 state = require '../server/state'
 
@@ -32,6 +32,7 @@ updateStatus = (obj, loc, info, param, value) ->
     type: tag[1]
     name: param
 
+# TODO linear search, should be replaced by hash index
 findKey = (collection, key) ->
   for k,v of collection
     if key is v.key

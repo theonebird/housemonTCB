@@ -33,9 +33,11 @@ module.exports =
   S300:
     temp:
       title: 'Temperature'
+      unit: '°C'
       scale: 1
     humi:
       title: 'Relative humidity'
+      unit: '%'
       scale: 1
 
   feed: 'rf12.packet'
