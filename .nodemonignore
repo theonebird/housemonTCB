@@ -6,4 +6,5 @@
 /client/*
 /logger/*
 /uploads/*
-./README.md
+/README.md
+/nohup.*
