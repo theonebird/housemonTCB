@@ -66,6 +66,17 @@ such a new feature can be added as follows right now:
             controller: 'JobsCtrl'
           ]
 
+* if you want the briq to also perform some task on the server, add this to it:
+
+        exports.factory = class
+          constructor: -> ...
+          destroy: -> ...
+
+The constructor will be called when the briq is installed, to create a bob, and
+destroy will be called when it's uninstalled. There is a simple mechanism to get
+additional parameters into the constructor, see `exports.info.inputs` in the
+`rf12demo-serial` briq for an example.
+
 That's it. Save and your browser should now show a new "jobs-menu" briq. When
 "installing" it on the admin page, it will create a new "Jobs" menu item, which
 in turn leads to the new page defined by the above CoffeeScript and Jade files.
