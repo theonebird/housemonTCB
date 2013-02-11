@@ -7,41 +7,54 @@ local = require '../local'
 fs = require 'fs'
 redis = require 'redis'
 
-config = local.redisConfig
-db = redis.createClient config.port, config.host, config
-dbReady = false
-db.select config.db, ->
-  dbReady = true
+SLOTSIZE = 24 * 3600 * 1000 # one day, in milliseconds
 
+###
 HISTORY_PATH = './histdata'
 HISTREQ_PATH = '../histdata'
 HISTMAP_PATH = './histdata/index.json'
 fs.mkdir HISTORY_PATH
 
-DURATION = 24 * 3600 * 1000 # one day, in milliseconds
-
 if fs.existsSync HISTMAP_PATH
-  keyMap = require HISTREQ_PATH
+  histMap = require HISTREQ_PATH
 else
-  keyMap = _: 0 # sequence number
+  histMap = _: 0 # sequence number
+# fs.writeFileSync HISTMAP_PATH, JSON.stringify histMap, null, 2
+###
 
-keyToId = (key) ->
-  unless keyMap[key]?
-    keyMap[key] = ++keyMap._
-    fs.writeFileSync HISTMAP_PATH, JSON.stringify keyMap, null, 2
-  keyMap[key]
+keyMap = {}
+lastId = 0
+slotCache = {}
 
-histTag = (key, time) ->
-  id = ('000' + keyToId key).slice -4
-  slot = Math.floor time / DURATION
-  "#{id}-#{slot}"
+config = local.redisConfig
+db = redis.createClient config.port, config.host, config
+dbReady = false
+
+db.select config.db, ->
+  # restore keyMap from last info in hist:keys
+  db.zrange 'hist:keys', 0, -1, 'withscores', (err, res) ->
+    for i in [0...res.length] by 2
+      lastId = parseInt res[i+1]
+      keyMap[res[i]] = lastId
+    dbReady = true # ready to accept new results
 
 storeValue = (obj, oldObj) ->
   if obj and dbReady
-    tag =  histTag obj.key, obj.time
-    db.sadd 'hist:tags', tag, ->
-    # score is milliseconds since the start of the slot
-    db.zadd "hist:#{tag}", obj.time % DURATION, obj.origval, ->
+    key = obj.key
+    # map each key to a unique id, and remeber that mapping
+    unless keyMap[key]?
+      keyMap[key] = ++lastId
+      db.zadd 'hist:keys', lastId, key, ->
+    # id's are used as 4-digit keys
+    id = ('000' + keyMap[key]).slice -4
+    slot = Math.floor obj.time / SLOTSIZE
+    # use a cache to avoid needless redundant saves
+    unless slotCache[id] is slot
+      db.sadd 'hist:slots', slot, ->
+      db.sadd "hist:slot:#{slot}", id, ->
+      slotCache[id] = slot
+    # the score is milliseconds since the start of the slot
+    db.zadd "hist:#{id}:#{slot}", obj.time % SLOTSIZE, obj.origval, ->
 
 exports.factory = class
 
