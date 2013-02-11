@@ -68,7 +68,7 @@ exports.rawRange = (key, from, to, cb) ->
       # TODO end of range is not honoured yet, always until last for now
       #db.zrangebyscore tag, from % SLOTSIZE, '+inf', 'withscores', (a,b) ->
       db.zrangebyscore tag, 0, '+inf', 'withscores', (err, res) ->
-        cb err, [slot, res]
+        cb err, [slot * SLOTSIZE, res]
       return
   cb null, []
 

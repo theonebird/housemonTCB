@@ -22,7 +22,7 @@ adjustValue = (value, info) ->
   value
 
 updateStatus = (obj, loc, info, param, value) ->
-  key = "#{loc.title}/#{info.title}"
+  key = "#{loc.title} - #{info.title}"
   tag = obj.key.split '.'
   adj = adjustValue value, info
 
