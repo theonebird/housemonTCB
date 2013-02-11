@@ -18,6 +18,7 @@ module.exports = (ng) ->
             series.push
               x: offset + parseInt pairs[i+1]
               y: adjustValue parseInt(pairs[i]), info
+          console.info 'series #', series.length, key
           data = [
             values: series
             key: 'Usage House'
@@ -26,9 +27,9 @@ module.exports = (ng) ->
             chart = nv.models.lineChart()
             formatter = d3.time.format '%X'
             chart.xAxis.tickFormat (d) -> formatter new Date (d)
-            d3.select('#chart svg')
-              .datum(data)
-              .call(chart)
+            chart.xAxis.showMaxMin false
+            chart.yAxis.showMaxMin false
+            d3.select('#chart svg').datum(data).call(chart)
   ]
 
 # TODO this duplicates the same code on the server, see status.coffee
@@ -39,5 +40,8 @@ adjustValue = (value, info) ->
     value *= Math.pow 10, -info.scale
   else if info.scale >= 0
     value /= Math.pow 10, info.scale
-    value = value.toFixed info.scale
+    # Note: this is different from server version - do not use exact decimal
+    # formatting because strings appear to mess up the nvd3 graphing, numbers
+    # are also probably a lot more efficient.
+    #value = value.toFixed info.scale
   value
