@@ -1,11 +1,12 @@
 exports.info =
   name: 'history'
   description: 'Historical data storage'
+  rpcs: ['rawRange']
   
 state = require '../server/state'
 local = require '../local'
-fs = require 'fs'
 redis = require 'redis'
+fs = require 'fs'
 
 SLOTSIZE = 24 * 3600 * 1000 # one day, in milliseconds
 
@@ -56,10 +57,18 @@ storeValue = (obj, oldObj) ->
     # the score is milliseconds since the start of the slot
     db.zadd "hist:#{id}:#{slot}", obj.time % SLOTSIZE, obj.origval, ->
 
+# callable from client as rpc
+exports.rawRange = (key, from, to, cb) ->
+  id = keyMap[key]
+  if id?
+    slot = Math.floor from / SLOTSIZE
+    if slotCache[id] is slot
+      tag = "hist:#{id}:#{slot}"
+      # TODO end of range is not honoured yet, always until last for now
+      db.zrangebyscore tag, from % SLOTSIZE, '+inf', 'withscores', cb
+      return
+  cb null, []
+
 exports.factory = class
-
-  constructor: ->
-    state.on 'set.status', storeValue
-
-  destroy: ->
-    state.off 'set.status', storeValue
+  constructor: -> state.on 'set.status', storeValue
+  destroy: -> state.off 'set.status', storeValue

@@ -14,6 +14,9 @@ module.exports = (state) ->
           console.info 'install briq', obj.key
           args = obj.key.split(':').slice 1
           installedBriqs[obj.key] = new briq.factory(args...)
+        if briq?.rpcs
+          ss.api.add name, briq[name]  for name in briq.rpcs
+
       else
         briq = installedBriqs[oldObj.key]
         if briq?

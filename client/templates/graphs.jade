@@ -1,3 +1,19 @@
 .row
   .twelve.columns
-    h1 Graphs
+
+    .row
+      .eight.columns
+        h3 Graphs
+      .two.columns.end
+        h3: input(type='text',ng-model='query',placeholder='Search...')
+
+    .row
+      .eight.columns
+        #graph
+      .four.columns
+        .row
+          .twelve.columns(ng-repeat='row in status | \
+                                      filter:query | orderBy:"key"')
+            input(type='checkbox')
+            |  {{row.location}} - {{row.parameter}}
+            span(ng-show='row.unit')  ({{row.unit}})
