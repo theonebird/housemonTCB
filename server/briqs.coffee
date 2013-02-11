@@ -1,4 +1,6 @@
 # Briqs are the installable modules in the ./briqs/ directory
+
+ss = require 'socketstream'
 fs = require 'fs'
 
 installedBriqs = {}
@@ -10,12 +12,13 @@ module.exports = (state) ->
     state.on 'set.bobs', (obj, oldObj) ->
       if obj?
         briq = models.briqs[obj.briq_id]
-        if briq?.factory
-          console.info 'install briq', obj.key
-          args = obj.key.split(':').slice 1
-          installedBriqs[obj.key] = new briq.factory(args...)
-        if briq?.rpcs
-          ss.api.add name, briq[name]  for name in briq.rpcs
+        if briq?
+          if briq.factory
+            console.info 'install briq', obj.key
+            args = obj.key.split(':').slice 1
+            installedBriqs[obj.key] = new briq.factory(args...)
+          if briq.info.rpcs
+            ss.api.add name, briq[name]  for name in briq.info.rpcs
 
       else
         briq = installedBriqs[oldObj.key]

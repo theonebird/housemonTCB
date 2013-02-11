@@ -3,7 +3,11 @@
 module.exports = (ng) ->
 
   ng.controller 'GraphsCtrl', [
-    '$scope',
-    ($scope) ->
+    '$scope','rpc',
+    ($scope, rpc) ->
 
+      key = 'meterkast/Usage house'
+      promise = rpc.exec 'host.api', 'rawRange', key, -86400000, 0
+      promise.then (values) ->
+        console.log 'res',values
   ]

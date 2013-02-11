@@ -46,8 +46,7 @@ storeValue = (obj, oldObj) ->
     unless keyMap[key]?
       keyMap[key] = ++lastId
       db.zadd 'hist:keys', lastId, key, ->
-    # id's are used as 4-digit keys
-    id = ('000' + keyMap[key]).slice -4
+    id = keyMap[key]
     slot = Math.floor obj.time / SLOTSIZE
     # use a cache to avoid needless redundant saves
     unless slotCache[id] is slot
@@ -59,13 +58,17 @@ storeValue = (obj, oldObj) ->
 
 # callable from client as rpc
 exports.rawRange = (key, from, to, cb) ->
+  from += Date.now()  if from < 0
+  slot = Math.floor from / SLOTSIZE
   id = keyMap[key]
   if id?
-    slot = Math.floor from / SLOTSIZE
-    if slotCache[id] is slot
+    if slotCache[id] >= slot
+      slot = slotCache[id] # TODO temporary hack
       tag = "hist:#{id}:#{slot}"
       # TODO end of range is not honoured yet, always until last for now
-      db.zrangebyscore tag, from % SLOTSIZE, '+inf', 'withscores', cb
+      #db.zrangebyscore tag, from % SLOTSIZE, '+inf', 'withscores', (a,b) ->
+      db.zrangebyscore tag, 0, '+inf', 'withscores', (err, res) ->
+        cb err, [slot, res]
       return
   cb null, []
 
