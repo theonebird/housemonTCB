@@ -68,7 +68,7 @@ state.store = (name, obj, cb) ->
     cb?()
     
 state.setupStorage = (collections, config) ->
-  db = redis.createClient(config.port, config.host, config)
+  db = redis.createClient config.port, config.host, config
   
   state.on 'publish', (name, obj) ->
     if obj.key?

@@ -11,7 +11,7 @@ state = require '../server/state'
 models = undefined
 state.fetch (m) -> models = m
 
-updateStatus = (obj, loc, info, param, value) ->
+adjustValue = (value, info) ->
   if info.factor
     value *= info.factor
   if info.scale < 0
@@ -19,20 +19,29 @@ updateStatus = (obj, loc, info, param, value) ->
   else if info.scale >= 0
     value /= Math.pow 10, info.scale
     value = value.toFixed info.scale
+  value
+
+updateStatus = (obj, loc, info, param, value) ->
+  key = "#{loc.title}/#{info.title}"
   tag = obj.key.split '.'
+  adj = adjustValue value, info
 
   state.store 'status',
-    key: "#{loc.title}/#{info.title}"
+    key: key
     location: loc.title
     parameter: info.title
-    value: value
+    value: adj
     unit: info.unit
     time: obj.time
     origin: tag[0]
     type: tag[1]
     name: param
+    origval: value
+    factor: info.factor
+    scale: info.scale
 
 # TODO linear search, should be replaced by hash index
+# TODO location and driver lookup depend on timestamp of the reading
 findKey = (collection, key) ->
   for k,v of collection
     if key is v.key

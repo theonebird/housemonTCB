@@ -1,4 +1,5 @@
 client/static/assets/
+histdata/
 logger/
 node_modules/
 uploads/
