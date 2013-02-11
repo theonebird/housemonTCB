@@ -11,18 +11,16 @@ module.exports = (ng) ->
 
       promise = rpc.exec 'host.api', 'rawRange', key, -86400000, 0
       promise.then (values) ->
-        # TODO deal with first-time failure
-        if values.length
-          [ offset, pairs ] = values
+        [ offset, pairs ] = values
+        if pairs
           series = []
           for i in [0...pairs.length] by 2
-          # for i in [0...100] by 2
             series.push
               x: offset + parseInt pairs[i+1]
               y: adjustValue parseInt(pairs[i]), info
           data = [
             values: series
-            key: key
+            key: 'Usage House'
           ]
           nv.addGraph ->
             chart = nv.models.lineChart()
