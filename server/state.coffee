@@ -69,6 +69,8 @@ state.store = (name, obj, cb) ->
     
 state.setupStorage = (collections, config) ->
   db = redis.createClient config.port, config.host, config
+  # can't call Redis's bgsave too often, it fails when still running
+  db.occasionalSave = _.debounce db.bgsave, 5000
   
   state.on 'publish', (name, obj) ->
     if obj.key?
@@ -81,6 +83,8 @@ state.setupStorage = (collections, config) ->
         obj = JSON.parse res
         db.hdel name, obj.id
         db.hdel "#{name}:ids", obj.key
+    if name is 'bobs' # special case: save installs to disk quickly
+      db.occasionalSave()
 
   db.select config.db, ->
     loadData = (name) ->

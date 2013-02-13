@@ -61,7 +61,4 @@ module.exports = (ng) ->
         $scope.bobs.store _.omit $scope.bob, 'key'
         $scope.bob = null
         $scope.briq = null
-
-      $scope.saveNow = ->
-        rpc.exec 'host.api', 'saveNow'
   ]
