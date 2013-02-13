@@ -3,11 +3,11 @@
   .three.columns
     h3 Installed
     ul.square
-      li(ng-repeat='bob in bobs',ng-click='selectBob(bob)')
+      li(ng-repeat='bob in bobs | orderBy:"key"',ng-click='selectBob(bob)')
         {{bob.key}}
     h3 Briqs
     ul.square
-      li(ng-repeat='briq in briqs',ng-click='selectBriq(briq)')
+      li(ng-repeat='briq in briqs | orderBy:"key"',ng-click='selectBriq(briq)')
         {{briq.info.name}}
              
   .nine.columns(ng-show='briq')
