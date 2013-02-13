@@ -15,21 +15,18 @@ module.exports = (ng) ->
         if pairs
           series = []
           for i in [0...pairs.length] by 2
-            series.push
-              x: offset + parseInt pairs[i+1]
-              y: adjustValue parseInt(pairs[i]), info
+            series.push [
+              offset + parseInt pairs[i+1]
+              adjustValue parseInt(pairs[i]), info
+            ]
           console.info 'series #', series.length, key
           data = [
             values: series
             key: 'Usage House'
           ]
-          nv.addGraph ->
-            chart = nv.models.lineChart()
-            formatter = d3.time.format '%X'
-            chart.xAxis.tickFormat (d) -> formatter new Date (d)
-            chart.xAxis.showMaxMin false
-            chart.yAxis.showMaxMin false
-            d3.select('#chart svg').datum(data).call(chart)
+          graph = Flotr.draw $('#chart')[0], [ series ],
+            xaxis:
+              mode: 'time'
   ]
 
 # TODO this duplicates the same code on the server, see status.coffee
