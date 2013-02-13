@@ -9,7 +9,7 @@ module.exports = (ng) ->
       key = 'meterkast - Usage house'
       info = $scope.status.find key
 
-      promise = rpc.exec 'host.api', 'rawRange', key, -86400000, 0
+      promise = rpc.exec 'host.api', 'rawRange', key, -1800000, 0
       promise.then (values) ->
         [ offset, pairs ] = values
         if pairs

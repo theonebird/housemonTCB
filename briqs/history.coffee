@@ -6,22 +6,8 @@ exports.info =
 state = require '../server/state'
 local = require '../local'
 redis = require 'redis'
-fs = require 'fs'
 
-SLOTSIZE = 24 * 3600 * 1000 # one day, in milliseconds
-
-###
-HISTORY_PATH = './histdata'
-HISTREQ_PATH = '../histdata'
-HISTMAP_PATH = './histdata/index.json'
-fs.mkdir HISTORY_PATH
-
-if fs.existsSync HISTMAP_PATH
-  histMap = require HISTREQ_PATH
-else
-  histMap = _: 0 # sequence number
-# fs.writeFileSync HISTMAP_PATH, JSON.stringify histMap, null, 2
-###
+HISTSLOT = 24 * 3600 * 1000 # one day, in milliseconds
 
 keyMap = {}
 lastId = 0
@@ -47,28 +33,28 @@ storeValue = (obj, oldObj) ->
       keyMap[key] = ++lastId
       db.zadd 'hist:keys', lastId, key, ->
     id = keyMap[key]
-    slot = Math.floor obj.time / SLOTSIZE
+    slot = Math.floor obj.time / HISTSLOT
     # use a cache to avoid needless redundant saves
     unless slotCache[id] is slot
       db.sadd 'hist:slots', slot, ->
       db.sadd "hist:slot:#{slot}", id, ->
       slotCache[id] = slot
     # the score is milliseconds since the start of the slot
-    db.zadd "hist:#{id}:#{slot}", obj.time % SLOTSIZE, obj.origval, ->
+    db.zadd "hist:#{id}:#{slot}", obj.time % HISTSLOT, obj.origval, ->
 
 # callable from client as rpc
 exports.rawRange = (key, from, to, cb) ->
   from += Date.now()  if from < 0
-  slot = Math.floor from / SLOTSIZE
+  slot = Math.floor from / HISTSLOT
   id = keyMap[key]
   if id?
     if slotCache[id] >= slot
       slot = slotCache[id] # TODO temporary hack
       tag = "hist:#{id}:#{slot}"
       # TODO end of range is not honoured yet, always until last for now
-      #db.zrangebyscore tag, from % SLOTSIZE, '+inf', 'withscores', (a,b) ->
+     #db.zrangebyscore tag, from % HISTSLOT, '+inf', 'withscores', (err, res) ->
       db.zrangebyscore tag, 0, '+inf', 'withscores', (err, res) ->
-        cb err, [slot * SLOTSIZE, res]
+        cb err, [slot * HISTSLOT, res]
       return
   cb null, []
 

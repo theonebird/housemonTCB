@@ -67,6 +67,18 @@ server.listen local.httpPort
 ss.start server
 
 # This event is periodically pushed to the clients to make them, eh, "tick"
-setInterval ->
-  ss.api.publish.all 'ss-tick', Date.now()
-, 1000
+# special care is taken to synchronise to the exact start of a clock second
+setTimeout ->
+  lastMinute = -1
+  setInterval ->
+    now = Date.now()
+    ss.api.publish.all 'ss-tick', now
+    # also emit events once each exact minute for local cron-type uses
+    minutes = Math.floor(now / 60000) % 60
+    if minutes isnt lastMinute
+      if lastMinute >= 0
+        console.log Date()
+        state.emit 'minutes', minutes
+      lastMinute = minutes
+  , 1000
+, 1000 - Date.now() % 1000
