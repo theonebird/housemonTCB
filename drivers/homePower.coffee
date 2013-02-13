@@ -65,4 +65,4 @@ module.exports =
 time2watt = (t) ->
   if t > 60000
     t = 1000 * (t - 60000)
-  Math.floor(18000000 / t) if t > 0
+  18000000 / t | 0  if t > 0

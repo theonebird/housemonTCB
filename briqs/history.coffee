@@ -7,7 +7,7 @@ state = require '../server/state'
 local = require '../local'
 redis = require 'redis'
 
-HISTSLOT = 24 * 3600 * 1000 # one day, in milliseconds
+HISTSLOT = 32 * 3600 * 1000 # one day, in milliseconds
 
 keyMap = {}
 lastId = 0
@@ -33,7 +33,7 @@ storeValue = (obj, oldObj) ->
       keyMap[key] = ++lastId
       db.zadd 'hist:keys', lastId, key, ->
     id = keyMap[key]
-    slot = Math.floor obj.time / HISTSLOT
+    slot = obj.time / HISTSLOT | 0
     # use a cache to avoid needless redundant saves
     unless slotCache[id] is slot
       db.sadd 'hist:slots', slot, ->
@@ -45,15 +45,15 @@ storeValue = (obj, oldObj) ->
 # callable from client as rpc
 exports.rawRange = (key, from, to, cb) ->
   from += Date.now()  if from < 0
-  slot = Math.floor from / HISTSLOT
+  slot = from / HISTSLOT | 0
   id = keyMap[key]
   if id?
     if slotCache[id] >= slot
       slot = slotCache[id] # TODO temporary hack
       tag = "hist:#{id}:#{slot}"
       # TODO end of range is not honoured yet, always until last for now
-     #db.zrangebyscore tag, from % HISTSLOT, '+inf', 'withscores', (err, res) ->
-      db.zrangebyscore tag, 0, '+inf', 'withscores', (err, res) ->
+      # TODO also not correct when wrapping across multiple slots
+      db.zrangebyscore tag, from % HISTSLOT, '+inf', 'withscores', (err, res) ->
         cb err, [slot * HISTSLOT, res]
       return
   cb null, []

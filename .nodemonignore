@@ -3,6 +3,7 @@
 # From then on, all changes to /server will automatically restart your app.
 
 /.git/*
+/archive/*
 /client/*
 /histdata/*
 /logger/*

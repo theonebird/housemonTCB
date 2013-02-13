@@ -74,7 +74,7 @@ setTimeout ->
     now = Date.now()
     ss.api.publish.all 'ss-tick', now
     # also emit events once each exact minute for local cron-type uses
-    minutes = Math.floor(now / 60000) % 60
+    minutes = (now / 60000 | 0) % 60
     if minutes isnt lastMinute
       if lastMinute >= 0
         console.log Date()

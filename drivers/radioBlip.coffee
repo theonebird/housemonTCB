@@ -17,6 +17,6 @@ module.exports =
     count = raw.readUInt32LE(1)
     cb
       ping: count
-      age: Math.floor(count / (86400 / 64))
+      age: count / (86400 / 64) | 0
   
  
