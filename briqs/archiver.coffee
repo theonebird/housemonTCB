@@ -102,7 +102,7 @@ moveToArchive = (slot, cb) ->
               db.del "hist:slot:#{slot}", cb  unless --remain
 
 cronTask = (minutes) ->
-  if dbReady
+  if dbReady and minutes is 1 # only move to archive right after each hour
     db.smembers 'hist:slots', (err, res) ->
       last = Math.max res...
       for slot in res when slot < last - 1
