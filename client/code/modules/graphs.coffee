@@ -10,23 +10,34 @@ module.exports = (ng) ->
       info = $scope.status.find key
 
       promise = rpc.exec 'host.api', 'rawRange', key, -1800000, 0
-      promise.then (values) ->
-        [ offset, pairs ] = values
-        if pairs
-          series = []
-          for i in [0...pairs.length] by 2
-            series.push [
-              offset + parseInt pairs[i+1]
-              adjustValue parseInt(pairs[i]), info
-            ]
-          console.info 'series #', series.length, key
-          data = [
-            values: series
-            key: 'Usage House'
-          ]
-          graph = Flotr.draw $('#chart')[0], [ series ],
+      promise.then ([ offset, values ]) ->
+        if values
+          options =
             xaxis:
               mode: 'time'
+              timeMode: 'local'
+            yaxis:
+              autoscale: true
+            mouse:
+              track: true
+              sensibility: 5
+              trackFormatter: (obj) ->
+                # default shows millis, so we need to convert to a date + time
+                d = new Date Math.floor obj.x
+                t = Flotr.Date.format d, '%b %d, %H:%M:%S', 'local'
+                " #{t} - #{obj.y} "
+
+          data =
+            for i in [0...values.length] by 2
+              [
+                offset + parseInt values[i+1]
+                adjustValue parseInt(values[i]), info
+              ]
+
+          # TODO big nono: DOM access inside controller!
+          chart = $('#chart')[0]
+
+          graph = Flotr.draw chart, [ label: key, data: data ], options
   ]
 
 # TODO this duplicates the same code on the server, see status.coffee
@@ -37,8 +48,5 @@ adjustValue = (value, info) ->
     value *= Math.pow 10, -info.scale
   else if info.scale >= 0
     value /= Math.pow 10, info.scale
-    # Note: this is different from server version - do not use exact decimal
-    # formatting because strings appear to mess up the nvd3 graphing, numbers
-    # are also probably a lot more efficient.
-    #value = value.toFixed info.scale
+    value = value.toFixed info.scale
   value

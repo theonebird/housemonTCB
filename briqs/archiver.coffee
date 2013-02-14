@@ -66,7 +66,7 @@ saveOneDataset = (param, offset, pairs, cb) ->
   pnum = slot / FILESIZE | 0
   console.log 'ap', param, offset, pairs.length, slot, pnum, id
   fs.mkdir "#{ARCHIVE_PATH}/p#{pnum}", ->
-    path = "#{ARCHIVE_PATH}/p#{pnum}/p#{pnum}-#{id}"
+    path = "#{ARCHIVE_PATH}/p#{pnum}/p#{pnum}-#{id}.dat"
     # TODO add I/O error handling
     fs.readFile path, (err, data) ->
       unless data?
