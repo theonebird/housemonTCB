@@ -1,6 +1,6 @@
 exports.info =
   name: 'archiver'
-  description: 'Archival data storage'
+  description: 'Archival data storage (i.e. older history aggregated as files)'
   
 state = require '../server/state'
 local = require '../local'

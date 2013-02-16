@@ -1,6 +1,6 @@
 exports.info =
   name: 'history'
-  description: 'Historical data storage'
+  description: 'Historical data storage (full details of the last few days)'
   rpcs: ['rawRange']
   
 state = require '../server/state'
