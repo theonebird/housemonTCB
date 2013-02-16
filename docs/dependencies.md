@@ -92,10 +92,10 @@ These are some of the basic briqs which have been implemented as of mid-Feb:
   The decoded results from the drivers briq is stored in the "readings"
   collection.
 
-* **status** - Pick up new readings and perform to operations on each of them:
+* **status** - Pick up new readings and perform two operations on each of them:
 
-    1. Split up readings into individual measurement values
-    2. Convert the integers to properly scaled and formatted results
+   1. Split up readings into individual measurement values
+   2. Convert the integers to properly scaled and formatted results
 
   The status briq also maps readings to locations, i.e. this is where a reading
   from "RF12:5:12" gets turned into four measurements tagged to come from the
@@ -109,11 +109,12 @@ These are some of the basic briqs which have been implemented as of mid-Feb:
   "status" collection end up.
 
 * **archiver** - The archiver periodically goes through the history data in 
-  Redis, and saves the oldest stuff on file. This way, only up to about two
+  Redis, and moves the oldest stuff to file. This way, only up to about two
   days worth of raw data is kept in Redis, while all older data values are
   aggregated in archive files on disk.
 
-* **jcw-graphs** - A first attempt to get some graphs in the web browser.
-  This briq dependsrelies on the historical data stored in Redis.
+* **jcw-graphs** - A first attempt to get some graphs into the web browser.
+  This briq dependsrelies on the historical data stored in Redis.  Still just
+  for testing code, it has hard-coded settings, the checkboxes don't work yet.
 
 So much for a first _very preliminiary_ overview of some of the basic briqs.
