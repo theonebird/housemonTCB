@@ -19,7 +19,7 @@ for briqs to inter-operate, and for the server to communicate with clients:
         state = require '../server/state'
         state.emit 'bingo', new Date
 
-   This will evint a single "bingo" event and pass the current time as argument.
+   This will emit a single "bingo" event and pass the current time as argument.
 
    To pick up such events, any briq (the same or another one) can do this:
 
@@ -35,7 +35,7 @@ for briqs to inter-operate, and for the server to communicate with clients:
 2. The other mechanism is to store state in a "collection". A collection is an
    array of objects with a unique "key" and an auto-assigned "id" field. The 
    main difference with events, is that state is persistent across restarts
-   (via Redis) and that is gets replicated in all directions between server and
+   (via Redis) and that is gets replicated in both directions between server and
    clients. When a client connects, it automatically gets a copy of the current
    state as part of the startup process.
 
@@ -51,10 +51,10 @@ for briqs to inter-operate, and for the server to communicate with clients:
    "consumers" to be present at the same time. The last change will always be
    saved as part of the state, and can be picked up by briqs installed later.
 
-This may all sound like a big clever "master plan", but it's actually all quite
-ad-hoc in fact. The mechanism may still change completely, as the requirements
+This may all sound like a big clever "master plan", but in reality it's all
+quite ad-hoc. These mechanisms may still change completely, as the requirements
 are better understood. For now, it looks like "events" + "state" are fairly
-practical already for the tasks performed in HouseMon.
+practical and sufficient for the tasks performed in HouseMon.
 
 ## Briqs using other briqs
 
