@@ -94,8 +94,8 @@ These are some of the basic briqs which have been implemented as of mid-Feb:
 
 * **status** - Pick up new readings and perform two operations on each of them:
 
-   1. Split up readings into individual measurement values
-   2. Convert the integers to properly scaled and formatted results
+       1. Split up readings into individual measurement values
+       2. Convert the integers to properly scaled and formatted results
 
   The status briq also maps readings to locations, i.e. this is where a reading
   from "RF12:5:12" gets turned into four measurements tagged to come from the
