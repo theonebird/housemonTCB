@@ -15,7 +15,7 @@ exports.factory = class
     logs = []
     @timer = null
     
-    # trigger a similated packet event, then delay and schedule the next on
+    # trigger a simulated packet event, then delay and schedule the next on
     emitNext = (pos) =>
       state.emit 'rf12.packet', logs[pos]
       # careful with wrapping, reuse the same log every day
