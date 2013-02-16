@@ -3,7 +3,7 @@
 As HouseMon starts to get features (in the form of Briqs), it will become more
 important to have a clear image of how all these pieces are meant to be used
 together. This is bound to be a moving target, but here's a first attempt to
-describe the situation as of mid-February.model
+describe the situation as of mid-February.
 
 ## The big picture
 
