@@ -77,7 +77,7 @@ These are some of the basic briqs which have been implemented as of mid-Feb:
 * **rf12replay** - Generates fake data by replaying a fixed log file
 
   This does not depend on any other briqs. Only useful for testting. Use the
-  "rf12demo" briq to connect ot a real JeeNode or JeeLink more real-world use.
+  "rf12demo" briq to connect to a real JeeNode or JeeLink for real-world use.
 
 * **drivers** - This briq is a wrapper for "drivers" which can decode / encode
   RF12 packets. See some first implementations in the "drivers/" directory.
@@ -90,7 +90,7 @@ These are some of the basic briqs which have been implemented as of mid-Feb:
   (it'll retain its contents after that, unless the Redis data is flushed).
 
   The decoded results from the drivers briq is stored in the "readings"
-  collection.
+  collection. One entry per driver result (which can include multiple sensors).
 
 * **status** - Pick up new readings and perform two operations on each of them:
 
@@ -98,8 +98,8 @@ These are some of the basic briqs which have been implemented as of mid-Feb:
    2. Convert the integers to properly scaled and formatted results
 
   The status briq also maps readings to locations, i.e. this is where a reading
-  from "RF12:5:12" gets turned into four measurements tagged to come from the
-  "living room", for example.
+  from "RF12:5:12" gets turned into four measurements tagged as coming from a
+  room node in the "living room", for example.
 
   The results of the status briq is stored in the "status" collection.
 
