@@ -9,9 +9,10 @@ module.exports = (ng) ->
       key = 'meterkast - Usage house'
       info = $scope.status.find key
 
-      promise = rpc.exec 'host.api', 'rawRange', key, -1800000, 0
+      promise = rpc.exec 'host.api', 'rawRange', key, -3600000, 0
       promise.then ([ offset, values ]) ->
         if values
+          console.info "graph", values.length, key
           options =
             xaxis:
               mode: 'time'
@@ -27,12 +28,11 @@ module.exports = (ng) ->
                 t = Flotr.Date.format d, '%b %d, %H:%M:%S', 'local'
                 " #{t} - #{obj.y} "
 
-          data =
-            for i in [0...values.length] by 2
-              [
-                offset + parseInt values[i+1]
-                adjustValue parseInt(values[i]), info
-              ]
+          data = for i in [0...values.length] by 2
+            [
+              offset + parseInt values[i+1]
+              adjustValue parseInt(values[i]), info
+            ]
 
           # TODO big nono: DOM access inside controller!
           chart = $('#chart')[0]
@@ -48,5 +48,5 @@ adjustValue = (value, info) ->
     value *= Math.pow 10, -info.scale
   else if info.scale >= 0
     value /= Math.pow 10, info.scale
-    value = value.toFixed info.scale
+    # value = value.toFixed info.scale
   value
