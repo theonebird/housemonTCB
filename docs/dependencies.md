@@ -27,8 +27,8 @@ for briqs to inter-operate, and for the server to communicate with clients:
         state.on 'bingo', (arg) ->
           console.log "got bingo event:", arg
     
-   This mechanism works, regardless in which order briqs are insalled. Of no
-   emitter of no listener is set up, such events quietly vanish into thin air.
+   This mechanism works regardless of which order briqs are installed. in If no
+   emitter or no listener is set up, such events quietly vanish into thin air.
 
    Events with names sarting with "ss-" will also be sent to all clients.
 
@@ -67,8 +67,8 @@ This is definitely not a scalable solution, since debugging the cause of
 "nothing happening" is going to be a nightmare once more briqs get added, and
 once more of the briqs start inter-operating and _relying_ on each other.
 
-The problem can hopefully be solved by implementing a real briq dependency
-mechanism one day.
+The problem can hopefully be solved by implementing an explicit briq dependency
+mechanism at some point.
 
 ## Current dependencies
 
@@ -117,4 +117,4 @@ These are some of the basic briqs which have been implemented as of mid-Feb:
   This briq dependsrelies on the historical data stored in Redis.  Still just
   for testing code, it has hard-coded settings, the checkboxes don't work yet.
 
-So much for a first _very preliminiary_ overview of some of the basic briqs.
+So much for a first _very preliminary_ overview of some of the basic briqs.
