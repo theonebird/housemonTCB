@@ -67,6 +67,10 @@ state.store = (name, obj, cb) ->
       state.emit 'publish', name, obj, oldObj
     cb?()
     
+state.reset = (name) ->
+  for k,v of models[name]
+    state.store name, { id: k }
+
 state.setupStorage = (collections, config) ->
   db = redis.createClient config.port, config.host, config
   # can't call Redis's bgsave too often, it fails when still running

@@ -74,10 +74,13 @@ mechanism at some point.
 
 These are some of the basic briqs which have been implemented as of mid-Feb:
 
-* **rf12replay** - Generates fake data by replaying a fixed log file
+* **rf12replay** - Generates fake data by replaying a fixed log file.
 
   This does not depend on any other briqs. Only useful for testting. Use the
   "rf12demo" briq to connect to a real JeeNode or JeeLink for real-world use.
+
+* **logger** - Ties into raw serial events and saves each incoming line of data
+  as-is in text-based log files. Log files roll over every day at midnight UTC.
 
 * **drivers** - This briq is a wrapper for "drivers" which can decode / encode
   RF12 packets. See some first implementations in the "drivers/" directory.
@@ -114,7 +117,7 @@ These are some of the basic briqs which have been implemented as of mid-Feb:
   aggregated in archive files on disk.
 
 * **jcw-graphs** - A first attempt to get some graphs into the web browser.
-  This briq dependsrelies on the historical data stored in Redis.  Still just
-  for testing code, it has hard-coded settings, the checkboxes don't work yet.
+  This briq depends on the historical data stored in Redis.  Still just for
+  testing code, it has hard-coded settings, the checkboxes don't work yet.
 
 So much for a first _very preliminary_ overview of some of the basic briqs.

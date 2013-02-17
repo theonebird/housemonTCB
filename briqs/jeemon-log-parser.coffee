@@ -11,6 +11,7 @@ exports.info =
 events = require 'events'
 lazy = require 'lazy'
 fs = require 'fs'
+zlib = require 'zlib'
 state = require '../server/state'
 
 # L 01:02:03.537 usb-A40117UK OK 9 25 54 66 235 61 139 183 235 210 226 33 19
@@ -18,19 +19,6 @@ state = require '../server/state'
 class JeeMonLogParser extends events.EventEmitter
   
   info = {}
-
-# TODO: test code  
-  constructor: (filename) ->
-    if filename
-      @on 'packet', (packet) ->
-        if packet.id is 20
-          packet.band = 868
-          packet.group = 5
-          state.emit 'rf12.packet', packet, { name: 'slowLogger' }
-      setTimeout =>
-        @parseStream fs.createReadStream filename
-      , 5000
-#end test code
 
   parse: (line) ->
     words = line.split ' '
@@ -50,6 +38,13 @@ class JeeMonLogParser extends events.EventEmitter
       else
         @emit 'other', line.substring 28
   
+  parseFile: (filename, cb) ->
+    stream = fs.createReadStream filename
+    if filename.slice -3 is '.gz'
+      stream = stream.pipe zlib.createGunzip()
+    stream.on 'end', cb
+    @parseStream stream
+
   parseStream: (stream) ->
     new lazy(stream)
       .lines

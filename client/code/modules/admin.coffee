@@ -21,8 +21,8 @@
 module.exports = (ng) ->
 
   ng.controller 'AdminCtrl', [
-    '$scope','rpc',
-    ($scope, rpc) ->
+    '$scope',
+    ($scope) ->
 
       $scope.collection 'bobs'
       
