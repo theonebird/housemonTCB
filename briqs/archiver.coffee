@@ -3,15 +3,15 @@ exports.info =
   description: 'Archival data storage (i.e. older history aggregated as files)'
   
 state = require '../server/state'
-local = require '../local'
-redis = require 'redis'
 fs = require 'fs'
 async = require 'async'
 
-# TODO this constant is duplicated from history.coffee
-HISTSLOT = 32 * 3600 * 1000 # 32 hours, in milliseconds
+# TODO these constants are duplicated from history.coffee
+HISTSLOT_HR = 32 # number of hours stored in each history slot
+HISTSLOT_MS = HISTSLOT_HR * 3600 * 1000 # slot size, in milliseconds
 
-SLOTSIZE = 3600 * 1000 # archive slots hold one hour of aggragated values
+SLOTSIZE_MIN = 60 # each archive slot holds 60 minutes of aggragated values
+SLOTSIZE_MS = SLOTSIZE_MIN * 60 * 1000 # archive slot size in milliseconds
 FILESIZE = 1024 # number of slots per archive file
 
 ARCHIVE_PATH = './archive'
@@ -23,93 +23,78 @@ if fs.existsSync ARCHMAP_PATH
 else
   archMap = _: 0 # sequence number
 
-config = local.redisConfig
-db = redis.createClient config.port, config.host, config
-dbReady = false
+fs.mkdir ARCHIVE_PATH # ignore mkdir errors (it probably already exists)
 
-fs.mkdir ARCHIVE_PATH, ->
-  # ignore mkdir errors (it probably already exists)
-  db.select config.db, ->
-    dbReady = true # ready for use
+aggregated = {} # in-memory cache of aggregated values
 
 occasionalMapSave = _.debounce ->
   fs.writeFile ARCHMAP_PATH, JSON.stringify archMap, null, 2
 , 3000
 
-archKeyLookup = (param) ->
+addOneValue = (collector, id, value) ->
+  item = collector[id] ?= { cnt: 0 }
+  if item.cnt++
+    item.sum += value
+    item.min = Math.min value, item.min
+    item.max = Math.max value, item.max
+  else
+    item.sum = item.min = item.max = value
+
+storeValue = (obj, oldObj) ->
+  param = obj.key
   unless archMap[param]?
     archMap[param] = ++archMap._
     occasionalMapSave()
-  archMap[param]
+  id = archMap[param]
+  slot = obj.time / SLOTSIZE_MS | 0
+  collector = aggregated[slot] ?= {}
+  collector.dirty = true # tag as being modified recently
+  addOneValue collector, id, obj.origval
 
-timeToBytePos = (time) ->
-  ((time / SLOTSIZE | 0) % FILESIZE) * 16
-
-aggregate = (buffer, time, value) ->
-  pos = timeToBytePos time
-  hdr = buffer.readUInt32LE pos
-  cnt = hdr >> 20 # lower 20 bits reserved for future use
-  if cnt is 0
-    sum = min = max = value
-  else
-    sum = value + buffer.readInt32LE pos+4
-    min = Math.min value, buffer.readInt32LE pos+8
-    max = Math.max value, buffer.readInt32LE pos+12
-  hdr += 1 << 20
-  buffer.writeUInt32LE hdr, pos
-  buffer.writeInt32LE sum, pos+4
-  buffer.writeInt32LE min, pos+8
-  buffer.writeInt32LE max, pos+12
-
-saveOneDataset = (param, offset, pairs, cb) ->
-  id = archKeyLookup param
-  slot = offset / SLOTSIZE | 0
-  pnum = slot / FILESIZE | 0
-  console.log 'ap', param, offset, pairs.length, slot, pnum, id
-  fs.mkdir "#{ARCHIVE_PATH}/p#{pnum}", ->
-    path = "#{ARCHIVE_PATH}/p#{pnum}/p#{pnum}-#{id}.dat"
-    # TODO add I/O error handling
-    fs.readFile path, (err, data) ->
-      unless data?
-        data = new Buffer(16 * FILESIZE)
-        data.fill 0
-      for i in [0...pairs.length] by 2
-        time = offset + parseInt pairs[i+1]
-        value = parseInt pairs[i]
-        aggregate data, time, value  unless isNaN value
-      fs.writeFile path, data, cb
-
-getInvertedKeyMap = (cb) ->
-  db.zrange 'hist:keys', 0, -1, 'withscores', (err, res) ->
-    invKeyMap = {}
-    for i in [0...res.length] by 2
-      lastId = parseInt res[i+1]
-      invKeyMap[lastId] = res[i]
-    cb invKeyMap
-
-moveToArchive = (slot, cb) ->
-  console.info 'archiving slot', slot
-  getInvertedKeyMap (invKeyMap) ->
-    db.smembers "hist:slot:#{slot}", (err, res) ->
-      # use async to perform all these saves serially
-      async.eachSerial res, (id, done) ->
-        tag = "hist:#{id}:#{slot}"
-        db.zrangebyscore tag, 0, '+inf', 'withscores', (err, res) ->
-          saveOneDataset invKeyMap[id], slot * HISTSLOT, res, ->
-            db.del tag, done
-      , -> # callback executes when all the slots have been saved
-        db.del "hist:slot:#{slot}", cb
+saveToFile = (seg, slots, id, cb) ->
+  path = "#{ARCHIVE_PATH}/p#{seg}/p#{seg}-#{id}.dat"
+  console.log 'sta', seg, slots, id, path
+  fs.readFile path, (err, data) ->
+    unless data?
+      data = new Buffer(16 * FILESIZE)
+      data.fill 0
+    for slot in slots
+      item = aggregated[slot]?[id]
+      if item
+        pos = (slot % FILESIZE) * 16
+        data.writeUInt32LE item.cnt << 20, pos
+        data.writeInt32LE item.sum, pos+4
+        data.writeInt32LE item.min, pos+8
+        data.writeInt32LE item.max, pos+12
+    fs.writeFile path, data, cb
 
 cronTask = (minutes) ->
-  if dbReady and minutes is 1 # only move to archive right after each hour
-    db.smembers 'hist:slots', (err, res) ->
-      last = Math.max res...
-      for slot in res when slot < last - 1
-        do (slot) ->
-          moveToArchive slot, ->
-            db.srem 'hist:slots', slot, ->
-              console.info 'slot moved to archive:', slot
+  if minutes % 3 is 0
+    segments = {} # map of arrays with slots we need to save
+    ids = {} # used to accumulate all the id's present in oldSlots
+    for hour, collector of aggregated
+      if collector.dirty
+        delete collector.dirty
+      else
+        seg = hour / FILESIZE | 0
+        segments[seg] ?= []
+        segments[seg].push hour
+        ids = _.extend ids, collector
+    # at this point, we know what slots and which id's to save (if any)
+    console.log 'segs', segments, ids
+    async.eachSeries _.keys(segments), (seg, done) ->
+      fs.mkdir "#{ARCHIVE_PATH}/p#{seg}", ->
+        slots = segments[seg]
+        async.eachSeries _.keys(ids), (id, cb) ->
+          saveToFile seg, slots, id, cb
+        , -> # called once all id's in this segment have been saved
+          delete aggregated[slot]  for slot in slots
+          done()
 
 exports.factory = class
-  constructor: -> state.on 'minutes', cronTask
-  destroy: -> state.off 'minutes', cronTask
+  constructor: ->
+    state.on 'set.status', storeValue
+    state.on 'minutes', cronTask
+  destroy: ->
+    state.off 'set.status', storeValue
+    state.off 'minutes', cronTask
