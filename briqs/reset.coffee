@@ -67,7 +67,7 @@ exports.reprocessLogs = ->
       do (year) ->
         files = fs.readdirSync "#{LOGDIR}/#{year}"
         # use async to serialise the scans and process them in sequence
-        async.eachSeries files.sort().slice(-50), (path, cb) ->
+        async.eachSeries files.sort().slice(-5), (path, cb) ->
           if path.slice(0, 4) is year
             console.log 'reprocessing', path
             mon = parseInt path.slice(4, 6), 10

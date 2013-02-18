@@ -39,19 +39,19 @@ packetListener = (packet, ainfo) ->
 loadAllDecoders = ->
   fs.readdir './drivers', (err, files) ->
     throw err  if err
-    for f in files
-      f = f.replace /\..*/, ''
-      obj = require "../drivers/#{f}"
+    for file in files
+      name = file.replace /\..*/, ''
+      obj = require "../drivers/#{name}"
       if obj.descriptions
         if obj.descriptions.length # TODO real array check
           # demultiplexing driver, with multiple descriptions
           drivers[d] = obj[d]  for d in obj.descriptions
         else
-          drivers[f] = obj.descriptions
+          drivers[name] = obj.descriptions
       if obj.announcer
-        announcers[obj.announcer] = f
+        announcers[obj.announcer] = name
       if obj.decode
-        decoders[f] = obj
+        decoders[name] = obj
     for k,v of drivers
       v.key = k
       state.store 'drivers', v
