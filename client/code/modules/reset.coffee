@@ -6,7 +6,5 @@ module.exports = (ng) ->
     '$scope','rpc',
     ($scope, rpc) ->
 
-      $scope.resetStatus = -> rpc.exec 'host.api', 'resetStatus'
-      $scope.resetReadings = -> rpc.exec 'host.api', 'resetReadings'
-      $scope.flushRedis = -> rpc.exec 'host.api', 'flushRedis'
+      $scope.remote = (cmd) -> rpc.exec 'host.api', cmd
   ]

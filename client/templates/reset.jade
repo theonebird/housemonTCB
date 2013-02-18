@@ -2,11 +2,15 @@
   .twelve.columns
     h3 Reset
 
-    .row
-      .two.columns
-        button(ng-click='resetStatus()') Reset Status
-      .two.columns
-        button(ng-click='resetReadings()') Reset Readings
-      .two.columns
-        button(ng-click='flushRedis()') Flush Redis
-      .two.columns
+    hr
+    button(ng-click='remote("resetStatus")') Reset Status
+    |  &nbsp; 
+    button(ng-click='remote("resetReadings")') Reset Readings
+    |  &nbsp; 
+    button(ng-click='remote("flushRedis")') Flush Redis
+    |  &nbsp; 
+    button(ng-click='remote("deleteArchive")') Delete Archive
+    |  &nbsp; 
+    button(ng-click='remote("restart")') Restart server
+    hr
+    button(ng-click='remote("reprocessLogs")') Reprocess Logs
