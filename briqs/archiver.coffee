@@ -18,6 +18,7 @@ ARCHMAP_PATH = './archive/index.json'
 
 if fs.existsSync ARCHMAP_PATH
   archMap = require ARCHREQ_PATH
+  console.info 'archMap', archMap._
 else
   archMap = _: 0 # sequence number
 
