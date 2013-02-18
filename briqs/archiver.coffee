@@ -6,9 +6,10 @@ state = require '../server/state'
 local = require '../local'
 redis = require 'redis'
 fs = require 'fs'
+async = require 'async'
 
 # TODO this constant is duplicated from history.coffee
-HISTSLOT = 32 * 3600 * 1000 # one day, in milliseconds
+HISTSLOT = 32 * 3600 * 1000 # 32 hours, in milliseconds
 
 SLOTSIZE = 3600 * 1000 # archive slots hold one hour of aggragated values
 FILESIZE = 1024 # number of slots per archive file
@@ -22,16 +23,6 @@ if fs.existsSync ARCHMAP_PATH
 else
   archMap = _: 0 # sequence number
 
-occasionalMapSave = _.debounce ->
-  fs.writeFileSync ARCHMAP_PATH, JSON.stringify archMap, null, 2
-, 3000
-
-archKey = (param) ->
-  unless archMap[param]?
-    archMap[param] = ++archMap._
-    occasionalMapSave()
-  archMap[param]
-
 config = local.redisConfig
 db = redis.createClient config.port, config.host, config
 dbReady = false
@@ -40,6 +31,16 @@ fs.mkdir ARCHIVE_PATH, ->
   # ignore mkdir errors (it probably already exists)
   db.select config.db, ->
     dbReady = true # ready for use
+
+occasionalMapSave = _.debounce ->
+  fs.writeFile ARCHMAP_PATH, JSON.stringify archMap, null, 2
+, 3000
+
+archKeyLookup = (param) ->
+  unless archMap[param]?
+    archMap[param] = ++archMap._
+    occasionalMapSave()
+  archMap[param]
 
 timeToBytePos = (time) ->
   ((time / SLOTSIZE | 0) % FILESIZE) * 16
@@ -61,7 +62,7 @@ aggregate = (buffer, time, value) ->
   buffer.writeInt32LE max, pos+12
 
 saveOneDataset = (param, offset, pairs, cb) ->
-  id = archKey param
+  id = archKeyLookup param
   slot = offset / SLOTSIZE | 0
   pnum = slot / FILESIZE | 0
   console.log 'ap', param, offset, pairs.length, slot, pnum, id
@@ -90,16 +91,14 @@ moveToArchive = (slot, cb) ->
   console.info 'archiving slot', slot
   getInvertedKeyMap (invKeyMap) ->
     db.smembers "hist:slot:#{slot}", (err, res) ->
-      # TODO should find a clean way to throttle all these async calls
-      remain = res.length
-      for id in res
-        do (id) ->
-          tag = "hist:#{id}:#{slot}"
-          db.zrangebyscore tag, 0, '+inf', 'withscores', (err, res) ->
-            saveOneDataset invKeyMap[id], slot * HISTSLOT, res, ->
-              db.del tag, ->
-              # callback executes when all the slots have been saved
-              db.del "hist:slot:#{slot}", cb  unless --remain
+      # use async to perform all these saves serially
+      async.eachSerial res, (id, done) ->
+        tag = "hist:#{id}:#{slot}"
+        db.zrangebyscore tag, 0, '+inf', 'withscores', (err, res) ->
+          saveOneDataset invKeyMap[id], slot * HISTSLOT, res, ->
+            db.del tag, done
+      , -> # callback executes when all the slots have been saved
+        db.del "hist:slot:#{slot}", cb
 
 cronTask = (minutes) ->
   if dbReady and minutes is 1 # only move to archive right after each hour

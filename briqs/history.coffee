@@ -7,7 +7,8 @@ state = require '../server/state'
 local = require '../local'
 redis = require 'redis'
 
-HISTSLOT = 32 * 3600 * 1000 # one day, in milliseconds
+HISTSLOT_HR = 32 # number of hours stored in each history slot
+HISTSLOT_MS = HISTSLOT_HR * 3600 * 1000 # slot size, in milliseconds
 
 keyMap = {}
 lastId = 0
@@ -33,19 +34,19 @@ storeValue = (obj, oldObj) ->
       keyMap[key] = ++lastId
       db.zadd 'hist:keys', lastId, key, ->
     id = keyMap[key]
-    slot = obj.time / HISTSLOT | 0
+    slot = obj.time / HISTSLOT_MS | 0
     # use a cache to avoid needless redundant saves
     unless slotCache[id] is slot
       db.sadd 'hist:slots', slot, ->
       db.sadd "hist:slot:#{slot}", id, ->
       slotCache[id] = slot
     # the score is milliseconds since the start of the slot
-    db.zadd "hist:#{id}:#{slot}", obj.time % HISTSLOT, obj.origval, ->
+    db.zadd "hist:#{id}:#{slot}", obj.time % HISTSLOT_MS, obj.origval, ->
 
 # callable from client as rpc
 exports.rawRange = (key, from, to, cb) ->
   from += Date.now()  if from < 0
-  slot = from / HISTSLOT | 0
+  slot = from / HISTSLOT_MS | 0
   id = keyMap[key]
   if id?
     if slotCache[id] >= slot
@@ -53,8 +54,8 @@ exports.rawRange = (key, from, to, cb) ->
       tag = "hist:#{id}:#{slot}"
       # TODO end of range is not honoured yet, always until last for now
       # TODO also not correct when wrapping across multiple slots
-      db.zrangebyscore tag, from % HISTSLOT, '+inf', 'withscores', (err, res) ->
-        cb err, [slot * HISTSLOT, res]
+      db.zrangebyscore tag, from % HISTSLOT_MS, '+inf', 'withscores', (err, res) ->
+        cb err, [slot * HISTSLOT_MS, res]
       return
   cb null, []
 
