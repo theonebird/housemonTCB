@@ -10,7 +10,7 @@ module.exports = (ng) ->
       info = $scope.status.find key
 
       promise = rpc.exec 'host.api', 'rawRange', key, -3600000, 0
-      promise.then ([ offset, values ]) ->
+      promise.then (values) ->
         if values
           console.info "graph", values.length, key
           options =
@@ -30,7 +30,7 @@ module.exports = (ng) ->
 
           data = for i in [0...values.length] by 2
             [
-              offset + parseInt values[i+1]
+              parseInt values[i+1]
               adjustValue parseInt(values[i]), info
             ]
 

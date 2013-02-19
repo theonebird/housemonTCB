@@ -7,12 +7,8 @@ state = require '../server/state'
 local = require '../local'
 redis = require 'redis'
 
-HISTSLOT_HR = 32 # number of hours stored in each history slot
-HISTSLOT_MS = HISTSLOT_HR * 3600 * 1000 # slot size, in milliseconds
-
 keyMap = {}
 lastId = 0
-slotCache = {}
 
 config = local.redisConfig
 db = redis.createClient config.port, config.host, config
@@ -33,32 +29,27 @@ storeValue = (obj, oldObj) ->
     unless keyMap[key]?
       keyMap[key] = ++lastId
       db.zadd 'hist:keys', lastId, key, ->
-    id = keyMap[key]
-    slot = obj.time / HISTSLOT_MS | 0
-    # use a cache to avoid needless redundant saves
-    unless slotCache[id] is slot
-      db.sadd 'hist:slots', slot, ->
-      db.sadd "hist:slot:#{slot}", id, ->
-      slotCache[id] = slot
-    # the score is milliseconds since the start of the slot
-    db.zadd "hist:#{id}:#{slot}", obj.time % HISTSLOT_MS, obj.origval, ->
+    db.zadd "hist:#{keyMap[key]}", obj.time, obj.origval, ->
 
 # callable from client as rpc
 exports.rawRange = (key, from, to, cb) ->
-  from += Date.now()  if from < 0
-  slot = from / HISTSLOT_MS | 0
+  now = Date.now()
+  from += now  if from < 0
+  to += now  if to <= 0
   id = keyMap[key]
-  if id?
-    if slotCache[id] >= slot
-      slot = slotCache[id] # TODO temporary hack
-      tag = "hist:#{id}:#{slot}"
-      # TODO end of range is not honoured yet, always until last for now
-      # TODO also not correct when wrapping across multiple slots
-      db.zrangebyscore tag, from % HISTSLOT_MS, '+inf', 'withscores', (err, res) ->
-        cb err, [slot * HISTSLOT_MS, res]
-      return
-  cb null, []
+  if id? and dbReady
+    db.zrangebyscore "hist:#{id}", from, to, 'withscores', cb
+  else
+    cb null, []
+
+cronTask = (minutes) ->
+  if minutes is 55
+    console.log 'history cleanup time!'
 
 exports.factory = class
-  constructor: -> state.on 'set.status', storeValue
-  destroy: -> state.off 'set.status', storeValue
+  constructor: ->
+    state.on 'set.status', storeValue
+    state.on 'minutes', cronTask
+  destroy: ->
+    state.off 'set.status', storeValue
+    state.off 'minutes', cronTask
