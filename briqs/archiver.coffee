@@ -46,9 +46,9 @@ archiveValue = (time, param, value) ->
   if item.cnt is 0
     item.mean = item.m2 = 0
     item.min = item.max = value
-  item.cnt += 1
+  # this is based on Welford's algorithm to reduce round-off errors
   delta = value - item.mean
-  item.mean += delta / item.cnt
+  item.mean += delta / ++item.cnt
   item.m2 += delta * (value - item.mean)
   item.min = Math.min value, item.min
   item.max = Math.max value, item.max
