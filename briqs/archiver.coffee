@@ -10,7 +10,7 @@ SLOTSIZE_MIN = 60 # each archive slot holds 60 minutes of aggragated values
 SLOTSIZE_MS = SLOTSIZE_MIN * 60 * 1000 # archive slot size in milliseconds
 
 FILESIZE = 1024 # number of slots per archive file
-BYTES_PER_SLOT = 16 # each slot stores four (16) or five (20) 32-bit values
+BYTES_PER_SLOT = 20 # each slot stores five 32-bit values
 
 ARCHIVE_PATH = './archive'
 ARCHREQ_PATH = '../archive'
@@ -42,14 +42,16 @@ archiveValue = (time, param, value) ->
   id = archMap[param]
   # aggregate the value by combining it with what's already there
   item = collector[id] ?= { cnt: 0 }
-  if item.cnt++
-    item.sum += value
-    item.min = Math.min value, item.min
-    item.max = Math.max value, item.max
-  else
-    item.sum = item.min = item.max = value
-    item.ssq = 0
-  item.ssq += value * value  if BYTES_PER_SLOT >= 20
+  # see http://en.wikipedia.org/wiki/Algorithms_for_calculating_variance
+  if item.cnt is 0
+    item.mean = item.m2 = 0
+    item.min = item.max = value
+  item.cnt += 1
+  delta = value - item.mean
+  item.mean += delta / item.cnt
+  item.m2 += delta * (value - item.mean)
+  item.min = Math.min value, item.min
+  item.max = Math.max value, item.max
 
 storeValue = (obj, oldObj) ->
   archiveValue obj.time, obj.key, obj.origval
@@ -63,13 +65,15 @@ saveToFile = (seg, slots, id, cb) ->
       data.fill 0
     for slot in slots
       item = aggregated[slot]?[id]
-      if item
+      if item?.cnt
         pos = (slot % FILESIZE) * BYTES_PER_SLOT
-        data.writeUInt32LE item.cnt, pos
-        data.writeInt32LE item.sum, pos+4
+        data.writeUInt16LE item.cnt, pos
+        data.writeInt32LE Math.round(item.mean), pos+4
         data.writeInt32LE item.min, pos+8
         data.writeInt32LE item.max, pos+12
-        data.writeFloatLE item.ssq, pos+16  if BYTES_PER_SLOT >= 20
+        if item.cnt > 1
+          sdev = Math.sqrt item.m2 / (item.cnt - 1)
+          data.writeInt32LE Math.round(sdev), pos+16
     fs.writeFile path, data, cb
 
 cronTask = (minutes) ->
