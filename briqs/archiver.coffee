@@ -91,7 +91,8 @@ cronTask = (minutes) ->
     async.eachSeries _.keys(segments), (seg, done) ->
       fs.mkdir "#{ARCHIVE_PATH}/p#{seg}", ->
         slots = segments[seg]
-        async.eachSeries _.values(archMap), (id, cb) ->
+        # skip "_" sequence number, avoids double save of last key
+        async.eachSeries _.omit('_').values(archMap), (id, cb) ->
           saveToFile seg, slots, id, cb
         , -> # called once all id's in this segment have been saved
           delete aggregated[slot]  for slot in slots
