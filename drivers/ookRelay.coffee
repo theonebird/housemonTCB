@@ -3,7 +3,7 @@ module.exports =
   announcer: 12
 
   descriptions:
-    ['DCF77', 'KS300', 'S300']
+    ['DCF77', 'EMX', 'KS300', 'S300']
 
   DCF77:
     date:
@@ -12,6 +12,26 @@ module.exports =
       title: 'Time'
     dst:
       title: 'Summer'
+
+  EMX:
+    seq:
+      title: 'Seq number'
+    avg:
+      title: 'Average power'
+      unit: 'W'
+      min: 0
+      max: 4000
+      factor: 12
+    max:
+      title: 'Maximum power'
+      unit: 'W'
+      min: 0
+      max: 4000
+      factor: 12
+    tot:
+      title: 'Total consumption'
+      unit: 'Wh'
+      min: 0
 
   KS300:
     temp:
@@ -102,10 +122,10 @@ ookDecoders =
   emx: (raw, cb) ->
     v = (getBits(raw, i*9, 8) for i in [0..8])
     cb
-      tag: "EMX#{v[0]}-#{v[1]}"
+      tag: "EMX-#{v[0]}:#{v[1]}"
       seq: v[2]
-      avg: 12 * (256 * v[6] + v[5])
-      max: 12 * (256 * v[8] + v[7])
+      avg: 256 * v[6] + v[5]
+      max: 256 * v[8] + v[7]
       tot: 256 * v[4] + v[3]
       
   fsx: (raw, cb) ->
