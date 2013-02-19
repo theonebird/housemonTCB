@@ -10,11 +10,12 @@ fs.mkdir LOGGER_PATH
 
 dateFilename = (now) ->
   # construct the date value as 8 digits
-  d = now.getUTCDate() + 100 *
-     (now.getUTCMonth() + 1 + 100 *
-      now.getUTCFullYear())
+  y = now.getUTCFullYear()
+  d = now.getUTCDate() + 100 * (now.getUTCMonth() + 1 + 100 * y)
   # then massage it as a string to produce a file name
-  "#{LOGGER_PATH}/#{d}.txt"
+  path = "#{LOGGER_PATH}/#{y}"
+  fs.mkdirSync path  unless fs.existsSync path # TODO laziness: sync calls
+  path + "/#{d}.txt"
 
 timeString = (now) ->
   # first construct the value as 10 digits
@@ -40,7 +41,6 @@ exports.factory = class
       fs.write @fd, log
 
   constructor: ->
-    @fd = null
     state.on 'incoming', @logger
           
   destroy: ->
