@@ -46,12 +46,13 @@ archiveValue = (time, param, value) ->
   if item.cnt is 0
     item.mean = item.m2 = 0
     item.min = item.max = value
+  else
+    item.min = Math.min value, item.min
+    item.max = Math.max value, item.max
   # this is based on Welford's algorithm to reduce round-off errors
   delta = value - item.mean
   item.mean += delta / ++item.cnt
   item.m2 += delta * (value - item.mean)
-  item.min = Math.min value, item.min
-  item.max = Math.max value, item.max
 
 storeValue = (obj, oldObj) ->
   archiveValue obj.time, obj.key, obj.origval
@@ -92,7 +93,7 @@ cronTask = (minutes) ->
       fs.mkdir "#{ARCHIVE_PATH}/p#{seg}", ->
         slots = segments[seg]
         # skip "_" sequence number, avoids double save of last key
-        async.eachSeries _.omit('_').values(archMap), (id, cb) ->
+        async.eachSeries _.values(_.omit(archMap, '_')), (id, cb) ->
           saveToFile seg, slots, id, cb
         , -> # called once all id's in this segment have been saved
           delete aggregated[slot]  for slot in slots
