@@ -68,13 +68,16 @@ saveToFile = (seg, slots, id, cb) ->
       item = aggregated[slot]?[id]
       if item?.cnt
         pos = (slot % FILESIZE) * BYTES_PER_SLOT
-        data.writeUInt16LE item.cnt, pos
-        data.writeInt32LE Math.round(item.mean), pos+4
-        data.writeInt32LE item.min, pos+8
-        data.writeInt32LE item.max, pos+12
-        if item.cnt > 1
-          sdev = Math.sqrt item.m2 / (item.cnt - 1)
-          data.writeInt32LE Math.round(sdev), pos+16
+        try
+          data.writeUInt16LE item.cnt, pos
+          data.writeInt32LE Math.round(item.mean), pos+4
+          data.writeInt32LE item.min, pos+8
+          data.writeInt32LE item.max, pos+12
+          if item.cnt > 1
+            sdev = Math.sqrt item.m2 / (item.cnt - 1)
+            data.writeInt32LE Math.round(sdev), pos+16
+        catch err
+          console.error 'cannot save', slot, id, item
     fs.writeFile path, data, cb
 
 cronTask = (minutes) ->
