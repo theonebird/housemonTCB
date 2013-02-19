@@ -8,6 +8,7 @@ exports.info =
   rpcs: [
     'resetStatus'
     'resetReadings'
+    'resetHistory'
     'flushRedis'
     'deleteArchive'
     'restart'
@@ -33,6 +34,17 @@ exports.resetStatus = ->
 exports.resetReadings = ->
   console.log 'resetReadings'
   state.reset 'readings'
+
+exports.resetHistory = ->
+  console.log 'resetHistory'
+  db.zrange 'hist:keys', 0, -1, 'withscores', (err, res) ->
+    ids = []
+    for i in [0...res.length] by 2
+      ids.push parseInt res[i+1]
+    async.eachSeries ids, (id, cb) ->
+      db.del "hist:#{id}", -> cb() # ignore errors
+    , ->
+      db.del 'hist:keys', ->
 
 exports.flushRedis = ->
   console.log 'flushRedis'
