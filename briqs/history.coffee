@@ -23,6 +23,7 @@ dbReady = false
 db.select config.db, ->
   # restore keyMap from last info in hist:keys
   db.zrange 'hist:keys', 0, -1, 'withscores', (err, res) ->
+    throw err  if err
     for i in [0...res.length] by 2
       lastId = parseInt res[i+1]
       keyMap[res[i]] = lastId
