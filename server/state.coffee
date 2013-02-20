@@ -90,7 +90,8 @@ state.setupStorage = (collections, config) ->
     if name is 'bobs' # special case: save installs to disk quickly
       db.occasionalSave()
 
-  db.select config.db, ->
+  db.select config.db, (err) ->
+    throw err  if err
     loadData = (name) ->
       db.hgetall name, (err, ids) ->
         throw err  if err

@@ -20,7 +20,8 @@ config = local.redisConfig
 db = redis.createClient config.port, config.host, config
 dbReady = false
 
-db.select config.db, ->
+db.select config.db, (err) ->
+  throw err  if err
   # restore keyMap from last info in hist:keys
   db.zrange 'hist:keys', 0, -1, 'withscores', (err, res) ->
     throw err  if err
@@ -35,8 +36,8 @@ storeValue = (obj, oldObj) ->
     # map each key to a unique id, and remeber that mapping
     unless keyMap[key]?
       keyMap[key] = ++lastId
-      db.zadd 'hist:keys', lastId, key, ->
-    db.zadd "hist:#{keyMap[key]}", obj.time, obj.origval, ->
+      db.zadd 'hist:keys', lastId, key
+    db.zadd "hist:#{keyMap[key]}", obj.time, obj.origval
 
 # callable from client as rpc
 exports.rawRange = (key, from, to, cb) ->
