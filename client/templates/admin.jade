@@ -43,18 +43,20 @@
                              ng-show='bob')
 
     .row(ng-show='feeds || results')
-      .four.columns
+      .two.columns
+      .three.columns
         h5 Connections:
-      .four.columns(ng-show='feeds')
+      .three.columns(ng-show='feeds')
         h5 Feeds
         div(ng-repeat='(k,v) in feeds')
           b {{k}}
           i  - {{v}}
-      .four.columns.end(ng-show='results')
+      .three.columns.end(ng-show='results')
         h5 Results
         div(ng-repeat='(k,v) in results')
           b {{k}}
           i  - {{v}}
+      .one.columns
 
 .row
   .twelve.columns
