@@ -1,6 +1,13 @@
 exports.info =
   name: 'drivers'
   description: 'Driver collection'
+  connections:
+    feeds:
+      'rf12.announce': 'event'
+      'rf12.packet': 'event'
+    results:
+      'readings': 'collection'
+      'drivers': 'collection'
   
 nodeMap = require './nodeMap'
 state = require '../server/state'

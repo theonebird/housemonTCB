@@ -2,6 +2,12 @@ exports.info =
   name: 'history'
   description: 'Historical data storage (full details of the last few days)'
   rpcs: ['rawRange']
+  connections:
+    feeds:
+      'status': 'collection'
+      'minutes': 'event'
+    results:
+      'hist': 'redis'
   
 state = require '../server/state'
 local = require '../local'

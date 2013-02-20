@@ -5,3 +5,6 @@ exports.info =
     title: 'Graphs'
     controller: 'GraphsCtrl'
   ]
+  connections:
+    feeds:
+      'hist': 'redis'

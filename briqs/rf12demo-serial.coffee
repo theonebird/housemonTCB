@@ -5,9 +5,14 @@ exports.info =
     name: 'Serial port'
     default: 'usb-AH01A0GD' # TODO: list choices with serialport.list
   ]
-  # events: ['rf12.packet', 'data']
-  # dependencies:
-  #   'serialport': '*'
+  connections:
+    packages:
+      'serialport': '*'
+    results:
+      'rf12.announce': 'event'
+      'rf12.packet': 'event'
+      'rf12.config': 'event'
+      'rf12.other': 'event'
 
 serialport = require 'serialport'
 state = require '../server/state'

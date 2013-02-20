@@ -42,6 +42,20 @@
                              ng-click='removeBob()'
                              ng-show='bob')
 
+    .row(ng-show='feeds || results')
+      .four.columns
+        h5 Dependencies:
+      .four.columns(ng-show='feeds')
+        h5 Feeds
+        div(ng-repeat='(k,v) in feeds')
+          b {{k}}
+          i  - {{v}}
+      .four.columns(ng-show='results')
+        h5 Results
+        div(ng-repeat='(k,v) in results')
+          b {{k}}
+          i  - {{v}}
+
 .row
   .twelve.columns
     hr

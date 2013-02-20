@@ -1,6 +1,13 @@
 exports.info =
   name: 'archiver'
   description: 'Archival data storage'
+  connections:
+    feeds:
+      'status': 'collection'
+      'reprocess': 'event'
+      'minutes': 'event'
+    results:
+      'archive': 'dir'
   
 state = require '../server/state'
 fs = require 'fs'

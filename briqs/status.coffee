@@ -4,7 +4,11 @@ exports.info =
   menus: [
     title: 'Status'
   ]
-  # FIXME depends on readings collection
+  connections:
+    feeds:
+      'readings': 'collection'
+    results:
+      'status': 'collection'
   
 state = require '../server/state'
 

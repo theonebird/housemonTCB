@@ -31,7 +31,7 @@ module.exports = (ng) ->
         if bob = $scope.bobs?.find obj.info.name
           $scope.selectBob bob
         else
-          $scope.bob = null
+          $scope.bob = $scope.feeds = $scope.results = null
           $scope.briq = obj
           # TODO candidate for a Briq method
           for input in obj.info.inputs or []
@@ -50,7 +50,12 @@ module.exports = (ng) ->
 
       $scope.selectBob = (obj) ->
         $scope.bob = obj
-        $scope.briq = $scope.briqs.byId[obj.briq_id]
+        briq = $scope.briq = $scope.briqs.byId[obj.briq_id]
+        if briq.info.connections?
+          $scope.feeds = briq.info.connections.feeds
+          $scope.results = briq.info.connections.results
+        else
+           $scope.feeds = $scope.results = null
 
         # TODO candidate for a Briq method
         keys = obj.key.split(':').slice 1
@@ -59,6 +64,5 @@ module.exports = (ng) ->
 
       $scope.removeBob = ->
         $scope.bobs.store _.omit $scope.bob, 'key'
-        $scope.bob = null
-        $scope.briq = null
+        $scope.bob = $scope.briq = $scope.feeds = $scope.results = null
   ]
