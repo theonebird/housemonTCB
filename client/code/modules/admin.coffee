@@ -25,14 +25,22 @@ module.exports = (ng) ->
     ($scope) ->
 
       $scope.collection 'bobs'
+
+      briqAndBob = (briq, bob) ->
+        $scope.briq = briq
+        $scope.bob = bob
+        if briq?.info?.connections?
+          $scope.feeds = briq.info.connections.feeds
+          $scope.results = briq.info.connections.results
+        else
+          $scope.feeds = $scope.results = null
       
       $scope.selectBriq = (obj) ->
         # if there are no args, it may already have been installed
         if bob = $scope.bobs?.find obj.info.name
           $scope.selectBob bob
         else
-          $scope.bob = $scope.feeds = $scope.results = null
-          $scope.briq = obj
+          briqAndBob obj
           # TODO candidate for a Briq method
           for input in obj.info.inputs or []
             input.value = null
@@ -49,13 +57,7 @@ module.exports = (ng) ->
           key: key
 
       $scope.selectBob = (obj) ->
-        $scope.bob = obj
-        briq = $scope.briq = $scope.briqs.byId[obj.briq_id]
-        if briq.info.connections?
-          $scope.feeds = briq.info.connections.feeds
-          $scope.results = briq.info.connections.results
-        else
-           $scope.feeds = $scope.results = null
+        briqAndBob $scope.briqs.byId[obj?.briq_id], obj
 
         # TODO candidate for a Briq method
         keys = obj.key.split(':').slice 1
@@ -64,5 +66,5 @@ module.exports = (ng) ->
 
       $scope.removeBob = ->
         $scope.bobs.store _.omit $scope.bob, 'key'
-        $scope.bob = $scope.briq = $scope.feeds = $scope.results = null
+        briqAndBob null
   ]

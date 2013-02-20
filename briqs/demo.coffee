@@ -5,6 +5,11 @@ exports.info =
     title: 'Demo'
     controller: 'DemoCtrl'
   ]
+  connections:
+    feeds:
+      'rf12.packet': 'event'
+    results:
+      'ss-demo': 'event'
 
 state = require '../server/state'
 ss = require 'socketstream'

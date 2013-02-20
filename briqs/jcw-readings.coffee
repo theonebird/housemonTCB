@@ -5,3 +5,6 @@ exports.info =
     title: 'Readings'
     controller: 'ReadingsCtrl'
   ]
+  connections:
+    feeds:
+      'readings': 'collection'

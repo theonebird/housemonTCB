@@ -7,6 +7,9 @@ exports.info =
     title: 'Compile'
     controller: 'CompileCtrl'
   ]
+  connections:
+    feeds:
+      'uploads': 'event'
 
 state = require '../server/state'
 fs = require 'fs'

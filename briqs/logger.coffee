@@ -1,6 +1,11 @@
 exports.info =
   name: 'logger'
   description: 'Log incoming data to daily rotating text files'
+  connections:
+    feeds:
+      'incoming': 'event'
+    results:
+      'logger': 'dir'
 
 state = require '../server/state'
 fs = require 'fs'

@@ -1,6 +1,9 @@
 exports.info =
   name: 'rf12replay'
   description: 'RF12 test data generator'
+  connections:
+    results:
+      'rf12.packet': 'event'
   # needs: ['jeemon-log-parser']
 
 logParser = require '../jeemon-log-parser'

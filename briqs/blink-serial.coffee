@@ -9,6 +9,9 @@ exports.info =
     title: 'Blink'
     controller: 'BlinkCtrl'
   ]
+  connections:
+    results:
+      'readings': 'collection'
 
 serialport = require 'serialport'
 state = require '../server/state'

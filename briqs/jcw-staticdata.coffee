@@ -4,6 +4,9 @@ exports.info =
   menus: [
     title: 'Data'
   ]
+  connections:
+    results:
+      'locations': 'collection'
   
 nodeMap = require './nodeMap'
 state = require '../server/state'
