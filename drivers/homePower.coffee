@@ -9,21 +9,21 @@ module.exports =
       factor: 0.5
       scale: 3
       min: 0
-      max: 33
+      max: 33 # 65536 x 0.5W rollover
     c2:
       title: 'Counter solar'
       unit: 'kWh'
       factor: 0.5
       scale: 3
       min: 0
-      max: 33
+      max: 33 # 65536 x 0.5W rollover
     c3:
       title: 'Counter house'
       unit: 'kWh'
       factor: 0.5
       scale: 3
       min: 0
-      max: 33
+      max: 33 # 65536 x 0.5W rollover
     p1:
       title: 'Usage stove'
       unit: 'W'
