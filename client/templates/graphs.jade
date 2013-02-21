@@ -7,8 +7,8 @@
         #chart
 
       .four.columns
-        h3: input(type='text',ng-model='query',placeholder='Search...')
-        div(ng-repeat='row in status | filter:query | orderBy:"key"')
-          input(type='checkbox')
-          |  {{row.location}} - {{row.parameter}}
+        h3
+          input(type='text',ng-model='query',placeholder='Search...')
+        div(ng-repeat='row in status | filter:query | orderBy:"key"'
+            ng-click='setGraph(row.key)') {{row.key}}
           span(ng-show='row.unit')  ({{row.unit}})
