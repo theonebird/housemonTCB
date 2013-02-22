@@ -61,7 +61,7 @@ cronTask = (minutes) ->
       cutoff = Date.now() - MAXHOURS * 3600 * 1000
       ids = (parseInt res[i+1] for i in [0...res.length] by 2)
       async.eachSeries ids, (id, cb) ->
-        db.zremrangebyscore "hist:#{id}", '-inf', cutoff, ->
+        db.zremrangebyscore "hist:#{id}", '-inf', cutoff, cb
 
 exports.factory = class
   constructor: ->
