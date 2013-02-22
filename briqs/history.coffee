@@ -36,8 +36,8 @@ storeValue = (obj, oldObj) ->
     # map each key to a unique id, and remeber that mapping
     unless keyMap[key]?
       keyMap[key] = ++lastId
-      db.zadd 'hist:keys', lastId, key
-    db.zadd "hist:#{keyMap[key]}", obj.time, obj.origval
+      db.zadd 'hist:keys', lastId, key, ->
+    db.zadd "hist:#{keyMap[key]}", obj.time, obj.origval, ->
 
 # callable from client as rpc
 exports.rawRange = (key, from, to, cb) ->
