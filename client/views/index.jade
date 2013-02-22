@@ -8,9 +8,9 @@ html(lang='en',ng-controller='MainCtrl')
     
   body
     nav.top-bar
-      ul.top-bar
+      ul
         li.name: h1: a(href='{{pkg.homepage}}')
-          img(src='/images/logo.png',height=27.5,width=27.5)
+          img(src='/images/logo.png',height=27,width=27)
           | &nbsp; {{local.exactName}}
         li.toggle-topbar: a(href='#')
       section
