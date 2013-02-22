@@ -7,7 +7,8 @@ module.exports = (ng) ->
     ($scope, rpc) ->
 
       $scope.setGraph = (key) ->
-        promise = rpc.exec 'host.api', 'rawRange', key, -3600000, 0
+        period = ($scope.hours or 1) * 3600000
+        promise = rpc.exec 'host.api', 'rawRange', key, -period, 0
         promise.then (values) ->
           if values
             info = $scope.status.find key
