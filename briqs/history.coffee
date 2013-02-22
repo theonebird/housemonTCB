@@ -54,14 +54,14 @@ exports.rawRange = (key, from, to, cb) ->
     cb null, []
 
 cronTask = (minutes) ->
-  if minutes is 30 # clean up once an hour
+  if minutes is 35 # clean up once an hour
     console.log 'history cleanup started'
     db.zrange 'hist:keys', 0, -1, 'withscores', (err, res) ->
       throw err  if err
       cutoff = Date.now() - MAXHOURS * 3600 * 1000
       ids = (parseInt res[i+1] for i in [0...res.length] by 2)
       async.eachSeries ids, (id, cb) ->
-        db.remrangebyscore "hist:#{id}", '-inf', cutoff, ->
+        db.zremrangebyscore "hist:#{id}", '-inf', cutoff, ->
 
 exports.factory = class
   constructor: ->
