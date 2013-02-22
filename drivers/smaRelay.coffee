@@ -50,12 +50,10 @@ module.exports =
       acw: ints[2]
       dcv1: ints[3]
       dcv2: ints[4]
-      # only report aggragated values when they actually change
+    # only report aggragated values when they actually change
     @prev ?= []
-    if ints[0] isnt @prev[0]
-      yield: ints[0]
-    if ints[1] isnt @prev[1]
-      total: ints[1]
+    result.yield = ints[0]  if ints[0] isnt @prev[0]
+    result.total = ints[1]  if ints[1] isnt @prev[1]
     if ints[2]
       result.dcw1 = ints[5]
       result.dcw2 = ints[6]
