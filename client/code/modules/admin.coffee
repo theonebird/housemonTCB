@@ -67,4 +67,11 @@ module.exports = (ng) ->
       $scope.removeBob = ->
         $scope.bobs.store _.omit $scope.bob, 'key'
         briqAndBob null
+
+      $scope.showAll = ->
+        $scope.query = ''
+        briqAndBob null
+
+      $scope.$watch 'query', ->
+        briqAndBob null
   ]

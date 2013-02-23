@@ -55,7 +55,7 @@ exports.rawRange = (key, from, to, cb) ->
 
 cronTask = (minutes) ->
   if minutes is 35 # clean up once an hour
-    console.log 'history cleanup started'
+    console.info 'history cleanup started'
     db.zrange 'hist:keys', 0, -1, 'withscores', (err, res) ->
       throw err  if err
       cutoff = Date.now() - MAXHOURS * 3600 * 1000
