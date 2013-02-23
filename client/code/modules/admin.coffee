@@ -69,9 +69,5 @@ module.exports = (ng) ->
         briqAndBob null
 
       $scope.showAll = ->
-        $scope.query = ''
-        briqAndBob null
-
-      $scope.$watch 'query', ->
         briqAndBob null
   ]
