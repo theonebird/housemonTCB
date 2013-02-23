@@ -11,14 +11,14 @@
 .row
   .three.columns
     ul.square
-      li(ng-repeat='bob in bobs | filter:query | orderBy:"key"'
+      li.hover(ng-repeat='bob in bobs | filter:query | orderBy:"key"'
          ng-click='selectBob(bob)')
         {{bob.key}}
 
   .nine.columns
     div(ng-hide='briq')
       ul.square
-        li(ng-repeat='briq in briqs | filter:query | orderBy:"info.name"'
+        li.hover(ng-repeat='briq in briqs | filter:query | orderBy:"info.name"'
            ng-click='selectBriq(briq)')
           b {{briq.info.name}}
           |  - {{briq.info.description}}
