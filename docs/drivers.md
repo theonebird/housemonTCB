@@ -43,14 +43,6 @@ decoder, and provides a "callback" function as second argument. That callback
 must be called once for each complete reading, passing an object with the
 decoded "readings".
 
-## Announcer ID
-
-The "announcer" id is a value which can be used for nodes to announce their
-type to the central node, and thus avoid manual "_node id_ to _driver type_"
-association, see <http://jeelabs.org/2013/01/16/remote-node-discovery-code/>.
-
-This proposed mechanism has not yet been fully fleshed out (mid-February).
-
 ## Special cases
 
 Note that the "cb" callback function can be called zero or more times, depending
@@ -61,17 +53,26 @@ so decoding the data ia a matter of simply returning the second byte as result.
 The decoder is called with "this" set to the same object each time, so it can
 store temporary values there if it needs to track state from call to call.
 
+## Announcer ID
+
+The "announcer" id is a value which can be used for nodes to announce their
+type to the central node, and thus avoid manual "_node id_ to _driver type_"
+association, see <http://jeelabs.org/2013/01/16/remote-node-discovery-code/>.
+
+This proposed mechanism has not been fully fleshed out (as of mid-February).
+
 ## Meta-data
 
 The "descriptions" object should contain one field per field in the decoded
 readings (just one in this case: "value"), and must specify at least a title
 for it. The other fields are optional:
 
+* **title** - the friendly name to use in reports for this paramater (required)
 * **unit** - a short name for the measureent unit (e.g. "%", "m3", "W", etc)
 * **min** - the minimum acceptable value (not enforced yet)
 * **max** - the maximum acceptable value (not enforced yet)
 * **factor** - a scale factor to be applied to the reading (default 1.0)
-* **scale** - numeric scaling: >0 = number of decimals, <0 = add zeroes
+* **scale** - numeric scaling: >= 0 is number of decimals, < 0 to add zeroes
 
 ## Important note
 
