@@ -11,7 +11,7 @@ data as separate CoffeeScript or JavaScript files in the "drivers/" directory.
 
 ## Simple example driver
 
-Here is the "lightNode" driver, as inplemented in `drivers/lightNode.coffee`:
+Here is the "lightNode" driver, as implemented in `drivers/lightNode.coffee`:
 
     module.exports =
 
@@ -67,7 +67,7 @@ The "descriptions" object should contain one field per field in the decoded
 readings (just one in this case: "value"), and must specify at least a title
 for it. The other fields are optional:
 
-* **title** - the friendly name to use in reports for this paramater (required)
+* **title** - the friendly name to use in reports for this parameter (required)
 * **unit** - a short name for the measureent unit (e.g. "%", "m3", "W", etc)
 * **min** - the minimum acceptable value (not enforced yet)
 * **max** - the maximum acceptable value (not enforced yet)
@@ -82,19 +82,19 @@ The reason for this is not just to reduce floating-point processing overhead on
 the server, which might be a very low-power Linux box without hardware FP, but
 also because integers are better suited for keeping track of the precision of
 a reading. So the value "1000" with scale 2 represents the value "10.00", not
-"10", "10.0", or "10.000". Some people care about this subtle distinction.
+"10", "10.0", or "10.000". Some people care about such distinctions!
 
 If you truly, really _cannot_ avoid floating point, then here is a work-around:
 return two different parameters in the reading, one representing the mantissa
 and the other the exponent. These can be turned into a floating point result
-in the browser, when the time comes to diaplay or otherwise use that reading.
+in the browser, when the time comes to display or otherwise use that reading.
 
 ## Other examples
 
-For a simple driver which returns multiple sensor values, see the "roomNode".
+* For a simple driver which returns multiple sensor values, see the "roomNode".
 
-For a driver which "demultiplexes" incoming data as multiple readings coming
-from different wireless sources, see the "ookRelay" code.
+* For a driver which "de-multiplexes" incoming packets into readings from
+  _multiple_ wireless nodes, see the "ookRelay" code.
 
-For a driver which reports only changes and keeps track of the previous data,
-see the "p1scanner" implementation.
+* For a driver which reports only changes and keeps track of the previous data,
+  see the "p1scanner" implementation.
