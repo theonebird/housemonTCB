@@ -7,7 +7,7 @@ such as USB ports and network interfaces, and the event and state mechanism in
 HouseMon, which communicates in higher-level terms (readings and commands).
 
 The "drivers" briq creates a simple way to manage these little bits of code and
-data as separate CoffeeScript or JavaScript files in the "drivers/" directory.
+data as separate CoffeeScript or JavaScript files in the `drivers/` directory.
 
 ## Simple example driver
 
@@ -76,10 +76,10 @@ for it. The other fields are optional:
 
 ## Important note
 
-Note tha decoded values should be returned as **integers**, because internally
+Note that decoded values should be returned as **integers**, because internally
 all readings are passed around and stored in signed int format (up to 32 bits).
 The reason for this is not just to reduce floating-point processing overhead on
-the server, which might be a very low-power Linux box without hardware FP, but
+the server (which might be a very low-power Linux box without hardware FP), but
 also because integers are better suited for keeping track of the precision of
 a reading. So the value "1000" with scale 2 represents the value "10.00", not
 "10", "10.0", or "10.000". Some people care about such distinctions!

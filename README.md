@@ -24,7 +24,7 @@ Now browse to <http://localhost:3333/> (this can be changed in `local.json`).
 
 # Documentation
 
-If you want to start exploring the (early) features of HouseMon, keep these
+If you want to start exploring the (early) features of HouseMon, keep these  
 points in mind and check <http://jeelabs.org/tag/housemon/> for the latest news:
 
 * the "logger" triggers on "incoming" events, as emitted by the "rf12demo" briq
