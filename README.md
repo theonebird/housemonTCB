@@ -46,4 +46,4 @@ To use this project as starting point for a fresh SocketStream project:
 
 # License
 
-MIT
+[MIT](http://opensource.org/licenses/MIT)
