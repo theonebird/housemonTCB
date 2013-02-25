@@ -1,5 +1,7 @@
 # Web server startup, i.e. first code loaded from app.js
 
+console.error 'pid', process.pid, Date() # mark new launch in the error log
+
 global._ = require 'underscore'
 
 # This list is also the order in which everything gets initialised
