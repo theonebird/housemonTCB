@@ -10,7 +10,7 @@
   },
   "main": "app.js",
   "dependencies": {
-    "socketstream": "git://github.com/socketstream/socketstream.git",
+    "socketstream": "~0.3.3",
     "coffee-script": "~1.4.0",
     "ss-coffee": "~0.1.2",
     "ss-jade": "~0.1.3",
