@@ -43,6 +43,8 @@ setId = (name, obj, cb) ->
           # issue and assign a new id
           cb obj.id = id
 
+state.models = models
+
 state.fetch = (cb) ->
   cb models
 

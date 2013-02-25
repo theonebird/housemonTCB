@@ -12,8 +12,7 @@ exports.info =
   
 state = require '../server/state'
 
-models = undefined
-state.fetch (m) -> models = m
+models = state.models
 
 adjustValue = (value, info) ->
   if info.factor
