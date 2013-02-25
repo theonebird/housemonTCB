@@ -6,6 +6,8 @@ exports.info =
       'incoming': 'event'
     results:
       'logger': 'dir'
+  downloads:
+    '/logger': './logger'
 
 state = require '../server/state'
 fs = require 'fs'

@@ -8,6 +8,8 @@ exports.info =
       'minutes': 'event'
     results:
       'archive': 'dir'
+  downloads:
+    '/archive': './archive'
   
 state = require '../server/state'
 fs = require 'fs'

@@ -34,7 +34,15 @@ ss.http.route '/', (req, res) ->
 ss.session.store.use 'redis', local.redisConfig
 # ss.publish.transport.use 'redis', local.redisConfig
 collections = ['bobs','readings','locations','drivers','uploads','status']
-state.setupStorage collections, local.redisConfig
+state.setupStorage collections, local.redisConfig, ->
+  # set up download areas defined in any of the installed briqs
+  for id, bob of  state.models.bobs
+    briq = state.models.briqs[bob.briq_id]
+    for route, dir of briq?.info.downloads
+      console.log 'downloads', route, dir
+      # FIXME doesn't work yet, timing is too late, need to delay server start
+      # ss.http.middleware.append route, ss.http.connect.directory dir
+      # ss.http.middleware.append route, ss.http.connect.static dir
 
 # Code Formatters known by SocketStream
 ss.client.formatters.add require('ss-coffee')
