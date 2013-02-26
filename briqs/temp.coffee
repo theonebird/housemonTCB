@@ -1,6 +1,6 @@
 exports.info =
   name: 'temp'
-  description: 'This temp briq is used by to display temperature from the Modern Device 421 TMP chip on a JeeNode
+  description: 'This temp briq is used by to display temperature from the Modern Device TMP421 chip on a JeeNode psix connector.
   menus: [
     title: 'Temperature'
     controller: 'TempCtrl'
