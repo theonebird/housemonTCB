@@ -3,7 +3,7 @@ exports.info =
   description: 'Serial interface for a JeeNode running the RF12demo sketch'
   inputs: [
     name: 'Serial port'
-    default: 'usb-AH01A0GD' # TODO: list choices with serialport.list
+    default: 'ttyUSB0' # TODO: list choices with serialport.list
   ]
   connections:
     packages:
