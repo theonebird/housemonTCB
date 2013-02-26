@@ -1,5 +1,5 @@
 {
-  "exactName": "HouseMon",
+  "exactName": "HouseMonTCB",
   "httpPort": 3333,
   "redisConfig": {
     "host": "localhost",
